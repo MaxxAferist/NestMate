@@ -1,0 +1,94 @@
+.loginWindow{
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.windowForm{
+    width: 800px;
+    height: 400px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.img{
+    height: 100%;
+    width: 500px;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+.loginForm{
+    background-color: rgba(241, 241, 241, 0.78);
+    /*padding: 5px;*/
+    /*border-radius: 8px;*/
+    width: 350px;
+    height: 100%;
+    position: relative;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    text-align: center;
+}
+.closeButton{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+}
+.title{
+    font-size: 25px;
+    margin-bottom: 5px;
+    text-align: center;
+    height: 40px;
+}
+.siteName{
+    height: 30px;
+    text-align: center;
+    margin-bottom: 5px;
+    color: #6A6A6AFF;
+    font-style: italic;
+    font-size: 35px;
+}
+.input{
+    /*min-width: 330px;*/
+    min-height: 40px;
+    width: 91%;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+.loginButton{
+    /*min-width: 330px;*/
+    width: 93%;
+    min-height: 50px;
+    padding: 10px;
+    background-color: rgba(51,146,255,0.85);
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+.registerButton{
+    /*min-width: 330px;*/
+    min-height: 50px;
+    width: 93%;
+    padding: 10px;
+    background-color: rgba(126,180,246,0.86);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 20px;
+}
+

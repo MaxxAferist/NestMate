@@ -1,0 +1,93 @@
+header{
+    height: 50px;
+    display: flex;
+    padding: 0 2rem;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #abd0d7;
+    background: rgba(190,255,188,0.22);
+}
+.siteName{
+    font-size: 30px;
+    color: #6A6A6AFF;
+    font-style: italic;
+}
+.searchButton{
+    height: 40px;
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: rgba(5, 154, 0, 0.86);
+    color: #fff;
+    border: none;
+    /*border-radius: 8px;*/
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    cursor: pointer;
+}
+.mainButton{
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #000000;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.signInButton{
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: #a6a6a6;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.leftSection{
+    display: flex;
+    gap: 10px;
+}
+.centerSection{
+    display: flex;
+    align-items: center;
+    flex-grow: 0;
+    margin: 0 20px;
+    max-width: 700px;
+}
+.rightSection{
+    gap: 10px;
+    margin: 0 20px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+.buttonContainer{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    min-width: 100%;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.searchContainer{
+    display: flex;
+    align-items: center;
+}
+.searchInput{
+    height: 20px;
+    padding: 8px;
+    font-size: 16px;
+    border: 2px solid rgba(0, 110, 39, 0.78);
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    /*border-radius: 8px;*/
+    /*margin-right: 8px;*/
+    width: 300px;
+}
