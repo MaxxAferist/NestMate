@@ -21,5 +21,10 @@ function App() {
       </BrowserRouter>
   );
 }
-
+/*git init
+git add *
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin <repo url>
+git push -f origin main*/
 export default App
