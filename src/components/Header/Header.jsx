@@ -1,8 +1,13 @@
-import { useState } from 'react'
+import {useContext, useState} from 'react'
 import s from './Header.module.css'
-
+import { LoginContext } from '../contexts/LoginContext.jsx'
+import LoginWindow from "../LoginWindow/LoginWindow.jsx";
+import { useNavigate } from 'react-router-dom'
 
 export default function Header({ tab, setTab }){
+    const { user } = useContext(LoginContext);
+    const navigate = useNavigate();
+
     const [searchQuery, setSearchQuery] = useState('');
 
     const handleSearch = () => {
@@ -10,7 +15,11 @@ export default function Header({ tab, setTab }){
     };
 
     function handleButtonLoginClick(){
-        setTab('login');
+        if(!user){
+            navigate('/LogIn');
+        }else{
+            navigate('/Profile');
+        }
     }
     return (
         <>
@@ -40,7 +49,8 @@ export default function Header({ tab, setTab }){
                             На главную
                         </button>
                         <button className={s.signInButton}  onClick={handleButtonLoginClick}>
-                            Вход или регистрация
+                            {!user && "Вход или регистрация"}
+                            {user && "Профиль"}
                         </button>
                     </div>
                 </div>

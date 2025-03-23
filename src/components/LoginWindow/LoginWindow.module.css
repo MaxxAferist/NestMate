@@ -11,7 +11,7 @@
 }
 .windowForm{
     width: 800px;
-    height: 400px;
+    height: 450px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -24,8 +24,6 @@
 }
 .loginForm{
     background-color: rgba(241, 241, 241, 0.78);
-    /*padding: 5px;*/
-    /*border-radius: 8px;*/
     width: 350px;
     height: 100%;
     position: relative;
@@ -57,38 +55,57 @@
     font-size: 35px;
 }
 .input{
-    /*min-width: 330px;*/
     min-height: 40px;
     width: 91%;
     padding: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     border-radius: 4px;
     border: 1px solid #ccc;
     font-size: 16px;
 }
 .loginButton{
-    /*min-width: 330px;*/
     width: 93%;
     min-height: 50px;
     padding: 10px;
-    background-color: rgba(51,146,255,0.85);
+    background-color: rgba(137, 193, 255, 0.85);
     color: #ffffff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     font-size: 20px;
 }
 .registerButton{
-    /*min-width: 330px;*/
     min-height: 50px;
     width: 93%;
     padding: 10px;
-    background-color: rgba(126,180,246,0.86);
+    background-color: rgba(51, 146, 255, 0.85);
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 20px;
 }
+.messageText{
+    font-size: 20px;
+    text-align: center;
+    color: #ff4040;
+}
+.inputGroup {
+    margin-bottom: 8px;
+}
 
+.inputError {
+    border-color: red !important;
+}
+
+.errorText {
+    color: red;
+    font-size: 14px;
+    margin-top: 3px;
+    display: block;
+}
+
+.loginButtonActive {
+    background-color: #007bff !important;
+}

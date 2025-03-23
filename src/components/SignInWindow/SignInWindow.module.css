@@ -27,7 +27,7 @@
     padding: 20px;
     border-radius: 8px;
     width: 350px;
-    height: 55%;
+    height: 80%;
     position: relative;
     z-index: 2;
 }
@@ -66,3 +66,40 @@
     cursor: pointer;
     font-size: 17px;
 }
+.messageText{
+    text-align: center;
+    font-size: 18px;
+}
+.linksField{
+    text-align: center;
+}
+.link {
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    text-align: center;
+}
+
+.link:hover {
+    color: #007bff;
+}
+.inputGroup {
+    margin-bottom: 15px;
+}
+
+.inputError {
+    border-color: red !important;
+}
+
+.errorText {
+    color: red;
+    font-size: 14px;
+    margin-top: 3px;
+    display: block;
+}
+
+.registerButtonActive {
+    background-color: #007bff !important;
+}
+
