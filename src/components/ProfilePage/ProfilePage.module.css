@@ -15,9 +15,38 @@
     border-radius: 8px;
     background-color: #f9f9f9;
 }
-.form{
+.profileDataForm{
+    background-color: rgba(166, 209, 253, 0.13);
     display: flex;
     flex-direction: column;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgba(177, 177, 177, 0.3);
+}
+.parametersText{
+    margin: 10px;
+}
+.flatDataForm{
+    background: rgba(190,255,188,0.18);
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgba(177, 177, 177, 0.3);
+}
+.rentDataForm{
+    background-color: rgba(190, 95, 246, 0.07);
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgba(177, 177, 177, 0.3);
 }
 .formGroup{
     margin-bottom: 15px;
@@ -42,6 +71,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin: 10px;
 }
 .checkboxLabel{
     display: flex;
@@ -98,4 +128,62 @@
     margin-bottom: 15px;
     align-items: center;
     text-align: right;
+}
+.prioritySelector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.prioritySelect {
+    padding: 5px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+.priorityRow {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.paramName {
+    min-width: 150px;
+}
+
+.priorityLabel {
+    color: #393939;
+    font-size: 0.9em;
+}
+.buttonChangeParameters{
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: rgba(66, 146, 246, 0.93);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+}
+.buttonChangePriorities{
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: rgba(100, 54, 133, 0.87);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+}
+.buttonSave{
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: rgba(0, 255, 82, 0.5);
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
 }

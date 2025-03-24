@@ -52,22 +52,44 @@ const ProfilePage = () => {
             metroDistance: '',
             cityCenterDistance: '',
         },
+        priorities: {
+            budget: 3,
+            ceilingHeight: 3,
+            mortgage: 3,
+            floor: 3,
+            floorsInBuilding: 3,
+            houseMaterial: 3,
+            renovationCondition: 3,
+            amenities: 3,
+            kitchenStove: 3,
+            viewFromWindows: 3,
+            parking: 3,
+            infrastructure: 3,
+            transportAccessibility: 3
+        }
     });
 
     const [rentPreferences, setRentPreferences] = useState({
-        minLeaseTerm: '',
-        maxLeaseTerm: '',
+        minRentPeriod: '',
+        maxRentPeriod: '',
         petsAllowed: false,
         childrenAllowed: false,
         immediateMoveIn: false,
         numberOfBeds: '',
+        priorities: {
+            rentPeriod: 3,
+            petsAllowed: 3,
+            childrenAllowed: 3,
+            immediateMoveIn: 3,
+            numberOfBeds: 3
+        }
     });
 
     const [editingRentData, setEditingRentData] = useState(false);
-
-
     const [editingPersonalData, setEditingPersonalData] = useState(false);
     const [editingFlatData, setEditingFlatData] = useState(false);
+    const [editingFlatPriorities, setEditingFlatPriorities] = useState(false);
+    const [editingRentPriorities, setEditingRentPriorities] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -130,8 +152,8 @@ const ProfilePage = () => {
     }, [flatPreferences.floorsInBuildingMin, flatPreferences.floorsInBuildingMax]);
 
     useEffect(() => {
-        validateRange('minLeaseTerm', 'maxLeaseTerm', rentPreferences.minLeaseTerm, rentPreferences.maxLeaseTerm);
-    }, [rentPreferences.minLeaseTerm, rentPreferences.maxLeaseTerm]);
+        validateRange('minRentPeriod', 'maxRentPeriod', rentPreferences.minRentPeriod, rentPreferences.maxRentPeriod);
+    }, [rentPreferences.minRentPeriod, rentPreferences.maxRentPeriod]);
 
     const validateRange = (minName, maxName, minValue, maxValue) => {
         if (minValue !== '' && maxValue !== '') {
@@ -155,7 +177,7 @@ const ProfilePage = () => {
                 return true;
             }
         }
-        return true; // Если одно из полей пустое, считаем валидацию успешной
+        return true;
     };
 
     const handlePersonalDataSubmit = (e) => {
@@ -170,7 +192,7 @@ const ProfilePage = () => {
 
         if (type === 'number') {
             const numericValue = value === '' ? '' : parseFloat(value);
-            if (name === 'minFloor' || name === 'maxFloor' || name === 'floorsInBuildingMin' || name === 'floorsInBuildingMax') {
+            if (name === 'minFloor' || name === 'maxFloor' || name === 'floorsInBuildingMin' || name === 'floorsInBuildingMax' || name ==="budgetMax" || name ==="maxRentPeriod") {
                 if (!validateNumberInput(name, numericValue, true, 1)) {
                     return;
                 }
@@ -243,13 +265,15 @@ const ProfilePage = () => {
     }
 
     const handleParkingChange = (e) => {
-        const {  type, value } = e.target;
+        const { name, type, value } = e.target;
         if(type === 'number') {
             const numericValue = value === '' ? '' : parseFloat(value);
             if (!validateNumberInput('parking.countMin', numericValue, true, 0)) {
                 return;
             }
         }
+
+
         setFlatPreferences((prev) => ({
             ...prev,
             parking: {
@@ -335,7 +359,7 @@ const ProfilePage = () => {
         const { name, value, type, checked } = e.target;
         if (type === 'number') {
             const numericValue = value === '' ? '' : parseFloat(value);
-            if (name === 'minLeaseTerm' || name === 'maxLeaseTerm' || name === 'numberOfBeds') {
+            if (name === 'minRentPeriod' || name === 'maxRentPeriod' || name === 'numberOfBeds') {
                 if (!validateNumberInput(name, numericValue, true, 1)) {
                     return;
                 }
@@ -351,17 +375,17 @@ const ProfilePage = () => {
     const handleRentPreferencesSubmit = (e) => {
         e.preventDefault();
 
-        const isMinLeaseTermValid = validateNumberInput('minLeaseTerm', rentPreferences.minLeaseTerm, true, 1);
-        const isMaxLeaseTermValid = validateNumberInput('maxLeaseTerm', rentPreferences.maxLeaseTerm, true, 1);
+        const isMinRentPeriodValid = validateNumberInput('minRentPeriod', rentPreferences.minRentPeriod, true, 0);
+        const isMaxRentPeriodValid = validateNumberInput('maxRentPeriod', rentPreferences.maxRentPeriod, true, 1);
         const isNumberOfBedsValid = validateNumberInput('numberOfBeds', rentPreferences.numberOfBeds, true, 1);
 
-        const isLeaseTermRangeValid = validateRange('minLeaseTerm', 'maxLeaseTerm', flatPreferences.minLeaseTerm, flatPreferences.maxLeaseTerm);
+        const isRentPeriodRangeValid = validateRange('minRentPeriod', 'maxRentPeriod', rentPreferences.minRentPeriod, rentPreferences.maxRentPeriod);
 
         if(
-            isMinLeaseTermValid &&
-            isMaxLeaseTermValid &&
+            isMinRentPeriodValid &&
+            isMaxRentPeriodValid &&
             isNumberOfBedsValid &&
-            isLeaseTermRangeValid
+            isRentPeriodRangeValid
         ){
             console.log('Данные для аренды квартиры:', rentPreferences);
             setEditingRentData(false);
@@ -370,6 +394,52 @@ const ProfilePage = () => {
         }
     }
 
+    const handleFlatPriorityChange = (name, value) => {
+        setFlatPreferences(prev => ({
+            ...prev,
+            priorities: {
+                ...prev.priorities,
+                [name]: parseInt(value)
+            }
+        }));
+    }
+
+    const handleRentPriorityChange = (name, value) => {
+        setRentPreferences(prev => ({
+            ...prev,
+            priorities: {
+                ...prev.priorities,
+                [name]: parseInt(value)
+            }
+        }));
+    }
+
+    const handleFlatPrioritySubmit = (e) => {
+        e.preventDefault();
+        console.log('Приоритеты для подбора квартиры:', flatPreferences);
+        setEditingFlatPriorities(false);
+    }
+    const handleRentPrioritySubmit = (e) => {
+        e.preventDefault();
+        console.log('Приоритеты для аренды квартиры:', rentPreferences);
+        setEditingRentPriorities(false);
+    }
+
+    const PrioritySelector = ({ section, name, value }) => (
+        <div className={s.prioritySelector}>
+            <span className={s.priorityLabel}>приоритет:</span>
+            <select
+                value={value}
+                onChange={(e) => ((section === 'flat') ?
+                    (handleFlatPriorityChange(name, e.target.value)) :(handleRentPriorityChange(name, e.target.value)))}
+                className={s.prioritySelect}
+            >
+                {[0, 1, 2, 3, 4, 5].map(num => (
+                    <option key={num} value={num}>{num}</option>
+                ))}
+            </select>
+        </div>
+    );
 
     const handleLogout = () => {
         logout();
@@ -382,8 +452,8 @@ const ProfilePage = () => {
 
     return (
         <div className={s.container}>
-            <div className={s.section}>
-                <h2>Личные данные</h2>
+            <div className={s.profileDataForm}>
+                <h2  className={s.parametersText}>Личные данные</h2>
                 {editingPersonalData ? (
                     <form onSubmit={handlePersonalDataSubmit} className={s.form}>
                         <div className={s.formGroup}>
@@ -445,13 +515,13 @@ const ProfilePage = () => {
                     </form>
                 ) : (
                     <div>
-                        <p><strong>ID Профиля:</strong> {userData.id}</p>
-                        <p><strong>Имя:</strong> {userData.firstName}</p>
-                        <p><strong>Фамилия:</strong> {flatPreferences.lastName}</p>
-                        <p><strong>Отчество:</strong> {flatPreferences.middleName}</p>
-                        <p><strong>Номер телефона:</strong> {flatPreferences.phoneNumber}</p>
-                        <p><strong>Пол:</strong> {flatPreferences.gender}</p>
-                        <p><strong>Email:</strong> {userData.email}</p>
+                        <p className={s.parametersText}><strong>ID Профиля:</strong> {userData.id}</p>
+                        <p className={s.parametersText}><strong>Имя:</strong> {userData.firstName}</p>
+                        <p className={s.parametersText}><strong>Фамилия:</strong> {flatPreferences.lastName}</p>
+                        <p className={s.parametersText}><strong>Отчество:</strong> {flatPreferences.middleName}</p>
+                        <p className={s.parametersText}><strong>Номер телефона:</strong> {flatPreferences.phoneNumber}</p>
+                        <p className={s.parametersText}><strong>Пол:</strong> {flatPreferences.gender}</p>
+                        <p className={s.parametersText}><strong>Email:</strong> {userData.email}</p>
                         <button onClick={() => setEditingPersonalData(true)} className={s.button}>
                             Редактировать личные данные
                         </button>
@@ -459,9 +529,9 @@ const ProfilePage = () => {
                 )}
             </div>
 
-            <div className={s.section}>
-                <h2>Данные для подбора квартиры</h2>
-                {editingFlatData ? (
+            <div className={s.flatDataForm}>
+                <h2  className={s.parametersText}>Данные для подбора квартиры</h2>
+                {editingFlatData &&
                     <form onSubmit={handleFlatDataSubmit} className={s.form}>
                         <div className={s.formGroup}>
                             <label>Бюджет:</label>
@@ -483,7 +553,468 @@ const ProfilePage = () => {
                                     className={s.range}
                                     placeholder="до"
                                 />
-                               {/* {errors.budgetMax && <span className={s.error}>{errors.budgetMax}</span>}*/}
+                                {/* {errors.budgetMax && <span className={s.error}>{errors.budgetMax}</span>}*/}
+                            </div>
+                            {errors.budgetMin && <span className={s.error}>{errors.budgetMin}</span>}
+                            { (!errors.budgetMin && errors.budgetMax) && <span className={s.error}>{errors.budgetMax}</span>}
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Регион:</label>
+                            <input
+                                type="text"
+                                name="region"
+                                value={flatPreferences.region}
+                                onChange={handleInputChange}
+                                className={s.input}
+                            />
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Город:</label>
+                            <input
+                                type="text"
+                                name="city"
+                                value={flatPreferences.city}
+                                onChange={handleInputChange}
+                                className={s.input}
+                            />
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Район:</label>
+                            <input
+                                type="text"
+                                name="district"
+                                value={flatPreferences.district}
+                                onChange={handleInputChange}
+                                className={s.input}
+                            />
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Высота потолков (от):</label>
+                            <input
+                                type="number"
+                                name="ceilingHeight"
+                                value={flatPreferences.ceilingHeight}
+                                onChange={handleInputChange}
+                                className={s.input}
+                                step="0.1"
+                            />
+                            {errors.ceilingHeight && <span className={s.error}>{errors.ceilingHeight}</span>}
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Возможность ипотеки:</label>
+                            <select
+                                name="mortgage"
+                                value={flatPreferences.mortgage}
+                                onChange={handleInputChange}
+                                className={s.input}
+                            >
+                                <option value="не важно">Не важно</option>
+                                <option value="да">Да</option>
+                                <option value="нет">Нет</option>
+                            </select>
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Этаж:</label>
+                            <div className={s.rangeFields}>
+                                <input
+                                    type="number"
+                                    name="minFloor"
+                                    value={flatPreferences.minFloor}
+                                    onChange={handleInputChange}
+                                    className={s.range}
+                                    placeholder="мин."
+                                />
+                                <input
+                                    type="number"
+                                    name="maxFloor"
+                                    value={flatPreferences.maxFloor}
+                                    onChange={handleInputChange}
+                                    className={s.range}
+                                    placeholder="макс."
+                                />
+                            </div>
+                            {errors.minFloor && <span className={s.error}>{errors.minFloor}</span>}
+                            {(!errors.minFloor && errors.maxFloor) && <span className={s.error}>{errors.maxFloor}</span>}
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Количество этажей в доме:</label>
+                            <div className={s.rangeFields}>
+                                <input
+                                    type="number"
+                                    name="floorsInBuildingMin"
+                                    value={flatPreferences.floorsInBuildingMin}
+                                    onChange={handleInputChange}
+                                    className={s.range}
+                                    placeholder="от"
+                                />
+                                <input
+                                    type="number"
+                                    name="floorsInBuildingMax"
+                                    value={flatPreferences.floorsInBuildingMax}
+                                    onChange={handleInputChange}
+                                    className={s.range}
+                                    placeholder="до"
+                                />
+                            </div>
+                            {errors.floorsInBuildingMin && <span className={s.error}>{errors.floorsInBuildingMin}</span>}
+                            {(!errors.floorsInBuildingMin && errors.floorsInBuildingMax) && <span className={s.error}>{errors.floorsInBuildingMax}</span>}
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Материал дома:</label>
+                            <div className={s.checkboxGroup}>
+                                {['кирпич', 'бетон', 'панельный'].map((material) => (
+                                    <label key={material} className={s.checkboxLabel}>
+                                        <input
+                                            type="checkbox"
+                                            name="houseMaterial"
+                                            value={material}
+                                            checked={flatPreferences.houseMaterial.includes(material)}
+                                            onChange={handleHouseMaterialChange}
+                                        />
+                                        {material}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Состояние ремонта:</label>
+                            <select
+                                name="renovationCondition"
+                                value={flatPreferences.renovationCondition}
+                                onChange={handleInputChange}
+                                className={s.input}
+                            >
+                                <option value="не важно">Не важно</option>
+                                <option value="новый">Новый</option>
+                                <option value="требует ремонта">Требует ремонта</option>
+                            </select>
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Дополнительные параметры:</label>
+                            <div className={s.checkboxGroup}>
+                                {['Лифт', 'Электричество', 'Газ', 'Интернет', 'Водоснабжение', 'Холодильник', 'Микроволновая печь', 'Стиральная машина', 'Кондиционер', 'Мебель', 'Видеонаблюдение', 'Домофон', 'Охрана', 'Пожарная сигнализация', 'Двор закрытого типа'].map((amenity) => (
+                                    <label key={amenity} className={s.checkboxLabel}>
+                                        <input
+                                            type="checkbox"
+                                            name="amenities"
+                                            value={amenity}
+                                            checked={flatPreferences.amenities.includes(amenity)}
+                                            onChange={handleAmenitiesChange}
+                                        />
+                                        {amenity}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Кухонная плита:</label>
+                            <select
+                                name="kitchenStove"
+                                value={flatPreferences.kitchenStove}
+                                onChange={handleInputChange}
+                                className={s.input}
+                            >
+                                <option value="не важно">Не важно</option>
+                                <option value="электрическая">Электрическая</option>
+                                <option value="газовая">Газовая</option>
+                            </select>
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Вид из окон:</label>
+                            <div className={s.checkboxGroup}>
+                                {['Во двор', 'На улицу'].map((view) => (
+                                    <label key={view} className={s.checkboxLabel}>
+                                        <input
+                                            type="checkbox"
+                                            name="viewFromWindows"
+                                            value={view}
+                                            checked={flatPreferences.viewFromWindows.includes(view)}
+                                            onChange={handleViewFromWindowsChange}
+                                        />
+                                        {view}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                        <div className={s.formGroup}>
+                            <label>Парковка:</label>
+                            <div className={s.rangeFields}>
+                                <input
+                                    type="number"
+                                    name="countMin"
+                                    value={flatPreferences.parking.countMin}
+                                    onChange={handleParkingChange}
+                                    className={s.range}
+                                    placeholder="мест (от)"
+                                />
+                                <select
+                                    name="type"
+                                    value={flatPreferences.parking.type}
+                                    onChange={handleParkingChange}
+                                    className={s.input}
+                                >
+                                    <option value="не важно">Не важно</option>
+                                    <option value="наземные">Наземные</option>
+                                    <option value="подземные">Подземные</option>
+                                </select>
+                                <select
+                                    name="payment"
+                                    value={flatPreferences.parking.payment}
+                                    onChange={handleParkingChange}
+                                    className={s.input}
+                                >
+                                    <option value="не важно">Не важно</option>
+                                    <option value="платные">Платные</option>
+                                    <option value="бесплатные">Бесплатные</option>
+                                </select>
+                            </div>
+                            {errors['parking.countMin'] && <span className={s.error}>{errors['parking.countMin']}</span>}
+                        </div>
+                        <label>Инфраструктура района:</label>
+                        <div className={s.fromInlineGroup}>
+
+                            <div className={s.inlineFormGroup}>
+                                <label>Парки:</label>
+                                <input
+                                    type="number"
+                                    name="parks"
+                                    value={flatPreferences.infrastructure.parks}
+                                    onChange={handleInfrastructureChange}
+                                    placeholder={'В радиусе, (м)'}
+                                    className={s.input}
+                                />
+                            </div>
+                            {errors['infrastructure.parks'] && <span className={s.error}>{errors['infrastructure.parks']}</span>}
+                            <div className={s.inlineFormGroup}>
+                                <label>Больницы:</label>
+                                <input
+                                    type="number"
+                                    name="hospitals"
+                                    value={flatPreferences.infrastructure.hospitals}
+                                    onChange={handleInfrastructureChange}
+                                    placeholder={'В радиусе, (м)'}
+                                    className={s.input}
+                                />
+                            </div>
+                            {errors['infrastructure.hospitals'] && <span className={s.error}>{errors['infrastructure.hospitals']}</span>}
+                            <div className={s.inlineFormGroup}>
+                                <label>Торговые центры:</label>
+                                <input
+                                    type="number"
+                                    name="shoppingCenters"
+                                    value={flatPreferences.infrastructure.shoppingCenters}
+                                    onChange={handleInfrastructureChange}
+                                    placeholder={'В радиусе, (м)'}
+                                    className={s.input}
+                                />
+                            </div>
+                            {errors['infrastructure.shoppingCenters'] && <span className={s.error}>{errors['infrastructure.shoppingCenters']}</span>}
+                            <div className={s.inlineFormGroup}>
+                                <label>Магазины:</label>
+                                <input
+                                    type="number"
+                                    name="shops"
+                                    value={flatPreferences.infrastructure.shops}
+                                    onChange={handleInfrastructureChange}
+                                    placeholder={'В радиусе, (м)'}
+                                    className={s.input}
+                                />
+                            </div>
+                            {errors['infrastructure.shops'] && <span className={s.error}>{errors['infrastructure.shops']}</span>}
+                            <div className={s.inlineFormGroup}>
+                                <label>Школы:</label>
+                                <input
+                                    type="number"
+                                    name="schools"
+                                    value={flatPreferences.infrastructure.schools}
+                                    onChange={handleInfrastructureChange}
+                                    placeholder={'В радиусе, (м)'}
+                                    className={s.input}
+                                />
+                            </div>
+                            {errors['infrastructure.schools'] && <span className={s.error}>{errors['infrastructure.schools']}</span>}
+                            <div className={s.inlineFormGroup}>
+                                <label>Детские сады:</label>
+                                <input
+                                    type="number"
+                                    name="kindergartens"
+                                    value={flatPreferences.infrastructure.kindergartens}
+                                    onChange={handleInfrastructureChange}
+                                    placeholder={'В радиусе, (м)'}
+                                    className={s.input}
+                                />
+                            </div>
+                            {errors['infrastructure.kindergartens'] && <span className={s.error}>{errors['infrastructure.kindergartens']}</span>}
+                        </div>
+                        <label style={{marginBottom: "5px"}}>Транспортная доступность:</label>
+                        <div className={s.fromInlineGroup}>
+                            <div className={s.inlineFormGroup}>
+                                <label>Остановки общественного транспорта:</label>
+                                <input
+                                    type="number"
+                                    name="publicTransportStops"
+                                    value={flatPreferences.transportAccessibility.publicTransportStops}
+                                    onChange={handleTransportAccessibilityChange}
+                                    placeholder={'Расстояние (м)'}
+                                    className={s.input}
+                                />
+                            </div>
+                            {errors['transportAccessibility.publicTransportStops'] && <span className={s.error}>{errors['transportAccessibility.publicTransportStops']}</span>}
+                            <div className={s.inlineFormGroup}>
+                                <label>Расстояние до метро:</label>
+                                <input
+                                    type="number"
+                                    name="metroDistance"
+                                    value={flatPreferences.transportAccessibility.metroDistance}
+                                    onChange={handleTransportAccessibilityChange}
+                                    placeholder={'Расстояние (м)'}
+                                    className={s.input}
+                                />
+                            </div>
+                            {errors['transportAccessibility.metroDistance'] && <span className={s.error}>{errors['transportAccessibility.metroDistance']}</span>}
+                            <div className={s.inlineFormGroup}>
+                                <label>Удалённость от центра:</label>
+                                <input
+                                    type="number"
+                                    name="cityCenterDistance"
+                                    value={flatPreferences.transportAccessibility.cityCenterDistance}
+                                    onChange={handleTransportAccessibilityChange}
+                                    placeholder={'Расстояние (м)'}
+                                    className={s.input}
+                                />
+                            </div>
+                            {errors['transportAccessibility.cityCenterDistance'] && <span className={s.error}>{errors['transportAccessibility.cityCenterDistance']}</span>}
+                        </div>
+                        <button type="submit" className={s.buttonSave}>
+                            Сохранить
+                        </button>
+                    </form>
+                }
+                {editingFlatPriorities &&
+                    <form onSubmit={handleFlatPrioritySubmit} className={s.form}>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Бюджет</strong>
+                            <PrioritySelector section="flat" name="budget" value={flatPreferences.priorities.budget} />
+                        </div>
+
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Высота потолков</strong>
+                            <PrioritySelector section="flat" name="ceilingHeight" value={flatPreferences.priorities.ceilingHeight} />
+                        </div>
+
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Возможность ипотеки</strong>
+                            <PrioritySelector section="flat" name="mortgage" value={flatPreferences.priorities.mortgage} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Этаж</strong>
+                            <PrioritySelector section="flat" name="floor" value={flatPreferences.priorities.floor} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Количество этажей в доме</strong>
+                            <PrioritySelector section="flat" name="floorsInBuilding" value={flatPreferences.priorities.floorsInBuilding} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Материал дома</strong>
+                            <PrioritySelector section="flat" name="houseMaterial" value={flatPreferences.priorities.houseMaterial} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Состояние ремонта</strong>
+                            <PrioritySelector section="flat" name="renovationCondition" value={flatPreferences.priorities.renovationCondition} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Дополнительные удобства</strong>
+                            <PrioritySelector section="flat" name="amenities" value={flatPreferences.priorities.amenities} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Кухонная плита</strong>
+                            <PrioritySelector section="flat" name="kitchenStove" value={flatPreferences.priorities.kitchenStove} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Вид из окон</strong>
+                            <PrioritySelector section="flat" name="viewFromWindows" value={flatPreferences.priorities.viewFromWindows} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Парковка</strong>
+                            <PrioritySelector section="flat" name="parking" value={flatPreferences.priorities.parking} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Инфраструктура района</strong>
+                            <PrioritySelector section="flat" name="infrastructure" value={flatPreferences.priorities.infrastructure} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Транспортная доступность</strong>
+                            <PrioritySelector section="flat" name="transportAccessibility" value={flatPreferences.priorities.transportAccessibility} />
+                        </div>
+                        <button
+                            type="submit"
+                            className={s.buttonSave}>
+                            Сохранить приоритеты
+                        </button>
+                    </form>
+                }
+                { (!editingFlatData && !editingFlatPriorities) &&
+                    <div>
+                        <p className={s.parametersText}><strong>Бюджет:</strong> {flatPreferences.budgetMin} - {flatPreferences.budgetMax}</p>
+                        <p className={s.parametersText}><strong>Регион:</strong> {flatPreferences.region}</p>
+                        <p className={s.parametersText}><strong>Город:</strong> {flatPreferences.city}</p>
+                        <p className={s.parametersText}><strong>Район:</strong> {flatPreferences.district}</p>
+                        <p className={s.parametersText}><strong>Высота потолков (от):</strong> {flatPreferences.ceilingHeight}</p>
+                        <p className={s.parametersText}><strong>Возможность ипотеки:</strong> {flatPreferences.mortgage}</p>
+                        <p className={s.parametersText}><strong>Этаж:</strong> {flatPreferences.minFloor} - {flatPreferences.maxFloor}</p>
+                        <p className={s.parametersText}><strong>Количество этажей в доме:</strong> {flatPreferences.floorsInBuildingMin} - {flatPreferences.floorsInBuildingMax}</p>
+                        <p className={s.parametersText}><strong>Материал дома:</strong> {flatPreferences.houseMaterial.join(', ')}</p>
+                        <p className={s.parametersText}><strong>Состояние ремонта:</strong> {flatPreferences.renovationCondition}</p>
+                        <p className={s.parametersText}><strong>Дополнительные параметры:</strong> {flatPreferences.amenities.join(', ')}</p>
+                        <p className={s.parametersText}><strong>Кухонная плита:</strong> {flatPreferences.kitchenStove}</p>
+                        <p className={s.parametersText}><strong>Вид из окон:</strong> {flatPreferences.viewFromWindows.join(', ')}</p>
+                        <p className={s.parametersText}><strong>Парковка:</strong> Количество: {flatPreferences.parking.countMin}, Тип: {flatPreferences.parking.type}, Оплата: {flatPreferences.parking.payment}</p>
+                        <p className={s.parametersText}><strong>Инфраструктура района:</strong></p>
+                        <ul>
+                            <li>Парки: {flatPreferences.infrastructure.parks}</li>
+                            <li>Больницы: {flatPreferences.infrastructure.hospitals}</li>
+                            <li>Торговые центры: {flatPreferences.infrastructure.shoppingCenters}</li>
+                            <li>Магазины: {flatPreferences.infrastructure.shops}</li>
+                            <li>Школы: {flatPreferences.infrastructure.schools}</li>
+                            <li>Детские сады: {flatPreferences.infrastructure.kindergartens}</li>
+                        </ul>
+                        <p  className={s.parametersText}><strong>Транспортная доступность:</strong></p>
+                        <ul>
+                            <li>Остановки общественного транспорта: {flatPreferences.transportAccessibility.publicTransportStops}</li>
+                            <li>Расстояние до метро: {flatPreferences.transportAccessibility.metroDistance}</li>
+                            <li>Удалённость от центра: {flatPreferences.transportAccessibility.cityCenterDistance}</li>
+                        </ul>
+                        <button  onClick={() => setEditingFlatData(true)} className={s.buttonChangeParameters}>
+                            Редактировать параметры квартиры
+                        </button>
+                        <button onClick={() => setEditingFlatPriorities(true)} className={s.buttonChangePriorities}>
+                            Расставить приоритеты параметров
+                        </button>
+                    </div>
+                }
+                {/*{editingFlatData ? (
+                    <form onSubmit={handleFlatDataSubmit} className={s.form}>
+                        <div className={s.formGroup}>
+                            <label>Бюджет:</label>
+                            <div className={s.rangeFields}>
+                                <input
+                                    type="number"
+                                    name="budgetMin"
+                                    value={flatPreferences.budgetMin}
+                                    onChange={handleInputChange}
+                                    className={s.range}
+                                    placeholder="от"
+                                />
+                                {errors.budgetMin && <span className={s.error}>{errors.budgetMin}</span>}
+                                <input
+                                    type="number"
+                                    name="budgetMax"
+                                    value={flatPreferences.budgetMax}
+                                    onChange={handleInputChange}
+                                    className={s.range}
+                                    placeholder="до"
+                                />
+                                {errors.budgetMax && <span className={s.error}>{errors.budgetMax}</span>}
                             </div>
                             {errors.budgetMin && <span className={s.error}>{errors.budgetMin}</span>}
                             { (!errors.budgetMin && errors.budgetMax) && <span className={s.error}>{errors.budgetMax}</span>}
@@ -820,70 +1351,41 @@ const ProfilePage = () => {
                         </button>
                     </form>
                 ) : (
-                    <div>
-                        <p><strong>Бюджет:</strong> {flatPreferences.budgetMin} - {flatPreferences.budgetMax}</p>
-                        <p><strong>Регион:</strong> {flatPreferences.region}</p>
-                        <p><strong>Город:</strong> {flatPreferences.city}</p>
-                        <p><strong>Район:</strong> {flatPreferences.district}</p>
-                        <p><strong>Высота потолков (от):</strong> {flatPreferences.ceilingHeight}</p>
-                        <p><strong>Возможность ипотеки:</strong> {flatPreferences.mortgage}</p>
-                        <p><strong>Этаж:</strong> {flatPreferences.minFloor} - {flatPreferences.maxFloor}</p>
-                        <p><strong>Количество этажей в доме:</strong> {flatPreferences.floorsInBuildingMin} - {flatPreferences.floorsInBuildingMax}</p>
-                        <p><strong>Материал дома:</strong> {flatPreferences.houseMaterial.join(', ')}</p>
-                        <p><strong>Состояние ремонта:</strong> {flatPreferences.renovationCondition}</p>
-                        <p><strong>Дополнительные параметры:</strong> {flatPreferences.amenities.join(', ')}</p>
-                        <p><strong>Кухонная плита:</strong> {flatPreferences.kitchenStove}</p>
-                        <p><strong>Вид из окон:</strong> {flatPreferences.viewFromWindows.join(', ')}</p>
-                        <p><strong>Парковка:</strong> Количество: {flatPreferences.parking.countMin}, Тип: {flatPreferences.parking.type}, Оплата: {flatPreferences.parking.payment}</p>
-                        <p><strong>Инфраструктура района:</strong></p>
-                        <ul>
-                            <li>Парки: {flatPreferences.infrastructure.parks}</li>
-                            <li>Больницы: {flatPreferences.infrastructure.hospitals}</li>
-                            <li>Торговые центры: {flatPreferences.infrastructure.shoppingCenters}</li>
-                            <li>Магазины: {flatPreferences.infrastructure.shops}</li>
-                            <li>Школы: {flatPreferences.infrastructure.schools}</li>
-                            <li>Детские сады: {flatPreferences.infrastructure.kindergartens}</li>
-                        </ul>
-                        <p><strong>Транспортная доступность:</strong></p>
-                        <ul>
-                            <li>Остановки общественного транспорта: {flatPreferences.transportAccessibility.publicTransportStops}</li>
-                            <li>Расстояние до метро: {flatPreferences.transportAccessibility.metroDistance}</li>
-                            <li>Удалённость от центра: {flatPreferences.transportAccessibility.cityCenterDistance}</li>
-                        </ul>
-                        <button onClick={() => setEditingFlatData(true)} className={s.button}>
-                            Редактировать параметры квартиры
-                        </button>
-                    </div>
-                )}
+                    {editingFlatPriorities ? (
+
+                    ):(
+
+                        )
+                    }
+                )}*/}
             </div>
-            <div className={s.section}>
-                <h2>Параметры для аренды</h2>
-                {editingRentData ? (
-                    <form onSubmit={(e) => { e.preventDefault(); setEditingRentData(false); }} className={s.form}>
+            <div className={s.rentDataForm}>
+                <h2 className={s.parametersText}>Параметры для аренды</h2>
+                { editingRentData &&
+                    <form onSubmit={handleRentPreferencesSubmit} className={s.form}>
                         <div className={s.formGroup}>
                             <label>Срок аренды:</label>
                             <div className={s.rangeFields}>
                                 <input
                                     type="number"
-                                    name="minLeaseTerm"
-                                    value={rentPreferences.minLeaseTerm}
+                                    name="minRentPeriod"
+                                    value={rentPreferences.minRentPeriod}
                                     onChange={handleRentInputChange}
                                     className={s.range}
                                     placeholder="мин"
                                 />
-                                {/*{errors.minLeaseTerm && <span className={s.error}>{errors.minLeaseTerm}</span>}*/}
+
                                 <input
                                     type="number"
-                                    name="maxLeaseTerm"
-                                    value={rentPreferences.maxLeaseTerm}
+                                    name="maxRentPeriod"
+                                    value={rentPreferences.maxRentPeriod}
                                     onChange={handleRentInputChange}
                                     className={s.range}
                                     placeholder="макс"
                                 />
-                                {/*{errors.maxLeaseTerm && <span className={s.error}>{errors.maxLeaseTerm}</span>}*/}
                             </div>
-                            {errors.minLeaseTerm && <span className={s.error}>{errors.minLeaseTerm}</span>}
-                            {(!errors.maxLeaseTerm && errors.maxLeaseTerm) && <span className={s.error}>{errors.maxLeaseTerm}</span>}
+                            {errors.minRentPeriod && <span className={s.error}>{errors.minRentPeriod}</span>}
+                            {(!errors.minRentPeriod && errors.maxRentPeriod) && <span className={s.error}>{errors.maxRentPeriod}</span>}
 
                         </div>
                         <div className={s.formGroup}>
@@ -930,22 +1432,55 @@ const ProfilePage = () => {
                             />
                             {errors.numberOfBeds && <span className={s.error}>{errors.numberOfBeds}</span>}
                         </div>
-                        <button type="submit" onClick={handleRentPreferencesSubmit} className={s.button}>
+                        <button type="submit" className={s.buttonSave}>
                             Сохранить
                         </button>
                     </form>
-                ) : (
+                }
+                {editingRentPriorities &&
+                    <form onSubmit={handleRentPrioritySubmit} className={s.form}>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Срок аренды</strong>
+                            <PrioritySelector section="rent" name="rentPeriod" value={rentPreferences.priorities.rentPeriod} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Проживание с животными</strong>
+                            <PrioritySelector section="rent" name="petsAllowed" value={rentPreferences.priorities.petsAllowed} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Проживание с детьми</strong>
+                            <PrioritySelector section="rent" name="childrenAllowed" value={rentPreferences.priorities.childrenAllowed} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Немедленное заселение</strong>
+                            <PrioritySelector section="rent" name="immediateMoveIn" value={rentPreferences.priorities.immediateMoveIn} />
+                        </div>
+                        <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Количество спальных мест</strong>
+                            <PrioritySelector section="rent" name="numberOfBeds" value={rentPreferences.priorities.numberOfBeds} />
+                        </div>
+                        <button
+                            type="submit"
+                            className={s.buttonSave}>
+                            Сохранить приоритеты
+                        </button>
+                    </form>
+                }
+                {(!editingRentData && !editingRentPriorities) &&
                     <div>
-                        <p><strong>Срок аренды:</strong> {rentPreferences.minLeaseTerm} - {rentPreferences.maxLeaseTerm}</p>
-                        <p><strong>Проживание с животными:</strong> {rentPreferences.petsAllowed ? 'Да' : 'Нет'}</p>
-                        <p><strong>Проживание с детьми:</strong> {rentPreferences.childrenAllowed ? 'Да' : 'Нет'}</p>
-                        <p><strong>Немедленное заселение:</strong> {rentPreferences.immediateMoveIn ? 'Да' : 'Нет'}</p>
-                        <p><strong>Количество спальных мест:</strong> {rentPreferences.numberOfBeds}</p>
-                        <button onClick={() => setEditingRentData(true)} className={s.button}>
+                        <p className={s.parametersText}><strong>Срок аренды:</strong> {rentPreferences.minRentPeriod} - {rentPreferences.maxRentPeriod}</p>
+                        <p className={s.parametersText}><strong>Проживание с животными:</strong> {rentPreferences.petsAllowed ? 'Да' : 'Нет'}</p>
+                        <p className={s.parametersText}><strong>Проживание с детьми:</strong> {rentPreferences.childrenAllowed ? 'Да' : 'Нет'}</p>
+                        <p className={s.parametersText}><strong>Немедленное заселение:</strong> {rentPreferences.immediateMoveIn ? 'Да' : 'Нет'}</p>
+                        <p className={s.parametersText}><strong>Количество спальных мест:</strong> {rentPreferences.numberOfBeds}</p>
+                        <button onClick={() => setEditingRentData(true)} className={s.buttonChangeParameters}>
                             Редактировать параметры аренды
                         </button>
+                        <button onClick={() => setEditingRentPriorities(true)} className={s.buttonChangePriorities}>
+                            Расставить приоритеты параметров
+                        </button>
                     </div>
-                )}
+                }
             </div>
             <button onClick={handleLogout} className={s.buttonExit}>
                 Выйти из профиля

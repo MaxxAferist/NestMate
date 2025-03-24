@@ -21,6 +21,10 @@ export default function Header({ tab, setTab }){
             navigate('/Profile');
         }
     }
+
+    function handleButtonOnMainClick(){
+        navigate('/');
+    }
     return (
         <>
             <header>
@@ -45,7 +49,7 @@ export default function Header({ tab, setTab }){
                         </div>
                     </div>
                     <div className={s.rightSection}>
-                        <button className={s.mainButton} onClick={() => console.log('Переход на главную')}>
+                        <button className={s.mainButton} onClick={handleButtonOnMainClick}>
                             На главную
                         </button>
                         <button className={s.signInButton}  onClick={handleButtonLoginClick}>
