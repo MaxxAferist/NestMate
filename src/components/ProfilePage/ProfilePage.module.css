@@ -29,7 +29,7 @@
     margin: 10px;
 }
 .flatDataForm{
-    background: rgba(190,255,188,0.18);
+    background: rgba(200, 253, 198, 0.11);
     display: flex;
     flex-direction: column;
     border-radius: 10px;
@@ -39,7 +39,7 @@
     border-color: rgba(177, 177, 177, 0.3);
 }
 .rentDataForm{
-    background-color: rgba(190, 95, 246, 0.07);
+    background-color: rgba(193, 123, 250, 0.05);
     display: flex;
     flex-direction: column;
     border-radius: 10px;
@@ -49,10 +49,11 @@
     border-color: rgba(177, 177, 177, 0.3);
 }
 .formGroup{
-    margin-bottom: 15px;
+   margin: 10px;
 }
+
 .input{
-    width: 100%;
+    width: 98%;
     padding: 8px;
     border-radius: 4px;
     border: 1px solid #ccc;
@@ -105,14 +106,18 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 10px;
+    margin: 10px;
 }
 
 .inlineFormGroup label {
     flex: 1;
     text-align: left;
 }
-
+.inlineLabel {
+    color: #666;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
 .inlineFormGroup input {
     flex: 2;
     padding: 8px;
@@ -124,8 +129,8 @@
     font-size: 0.875rem;
     margin-top: 5px;
 }
-.fromInlineGroup{
-    margin-bottom: 15px;
+.formInlineGroup{
+    margin: 10px;
     align-items: center;
     text-align: right;
 }
@@ -151,6 +156,7 @@
 
 .paramName {
     min-width: 150px;
+    margin: 10px;
 }
 
 .priorityLabel {
@@ -186,4 +192,65 @@
     border-radius: 8px;
     cursor: pointer;
     margin: 10px;
+}
+.editingParameterText{
+    margin: 10px;
+}
+.parametersContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px;
+}
+
+.parameterRow {
+    word-spacing: 3px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.parameterName {
+    color: #333;
+}
+
+.parameterValue {
+    color: #373737;
+    border: 1px solid #83b9ff;
+    border-radius: 4px;
+    background-color: rgba(131, 185, 255, 0.05);
+    padding: 4px 8px;
+    display: inline-block;
+}
+
+.parameterPriority {
+    color: #000000;
+    border: 1px solid #ffd883;
+    background-color: rgba(255, 216, 131, 0.09);
+    border-radius: 4px;
+    padding: 4px 8px;
+    display: inline-block;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+.nestedParameters {
+    gap: 6px;
+    padding-left: 8px;
+    margin-bottom: 6px;
+}
+
+.nestedParameterRow {
+    display: flex;
+    gap: 8px;
+    font-size: 0.9em;
+    margin: 10px 0;
+}
+
+.parameterBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
 }
