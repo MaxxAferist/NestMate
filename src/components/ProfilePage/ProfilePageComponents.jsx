@@ -1,0 +1,189 @@
+import s from './ProfilePage.module.css'
+
+export const ProfileParameterRow = ({ name, value, className = '' }) => {
+    return (
+        <div className={`${s.parameterRow} ${className}`}> {/*className для дополнительных стилей*/}
+            <strong className={s.parameterName}>{name}:</strong>
+            <span className={s.userParameterValue}>{value || ''}</span>
+        </div>
+    );
+};
+
+export const FormInputField = ({
+                                   name,
+                                   label,
+                                   type = 'text',
+                                   value,
+                                   onChange,
+                                   options = null,
+                                   className = '',
+                                   inputClassName = s.input,
+                                   required = false,
+                                   placeholder = '',
+                                   errorClassName = s.error,
+                                   error = null,
+                                   step = null,
+                                   minuteLabel='',
+                                   ...rest
+}) => {
+    return (
+        <div className={`${s.formGroup} ${className}`}>
+            <label>{label}</label>
+            {options ? (
+                <select
+                    name={name}
+                    value={value || ''}
+                    onChange={onChange}
+                    className={inputClassName}
+                    required={required}
+                >
+                    {options.map(option => (
+                        <option key={option.value} value={option.value}>
+                            {option.label}
+                        </option>
+                    ))}
+                </select>
+            ) : (
+                <input
+                    type={type}
+                    name={name}
+                    value={value || ''}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                    className={inputClassName}
+                    step={step}
+                    required={required}
+                />
+            )}
+            {minuteLabel && <span className={s.inlineLabel}>{minuteLabel}</span>}
+            {error && <span className={errorClassName}>{error}</span>}
+        </div>
+    );
+};
+export const ButtonSave = ({ children, type, className = '' }) => {
+    return (
+        <button className={`${s.buttonSave} ${className}`} type={type}>
+            {children}
+        </button>
+    )
+}
+
+export const InlineFromField = ({
+                                    name,
+                                    label,
+                                    type = 'text',
+                                    value,
+                                    onChange,
+                                    className = '',
+                                    inputClassName = s.input,
+                                    required = false,
+                                    placeholder = '',
+                                    errorClassName = s.error,
+                                    error = null,
+                                    step = null,
+                                    minuteLabel='',
+                                    ...rest
+                                }) => {
+    return (
+        <>
+            <div className={`${s.inlineFormGroup} ${className}`}>
+                <label>{label}</label>
+                <input
+                    type={type}
+                    name={name}
+                    value={value || ''}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                    className={inputClassName}
+                    step={step}
+                    required={required}
+                />
+                {minuteLabel && <span className={s.inlineLabel}>{minuteLabel}</span>}
+            </div>
+            {error && <span className={errorClassName}>{error}</span>}
+        </>
+
+    )
+}
+
+export const RangeInput = ({
+                        label,
+                        minName,
+                        maxName,
+                        minValue,
+                        maxValue,
+                        onChange,
+                        minPlaceholder = 'от',
+                        maxPlaceholder = 'до',
+                        minError = null,
+                        maxError = null,
+                        className = '',
+                        inputClassName = s.range,
+                        errorClassName = s.error
+                    }) => {
+    return (
+        <div className={`${s.formGroup} ${className}`}>
+            <label>{label}:</label>
+            <div className={s.rangeFields}>
+                <input
+                    type="number"
+                    name={minName}
+                    value={minValue || ''}
+                    onChange={onChange}
+                    className={inputClassName}
+                    placeholder={minPlaceholder}
+                />
+                <input
+                    type="number"
+                    name={maxName}
+                    value={maxValue || ''}
+                    onChange={onChange}
+                    className={inputClassName}
+                    placeholder={maxPlaceholder}
+                />
+            </div>
+            {minError && <span className={errorClassName}>{minError}</span>}
+            {!minError && maxError && <span className={errorClassName}>{maxError}</span>}
+        </div>
+    );
+};
+
+export const FlatParameterRow = ({
+                                     children,
+                                     name,
+                                     value,
+                                     priority,
+                                     isArray = false,
+                                     isRange = false,
+                                     defaultValue = 'не указан'
+}) => {
+    const renderValue = () => {
+        if (isArray) {
+            return value.length > 0 ? value.join(', ') : defaultValue;
+        }
+        if (isRange) {
+            return (<>{children}</>);
+        }
+        return value || defaultValue;
+    };
+    return (
+        <div className={s.parameterRow}>
+            <strong className={s.parameterName}>{name}:</strong>
+            <span className={s.parameterValue}>{renderValue()}</span>
+            {(0<=priority) && (
+                <span className={s.parameterPriority}>приоритет: {priority}</span>
+            )}
+        </div>
+    );
+};
+
+export const InfrastructureParameterRow = ({ name, value, defaultValue = 'расстояние не указано' }) => {
+    return (
+        <div className={s.parameterRow}>
+            <span className={s.parameterName}>{name}:</span>
+            <span className={s.parameterValue}>
+        {value ? `Пешком не более ${value} минут` : defaultValue}
+      </span>
+        </div>
+    );
+};

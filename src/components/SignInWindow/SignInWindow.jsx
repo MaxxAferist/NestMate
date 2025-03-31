@@ -8,7 +8,7 @@ export default function SignInWindow({ tab, setTab }){
     const { register, login } = useContext(LoginContext)
 
     const [userData, setUserData]=useState({
-        userName: '',
+        firstName: '',
         email: '',
         password: '',
     });
@@ -21,10 +21,10 @@ export default function SignInWindow({ tab, setTab }){
         const newErrors = {}
 
 
-        if (!userData.userName.trim()) { // проверка имени
-            newErrors.userName = 'Обязательное поле';
-        } else if (userData.userName.length < 1 || userData.userName.length > 30) {
-            newErrors.userName = 'Длина имени должна быть от 1 до 30 символов';
+        if (!userData.firstName.trim()) { // проверка имени
+            newErrors.firstName = 'Обязательное поле';
+        } else if (userData.firstName.length < 1 || userData.firstName.length > 30) {
+            newErrors.firstName = 'Длина имени должна быть от 1 до 30 символов';
         }
 
 
@@ -94,7 +94,7 @@ export default function SignInWindow({ tab, setTab }){
 
     const isFormValid = () => { // проверка заполнения
         return (
-            userData.userName.trim() &&
+            userData.firstName.trim() &&
             userData.email.trim() &&
             userData.password.trim() &&
             confirmPassword.trim() &&
@@ -113,15 +113,15 @@ export default function SignInWindow({ tab, setTab }){
                 <h2 className={s.title}>Регистрация</h2>
                 <div className={s.inputGroup}>
                     <input
-                        className={`${s.input} ${errors.userName ? s.inputError: ''}  `}
-                        name="userName"
+                        className={`${s.input} ${errors.firstName ? s.inputError: ''}  `}
+                        name="firstName"
                         type="text"
                         placeholder="Имя"
-                        value={userData.userName}
+                        value={userData.firstName}
                         onChange={handleChange}
                         disabled={isRegistered}
                     />
-                    {errors.userName && <span className={s.errorText} > {errors.userName}</span>}
+                    {errors.firstName && <span className={s.errorText} > {errors.firstName}</span>}
                 </div>
 
                 <div className={s.inputGroup}>

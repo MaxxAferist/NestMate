@@ -212,7 +212,8 @@
 }
 
 .parameterName {
-    color: #333;
+    font-size: 18px;
+    color: #1e1e1e;
 }
 
 .parameterValue {
@@ -233,6 +234,15 @@
     display: inline-block;
     font-size: 0.9em;
     font-style: italic;
+}
+
+.userParameterValue {
+    color: #191919;
+    border: 1px solid rgba(140, 132, 132, 0.18);
+    border-radius: 4px;
+    background-color: rgb(255, 255, 255);
+    padding: 4px 8px;
+    display: inline-block;
 }
 
 .nestedParameters {
