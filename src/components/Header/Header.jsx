@@ -1,7 +1,6 @@
 import {useContext, useState} from 'react'
 import s from './Header.module.css'
 import { LoginContext } from '../contexts/LoginContext.jsx'
-import LoginWindow from "../LoginWindow/LoginWindow.jsx";
 import { useNavigate } from 'react-router-dom'
 
 export default function Header({ tab, setTab }){

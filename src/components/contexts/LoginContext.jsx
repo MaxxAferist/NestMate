@@ -4,7 +4,6 @@ export const LoginContext = createContext();
 
 export const LoginProvider = ({ children }) => {
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(null);
 
     const [userData, setUserData] = useState({
         id: '',
@@ -19,6 +18,8 @@ export const LoginProvider = ({ children }) => {
     const [flatPreferences, setFlatPreferences] = useState({
         budgetMin: '',
         budgetMax: '',
+        areaMin: '',
+        areaMax: '',
         region: '',
         city: '',
         district: '',
@@ -56,6 +57,7 @@ export const LoginProvider = ({ children }) => {
         },
         priorities: {
             budget: 3,
+            area: 3,
             roomCount: 3,
             balconyType: 3,
             ceilingHeight: 3,

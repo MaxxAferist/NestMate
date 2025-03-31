@@ -6,6 +6,7 @@ import LoginWindow from './components/LoginWindow/LoginWindow.jsx'
 import HomePage from './components/HomePage/HomePage.jsx'
 import { LoginContext } from './components/contexts/LoginContext.jsx'
 import ProfilePage from './components/ProfilePage/ProfilePage.jsx'
+import FlatPage from "./components/FlatPage/FlatPage.jsx";
 
 function App() {
     const { user } = useContext(LoginContext);
@@ -17,6 +18,7 @@ function App() {
                   <Route path={'/SignIn'} element={<SignInWindow/>}/>
                   <Route path={'/LogIn'} element={<LoginWindow/>}/>
                   <Route path={'/Profile'} element={<ProfilePage/>}/>
+                  <Route path={'/FlatPage/:id'} element={<FlatPage/>}/>
               </Routes>
       </BrowserRouter>
   );

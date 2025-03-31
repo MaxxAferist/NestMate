@@ -66,6 +66,9 @@ const ProfilePage = () => {
         validateRange('floorsInBuildingMin', 'floorsInBuildingMax', flatPreferences.floorsInBuildingMin, flatPreferences.floorsInBuildingMax);
     }, [flatPreferences.floorsInBuildingMin, flatPreferences.floorsInBuildingMax]);
 
+    useEffect(() => {
+        validateRange('areaMin', 'areaMax', flatPreferences.areaMin, flatPreferences.areaMax);
+    }, [flatPreferences.areaMin, flatPreferences.areaMax]);
 
     const validateRange = (minName, maxName, minValue, maxValue) => {
         if (minValue !== '' && maxValue !== '') {
@@ -493,7 +496,7 @@ const ProfilePage = () => {
                             onChange={handleInputChange}
                         />
                         <RangeInput
-                            label="Бюджет"
+                            label="Бюджет   руб."
                             minName="budgetMin"
                             maxName="budgetMax"
                             minValue={flatPreferences.budgetMin}
@@ -501,6 +504,16 @@ const ProfilePage = () => {
                             onChange={handleInputChange}
                             minError={errors.budgetMin}
                             maxError={errors.budgetMax}
+                        />
+                        <RangeInput
+                            label="Площадь   м²"
+                            minName="areaMin"
+                            maxName="areaMax"
+                            minValue={flatPreferences.areaMin}
+                            maxValue={flatPreferences.areaMax}
+                            onChange={handleInputChange}
+                            minError={errors.areaMin}
+                            maxError={errors.areaMax}
                         />
                         <div className={s.formGroup}>
                             <label>Количество комнат:</label>
@@ -796,6 +809,10 @@ const ProfilePage = () => {
                             <PrioritySelector section="flat" name="budget" value={flatPreferences.priorities.budget} />
                         </div>
                         <div className={s.priorityRow}>
+                            <strong className={s.paramName}>Площадь</strong>
+                            <PrioritySelector section="flat" name="area" value={flatPreferences.priorities.area} />
+                        </div>
+                        <div className={s.priorityRow}>
                             <strong className={s.paramName}>Количество комнат</strong>
                             <PrioritySelector section="flat" name="roomCount" value={flatPreferences.priorities.roomCount} />
                         </div>
@@ -869,6 +886,12 @@ const ProfilePage = () => {
                                 {flatPreferences.budgetMin && flatPreferences.budgetMax ? ' ' : ''}
                                 {flatPreferences.budgetMax ? `до ${flatPreferences.budgetMax} руб.` : ''}
                                 {!flatPreferences.budgetMin && !flatPreferences.budgetMax ? 'не указан' : ''}
+                            </FlatParameterRow>
+                            <FlatParameterRow name="Площадь" isRange priority={flatPreferences.priorities.area}>
+                                {flatPreferences.areaMin ? `от ${flatPreferences.areaMin} м²` : ''}
+                                {flatPreferences.areaMin && flatPreferences.areaMax ? ' ' : ''}
+                                {flatPreferences.areaMax ? `до ${flatPreferences.areaMax} м²` : ''}
+                                {!flatPreferences.areaMin && !flatPreferences.areaMax ? 'не указан' : ''}
                             </FlatParameterRow>
 
                             <FlatParameterRow
