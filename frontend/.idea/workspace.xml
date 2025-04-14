@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d9c70930-1c4a-4f15-8630-7970b0670b5b" name="Changes" comment="Доделал страницу квартиры" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Frontend" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Treska1k&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/MaxxAferist/NestMate.git&quot;,
+    &quot;accountId&quot;: &quot;89f1cc55-ec43-4a5f-8028-15df4648044a&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2uRq3pZ9bZD8PsLhrrKwdDupht0" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/artem/WebstormProjects/NestMate/frontend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.3.4\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\artem\WebstormProjects\Site\src\components\contexts" />
+      <recent name="C:\Users\artem\WebstormProjects\Site\src\components" />
+      <recent name="C:\Users\artem\WebstormProjects\Site\src" />
+      <recent name="C:\Users\artem\WebstormProjects\Site\src\components\LoginWindow" />
+      <recent name="C:\Users\artem\WebstormProjects\Site\src\components\SignInWindow" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-WS-243.25659.40" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration>C:\Users\artem\AppData\Roaming\Subversion</configuration>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d9c70930-1c4a-4f15-8630-7970b0670b5b" name="Changes" comment="" />
+      <created>1742221538138</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742221538138</updated>
+      <workItem from="1742221539250" duration="13500000" />
+      <workItem from="1742283988718" duration="7855000" />
+      <workItem from="1742302830998" duration="1532000" />
+      <workItem from="1742317144831" duration="6222000" />
+      <workItem from="1742323716759" duration="1038000" />
+      <workItem from="1742406781966" duration="338000" />
+      <workItem from="1742407184901" duration="1242000" />
+      <workItem from="1742408443985" duration="536000" />
+      <workItem from="1742466993399" duration="3488000" />
+      <workItem from="1742475421179" duration="634000" />
+      <workItem from="1742564757732" duration="15897000" />
+      <workItem from="1742583648759" duration="7000" />
+      <workItem from="1742583776978" duration="6000" />
+      <workItem from="1742584526236" duration="109000" />
+      <workItem from="1742584752648" duration="195000" />
+      <workItem from="1742585216092" duration="297000" />
+      <workItem from="1742586308497" duration="225000" />
+      <workItem from="1742629613940" duration="4298000" />
+      <workItem from="1742653361112" duration="12556000" />
+      <workItem from="1742666522745" duration="192000" />
+      <workItem from="1742722992105" duration="9040000" />
+      <workItem from="1742734688606" duration="790000" />
+      <workItem from="1742739164996" duration="9365000" />
+      <workItem from="1742751845410" duration="6144000" />
+      <workItem from="1742758150903" duration="1702000" />
+      <workItem from="1742821681341" duration="11477000" />
+      <workItem from="1742833348683" duration="1375000" />
+      <workItem from="1742834776231" duration="30000" />
+      <workItem from="1742834844504" duration="10000" />
+      <workItem from="1742834861527" duration="229000" />
+      <workItem from="1742835120104" duration="559000" />
+      <workItem from="1742835692525" duration="161000" />
+      <workItem from="1742835938422" duration="5000" />
+      <workItem from="1742835963247" duration="1381000" />
+      <workItem from="1742839530807" duration="258000" />
+      <workItem from="1742891280044" duration="4662000" />
+      <workItem from="1742896003257" duration="10000" />
+      <workItem from="1743005998232" duration="4530000" />
+      <workItem from="1743164549965" duration="6841000" />
+      <workItem from="1743249285158" duration="15769000" />
+      <workItem from="1743331830278" duration="16795000" />
+      <workItem from="1743412239800" duration="19042000" />
+      <workItem from="1744017196956" duration="1945000" />
+      <workItem from="1744025528191" duration="5000" />
+      <workItem from="1744033187161" duration="12410000" />
+      <workItem from="1744096995302" duration="5939000" />
+      <workItem from="1744378271540" duration="2422000" />
+      <workItem from="1744450669613" duration="4985000" />
+      <workItem from="1744460170895" duration="16236000" />
+      <workItem from="1744534403323" duration="18412000" />
+      <workItem from="1744627065111" duration="2710000" />
+      <workItem from="1744632576709" duration="658000" />
+      <workItem from="1744633696922" duration="8000" />
+    </task>
+    <task id="LOCAL-00001" summary="Доделал страницу квартиры">
+      <option name="closed" value="true" />
+      <created>1744102674555</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1744102674555</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="HEAD" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Доделал страницу квартиры" />
+    <option name="LAST_COMMIT_MESSAGE" value="Доделал страницу квартиры" />
+  </component>
+</project>

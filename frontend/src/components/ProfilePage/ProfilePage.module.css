@@ -1,0 +1,601 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+.header{
+    text-align: center;
+    color: #333;
+}
+.section{
+    margin-bottom: 30px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+.profileDataForm{
+    width: 60%;
+    background-color: rgba(166, 209, 253, 0.13);
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgba(177, 177, 177, 0.3);
+}
+.parametersText{
+    margin: 10px;
+}
+.flatDataForm{
+    width: 60%;
+    background: rgba(200, 253, 198, 0.11);
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgba(177, 177, 177, 0.3);
+}
+.rentDataForm{
+    width: 60%;
+    background-color: rgba(193, 123, 250, 0.05);
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgba(177, 177, 177, 0.3);
+}
+.formGroup{
+   margin: 10px;
+}
+
+.input{
+    width: 98%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.textarea{
+    width: 100%;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    min-height: 100px;
+}
+.button{
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 10px;
+}
+.checkboxLabel{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.buttonExit{
+    padding: 10px 20px;
+    background-color: rgba(131, 32, 43, 0.9);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.checkboxGroup{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.rangeFields{
+    display: flex;
+    gap: 10px;
+}
+.range{
+    flex: 1;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.inlineFormGroup {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px;
+}
+
+.inlineFormGroup label {
+    flex: 1;
+    text-align: left;
+}
+.inlineLabel {
+    color: #666;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+.inlineFormGroup input {
+    flex: 2;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+.error {
+    color: red;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+.formInlineGroup{
+    margin: 10px;
+    align-items: center;
+    text-align: right;
+}
+.prioritySelector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.prioritySelect {
+    padding: 5px 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+}
+.priorityRow {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.paramName {
+    min-width: 150px;
+    margin: 10px;
+}
+
+.priorityLabel {
+    color: #393939;
+    font-size: 0.9em;
+}
+.buttonChangeParameters{
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: rgba(66, 146, 246, 0.93);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+}
+.buttonChangePriorities{
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: rgba(100, 54, 133, 0.87);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+}
+.buttonSave{
+    padding: 8px 16px;
+    font-size: 16px;
+    background-color: rgba(0, 255, 82, 0.5);
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+}
+.editingParameterText{
+    margin: 10px;
+}
+.parametersContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px;
+}
+
+.parameterRow {
+    word-spacing: 3px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.parameterName {
+    font-size: 18px;
+    color: #1e1e1e;
+}
+
+.parameterValue {
+    color: #373737;
+    border: 1px solid #83b9ff;
+    border-radius: 4px;
+    background-color: rgba(131, 185, 255, 0.05);
+    padding: 4px 8px;
+    display: inline-block;
+}
+
+.parameterPriority {
+    color: #000000;
+    border: 1px solid #ffd883;
+    background-color: rgba(255, 216, 131, 0.09);
+    border-radius: 4px;
+    padding: 4px 8px;
+    display: inline-block;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+.userParameterValue {
+    color: #191919;
+    border: 1px solid rgba(140, 132, 132, 0.18);
+    border-radius: 4px;
+    background-color: rgb(255, 255, 255);
+    padding: 4px 8px;
+    display: inline-block;
+}
+
+.nestedParameters {
+    gap: 6px;
+    padding-left: 8px;
+    margin-bottom: 6px;
+}
+
+.nestedParameterRow {
+    display: flex;
+    gap: 8px;
+    font-size: 0.9em;
+    margin: 10px 0;
+}
+
+.parameterBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.matrixContainer {
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.comparisonTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+}
+
+.colName{
+    border: 1px solid #ddd;
+    padding: 1px 2px;
+    text-align: center;
+    background-color: #f2f2f2;
+}
+
+.instructionsContainer {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-left: 4px solid #4285f4;
+}
+
+.instructionsTitle {
+    color: #202124;
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.instructionsList {
+    margin: 0 0 12px 0;
+    padding: 0 0 0 20px;
+    list-style: none;
+}
+
+.instructionItem {
+    margin-bottom: 8px;
+    line-height: 1.5;
+    position: relative;
+}
+
+.bullet {
+    position: absolute;
+    left: -20px;
+    color: #4285f4;
+    font-weight: bold;
+}
+
+/*.scaleValues {
+    margin-left: 24px;
+    margin-bottom: 16px;
+}
+
+.scaleRow {
+    margin-bottom: 6px;
+    display: flex;
+    align-items: baseline;
+}
+
+.scaleNumber {
+    display: inline-block;
+    width: 60px;
+    font-weight: 500;
+    color: #ea4335;
+}*/
+
+.example {
+    background-color: #e8f0fe;
+    border-radius: 6px;
+    padding: 12px;
+    margin-top: 16px;
+}
+
+.exampleTitle {
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #4285f4;
+}
+
+.exampleText {
+    line-height: 1.5;
+}
+
+.highlight {
+    background-color: #d2e3fc;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/*.instructionContainer {
+    margin: 5px;
+    padding: 5px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    width: 80%;
+}
+
+.instructionText {
+    color: #333;
+}
+
+.instructionLine {
+    margin: 5px;
+}*/
+
+.saatiScale {
+    margin: 10px;
+    padding-left: 20px;
+}
+
+.saatiScale li {
+    margin-bottom: 5px;
+}
+
+.scaleValue {
+    display: inline-block;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.errorContainer {
+    margin: 20px 0;
+    font-size: 14px;
+}
+
+.consistencyError {
+    background-color: #fff8e1;
+    border-left: 4px solid #ffc107;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+
+.saveError {
+    color: #d32f2f;
+    background-color: #ffebee;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.matrixButtonGroup {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.saveButton{
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px;
+}
+
+.saveButton:disabled {
+    background-color: #7c7c7c;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.saveButton:hover{
+    background-color: #388e3c;
+}
+
+
+.cancelButton {
+    background-color: #d3a83c;
+    color: #ffffff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px;
+}
+
+.cancelButton:hover{
+    background-color: #ffb600;
+}
+
+.clearButton {
+    background-color: #8c4343;
+    color: #ffffff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px;
+}
+
+.clearButton:hover {
+    background-color: #ba1c1c;
+}
+
+.oppositeValue {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 3px;
+}
+
+.columnSelectors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.columnSelector {
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+}
+
+.columnSelector select {
+    padding: 5px;
+}
+
+.normalCell{
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    background-color: #ffffff;
+}
+.comparisonTable th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    background-color: #f2f2f2;
+}
+
+.comparisonTable select {
+    padding: 5px;
+    width: 80px;
+}
+
+.oppositeValue {
+    font-size: 0.8em;
+    color: #666;
+    margin-top: 3px;
+}
+
+.rowName {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #f9f9f9;
+}
+
+.textContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.errorCell {
+    background-color: #ffebee;
+    border: 2px solid #ffb5ae;
+    position: relative;
+}
+
+
+.errorTitle {
+    color: #d32f2f;
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 15px;
+}
+
+.errorList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.errorItem {
+    margin-bottom: 12px;
+}
+
+.errorChain {
+    color: #555;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: flex-start;
+    line-height: 1.4;
+}
+
+.errorSuggestion {
+    color: #2e7d32;
+    background-color: #f1f8e9;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-left: 24px;
+    border-left: 3px solid #7cb342;
+}
+
+.errorIcon {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.errorSpacer {
+    height: 12px;
+    border-bottom: 1px dashed #eee;
+    margin: 8px 0;
+}
+
+.saveError {
+    color: #d32f2f;
+    background-color: #ffebee;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+}

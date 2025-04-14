@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <div class="container mt-5"> <!-- Создание контейнера -->
+    <h1>Все Пользователи</h1> <!-- цикл -->
+    {% if users|length > 0 %}
+        {% for el in users %}
+        <div>
+          <p> {{ el.id }}</p>
+          <p> {{ el.userName }}</p>
+          <p> {{ el.email }}</p>
+          <p> {{ el.password }}</p>
+          <p><b>Дата: {{el.signInDate.date()}}</b></p>
+        </div>
+        {% endfor %}
+    {% else %}
+    <p> Пользователей нет</p>
+    {% endif %}
+</div>
+</body>
+</html>
