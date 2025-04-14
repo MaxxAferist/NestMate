@@ -28,9 +28,9 @@ export const LoginProvider = ({ children }) => {
         city: '', // город
         district: '', // район
         roomCount: [], // кол-во комнат
+        apartmentType: 'неважно', // тип квартиры (вторичка/новостройка)
         balconyType: 'неважно', // балкон/лоджия
         ceilingHeight: '', // высота потолков
-        mortgage: 'неважно', // ипотека
         minFloor: '', // этаж
         maxFloor: '',
         floorsInBuildingMin: '', // этажей в доме
@@ -59,12 +59,12 @@ export const LoginProvider = ({ children }) => {
             cityCenterDistance: '',
             metroTransportTime: '',
         },
-        comparisonMatrix: (() => { // матрица парных сравнений
+        comparisonMatrix: (() => {
             const params = [
-                'budget', 'area', 'roomCount', 'balconyType', 'ceilingHeight',
-                'mortgage', 'floor', 'floorsInBuilding', 'houseMaterial',
-                'renovationCondition', 'amenities', 'kitchenStove',
-                'viewFromWindows', 'parking', 'infrastructure', 'transportAccessibility'
+                'budget', 'area', 'roomCount', 'apartmentType', 'balconyType',
+                'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
+                'renovationCondition', 'amenities', 'parking',
+                'infrastructure', 'transportAccessibility'
             ];
             const matrix = {};
             params.forEach(param1 => {
@@ -75,37 +75,39 @@ export const LoginProvider = ({ children }) => {
             });
             return matrix;
         })(),
-        priorities: { // приоритеты
-            budget: 1/16,
-            area: 1/16,
-            roomCount: 1/16,
-            balconyType: 1/16,
-            ceilingHeight: 1/16,
-            mortgage: 1/16,
-            floor: 1/16,
-            floorsInBuilding: 1/16,
-            houseMaterial: 1/16,
-            renovationCondition: 1/16,
-            amenities: 1/16,
-            kitchenStove: 1/16,
-            viewFromWindows: 1/16,
-            parking: 1/16,
-            infrastructure: 1/16,
-            transportAccessibility: 1/16
+        priorities: {
+            budget: 1/14,
+            area: 1/14,
+            roomCount: 1/14,
+            apartmentType: 1/14,
+            balconyType: 1/14,
+            ceilingHeight: 1/14,
+            floor: 1/14,
+            floorsInBuilding: 1/14,
+            houseMaterial: 1/14,
+            renovationCondition: 1/14,
+            amenities: 1/14,
+            parking: 1/14,
+            infrastructure: 1/14,
+            transportAccessibility: 1/14
         }
     });
     const [rentPreferences, setRentPreferences] = useState({
-        rentPeriod: "неважно", // период аренды
-        petsAllowed: false, // можно с животными
-        childrenAllowed: false, // можно с детьми
-        immediateMoveIn: false, // немедленное заселение
+        rentPayment: { // условия аренды
+            rentPriceMin: '', // цена аренды
+            rentPriceMax: '',
+            rentPeriod: "неважно", // период аренды
+        },
+        rentalTerms: { // условия проживания
+            petsAllowed: false, // можно с животными
+            childrenAllowed: false, // можно с детьми
+            immediateMoveIn: false, // немедленное заселение
+        },
         numberOfBeds: '', // количество спальных мест
         // матрицу добавлю позже
         priorities: {  // старые приоритеты
-            rentPeriod: 3,
-            petsAllowed: 3,
-            childrenAllowed: 3,
-            immediateMoveIn: 3,
+            rentPayment: 3,
+            rentalTerms: 3,
             numberOfBeds: 3
         }
     });
@@ -309,30 +311,32 @@ export const LoginProvider = ({ children }) => {
             gender: ' ',
         });
         setFlatPreferences({
-            budgetMin: '',
+            budgetMin: '', //бюджет
             budgetMax: '',
-            region: '',
-            city: '',
-            district: '',
-            roomCount: [],
-            balconyType: 'неважно',
-            ceilingHeight: '',
-            mortgage: 'неважно',
-            minFloor: '',
+            areaMin: '', //площадь
+            areaMax: '',
+            region: '', // регион
+            city: '', // город
+            district: '', // район
+            roomCount: [], // кол-во комнат
+            apartmentType: 'неважно', // тип квартиры (вторичка/новостройка)
+            balconyType: 'неважно', // балкон/лоджия
+            ceilingHeight: '', // высота потолков
+            minFloor: '', // этаж
             maxFloor: '',
-            floorsInBuildingMin: '',
+            floorsInBuildingMin: '', // этажей в доме
             floorsInBuildingMax: '',
-            houseMaterial: [],
-            renovationCondition: 'неважно',
-            amenities: [],
-            kitchenStove: 'неважно',
-            viewFromWindows: [],
-            parking: {
+            houseMaterial: [], // материал дома
+            renovationCondition: 'неважно', // состояние ремонта
+            amenities: [], // удобства
+            kitchenStove: 'неважно', // тип кухонной плиты
+            viewFromWindows: [], // вид из окон
+            parking: { // парковка
                 countMin: '',
                 type: 'неважно',
                 payment: 'неважно',
             },
-            infrastructure: {
+            infrastructure: { // инфраструктура района
                 parks: '',
                 hospitals: '',
                 shoppingCenters: '',
@@ -340,42 +344,59 @@ export const LoginProvider = ({ children }) => {
                 schools: '',
                 kindergartens: '',
             },
-            transportAccessibility: {
+            transportAccessibility: { // транспортная доступность
                 publicTransportStops: '',
                 metroDistance: '',
                 cityCenterDistance: '',
                 metroTransportTime: '',
             },
+            comparisonMatrix: (() => {
+                const params = [
+                    'budget', 'area', 'roomCount', 'apartmentType', 'balconyType',
+                    'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
+                    'renovationCondition', 'amenities', 'parking',
+                    'infrastructure', 'transportAccessibility'
+                ];
+                const matrix = {};
+                params.forEach(param1 => {
+                    matrix[param1] = {};
+                    params.forEach(param2 => {
+                        matrix[param1][param2] = 1;
+                    });
+                });
+                return matrix;
+            })(),
             priorities: {
-                budget: 1/16,
-                area: 1/16,
-                roomCount: 1/16,
-                balconyType: 1/16,
-                ceilingHeight: 1/16,
-                mortgage: 1/16,
-                floor: 1/16,
-                floorsInBuilding: 1/16,
-                houseMaterial: 1/16,
-                renovationCondition: 1/16,
-                amenities: 1/16,
-                kitchenStove: 1/16,
-                viewFromWindows: 1/16,
-                parking: 1/16,
-                infrastructure: 1/16,
-                transportAccessibility: 1/16
+                budget: 1/14,
+                area: 1/14,
+                roomCount: 1/14,
+                apartmentType: 1/14,
+                balconyType: 1/14,
+                ceilingHeight: 1/14,
+                floor: 1/14,
+                floorsInBuilding: 1/14,
+                houseMaterial: 1/14,
+                renovationCondition: 1/14,
+                amenities: 1/14,
+                parking: 1/14,
+                infrastructure: 1/14,
+                transportAccessibility: 1/14
             }
         });
         setRentPreferences({
-            rentPeriod: "неважно",
-            petsAllowed: false,
-            childrenAllowed: false,
-            immediateMoveIn: false,
-            numberOfBeds: '',
+            rentPayment: { // условия аренды
+                rentPrice: '', // цена аренды
+                rentPeriod: "неважно", // период аренды
+            },
+            rentalTerms: { // условия проживания
+                petsAllowed: false, // можно с животными
+                childrenAllowed: false, // можно с детьми
+                immediateMoveIn: false, // немедленное заселение
+            },
+            numberOfBeds: '', // количество спальных мест
             priorities: {
-                rentPeriod: 3,
-                petsAllowed: 3,
-                childrenAllowed: 3,
-                immediateMoveIn: 3,
+                rentPayment: 3,
+                rentalTerms: 3,
                 numberOfBeds: 3
             }
         });

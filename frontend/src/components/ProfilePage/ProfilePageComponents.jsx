@@ -107,6 +107,25 @@ export const InlineFromField = ({
     )
 }
 
+export const InlineCheckboxField = ({
+                                        name,
+                                        label,
+                                        type = 'checkbox',
+                                        checked,
+                                        onChange,
+                                }) => {
+    return (
+        <div className={s.inlineCheckboxGroup}>
+            <label>{label}</label>
+            <input
+                type={type}
+                name={name}
+                checked={checked}
+                onChange={onChange}
+            />
+        </div>
+    )
+}
 export const RangeInput = ({
                         label,
                         minName,
@@ -156,7 +175,7 @@ export const FlatParameterRow = ({
                                      priority,
                                      isArray = false,
                                      isRange = false,
-                                     defaultValue = 'не указан'
+                                     defaultValue = 'не указан',
 }) => {
     const renderValue = () => {
         if (isArray) {
@@ -192,8 +211,7 @@ export const InfrastructureParameterRow = ({ name, value, defaultValue = 'рас
 export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences, onSave, cancelChanging }) => {
     const [selectedColumns, setSelectedColumns] = useState([]);
     const [visibleMatrix, setVisibleMatrix] = useState({});
-    const [consistencyIndex, setConsistencyIndex] = useState(null);
-    /*const [isConsistent, setIsConsistent] = useState(true);*/
+    const [isConsistent, setIsConsistent] = useState(true);
     const [fullMatrix, setFullMatrix] = useState(flatPreferences.comparisonMatrix);
     const [consistentErrors, setConsistentErrors] = useState([]);
     const [saveError, setSaveError] = useState(null);
@@ -287,15 +305,7 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
         setSaveError(null);
     };
 
-    const handleSave = () => {
-        if (consistentErrors.length > 0) {
-            setSaveError("Исправьте противоречия в матрице перед сохранением");
-            return;
-        }
 
-        const weights = calculateWeights(fullMatrix);
-        onSave(fullMatrix, weights);
-    };
 
     const oppositeValue = (value) => {
         if (value === null) return null;
@@ -332,20 +342,50 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
         return 1 / numValue;
     };
 
+    const findLambdaMax = (matrix, weights) => {
+        const parameters = Object.keys(matrix);
+        let lambdaSum = 0;
+
+        parameters.forEach(param1 => {
+            let rowSum = 0;
+            parameters.forEach(param2 => {
+                rowSum += matrix[param1][param2] * weights[param2];
+            });
+            lambdaSum += rowSum / weights[param1];
+        });
+
+        return lambdaSum / parameters.length;
+    };
+
+    const findConsistencyIndex = (matrix, weights) => {
+        const n = Object.keys(matrix).length;
+        if (n <= 2) return 0;
+
+        const lambdaMax = findLambdaMax(matrix, weights);
+        const CI = (lambdaMax - n) / (n - 1);
 
 
-    const isErrorCell = (rowParam, colParam) => {
-        return consistentErrors.some(error =>
-            error.errorCells.some(([p1, p2]) =>
-                (p1 === rowParam && p2 === colParam) ||
-                (p1 === colParam && p2 === rowParam)
-            )
-        );
+        const RI_TABLE = { 3: 0.58, 4: 0.9, 5: 1.12,
+            6: 1.24, 7: 1.32, 8: 1.41, 9: 1.45, 10: 1.49,
+            11: 1.51, 12: 1.48, 13: 1.56, 14: 1.57, 15: 1.59};
+        const RI = RI_TABLE[n] || 1.49;
+
+        const CR = CI / RI;
+        return CR;
+    };
+
+    const checkConsistentIndex = (matrix, weights) => {
+        const CR = findConsistencyIndex(matrix, weights);
+        if (CR > 0.1) {
+            setIsConsistent(false);
+            return false;
+        }else{
+            return true;
+        }
     };
 
     const checkConsistency = (matrix) => {
         const parametersList = Object.keys(matrix);
-        const consistentErrors = [];
 
         for (let i = 0; i < parametersList.length; i++) {
             for (let j = 0; j < parametersList.length; j++) {
@@ -384,6 +424,15 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
         return consistentErrors;
     };
 
+    const isErrorCell = (rowParam, colParam) => {
+        return consistentErrors.some(error =>
+            error.errorCells.some(([p1, p2]) =>
+                (p1 === rowParam && p2 === colParam) ||
+                (p1 === colParam && p2 === rowParam)
+            )
+        );
+    };
+
     const calculateWeights = (matrix) => {
         const parametersList = Object.keys(matrix);
         if (parametersList.length === 0) return {};
@@ -394,18 +443,41 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
         parametersList.forEach(parameter => {
             let product = 1;
             parametersList.forEach(otherParameter => {
-                product *= matrix[parameter][otherParameter] || 1;
+                product *= matrix[parameter][otherParameter] || 1; // чтобы не было 0
             });
             weights[parameter] = Math.pow(product, 1/n);
         });
 
-        const sum = Object.values(weights).reduce((a, b) => a + b, 0);
+        const sum = Object.values(weights).reduce((a, b) => a + b, 0); // сложение всех весов начиная с 0
         parametersList.forEach(param => {
             weights[param] = weights[param] / sum;
         });
 
         return weights;
     };
+
+    const handleSave = () => {
+        const weights = calculateWeights(fullMatrix);
+        checkConsistentIndex(fullMatrix, weights);
+
+        if (!isConsistent || consistentErrors.length > 0) {
+            setSaveError("Обнаружены противоречия в матрице. Исправьте их перед сохранением.");
+            return;
+        }
+
+        onSave(fullMatrix, weights);
+    };
+
+    /*
+const handleSave = () => {
+    if (consistentErrors.length > 0) {
+        setSaveError("Исправьте противоречия в матрице перед сохранением");
+        return;
+    }
+
+    const weights = calculateWeights(fullMatrix);
+    onSave(fullMatrix, weights);
+};*/
 
 
     return (
@@ -607,7 +679,12 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
                         </div>
                     </div>
                 )}
-
+                {/*{!isConsistent && (
+                    <div className={s.consistencyError}>
+                        <h4>Несогласованность матрицы (CR > 0.1):</h4>
+                        <p>Проверьте сравнения параметров, так как они противоречивы.</p>
+                    </div>
+                )}*/}
                 {saveError && (
                     <div className={s.saveError}>
                         <span className={s.errorIcon}>❌</span>
@@ -815,3 +892,5 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
                     Чем выше вес, тем важнее параметр и тем сильнее он будет влиять на дальнейший подбор квартиры.
                 </p>
             </div>*/}
+
+
