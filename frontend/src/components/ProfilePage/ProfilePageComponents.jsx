@@ -115,14 +115,17 @@ export const InlineCheckboxField = ({
                                         onChange,
                                 }) => {
     return (
-        <div className={s.inlineCheckboxGroup}>
-            <label>{label}</label>
-            <input
-                type={type}
-                name={name}
-                checked={checked}
-                onChange={onChange}
-            />
+        <div className={s.inlineCheckboxRow}>
+            <label className={s.checkboxLabel}>
+                <input
+                    type={type}
+                    name={name}
+                    checked={checked}
+                    onChange={onChange}
+                    className={s.checkboxInput}
+                />
+                <span>{label}</span>
+            </label>
         </div>
     )
 }
@@ -173,6 +176,7 @@ export const FlatParameterRow = ({
                                      name,
                                      value,
                                      priority,
+                                     rentPriority,
                                      isArray = false,
                                      isRange = false,
                                      defaultValue = 'не указан',
@@ -186,12 +190,32 @@ export const FlatParameterRow = ({
         }
         return value || defaultValue;
     };
+    const formatPriority = (priorityValue) => {
+        if (priorityValue === undefined || priorityValue === null) return null;
+        return `${(priorityValue * 100).toFixed(1)}%`;
+    };
+
+    const flatPriorityText = formatPriority(priority);
+
+    const rentPriorityText = formatPriority(rentPriority);
+
     return (
         <div className={s.parameterRow}>
             <strong className={s.parameterName}>{name}:</strong>
             <span className={s.parameterValue}>{renderValue()}</span>
-            {(0<=priority) && (
-                <span className={s.parameterPriority}>приоритет: {priority}</span>
+            {(flatPriorityText || rentPriorityText) && (
+                <div className={s.priorityContainer}>
+                    {flatPriorityText && (
+                        <span className={s.flatPriority}>
+                            вес при подборе: {flatPriorityText}
+                        </span>
+                    )}
+                    {rentPriorityText && (
+                        <span className={s.rentPriority}>
+                            вес при аренде: {rentPriorityText}
+                        </span>
+                    )}
+                </div>
             )}
         </div>
     );
@@ -208,11 +232,12 @@ export const InfrastructureParameterRow = ({ name, value, defaultValue = 'рас
     );
 };
 
-export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences, onSave, cancelChanging }) => {
+
+
+export const ComparisonMatrix = ({ parameters, parametersNames, currentPreferences, onSave, cancelChanging }) => {
     const [selectedColumns, setSelectedColumns] = useState([]);
     const [visibleMatrix, setVisibleMatrix] = useState({});
-    const [isConsistent, setIsConsistent] = useState(true);
-    const [fullMatrix, setFullMatrix] = useState(flatPreferences.comparisonMatrix);
+    const [fullMatrix, setFullMatrix] = useState(currentPreferences.comparisonMatrix);
     const [consistentErrors, setConsistentErrors] = useState([]);
     const [saveError, setSaveError] = useState(null);
 
@@ -221,7 +246,6 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
         setSelectedColumns(initialColumns);
         updateVisibleMatrix(fullMatrix, initialColumns);
     }, [parameters]);
-
 
     const updateVisibleMatrix = (matrix, columns) => {
         const subMatrix = {};
@@ -243,6 +267,142 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
             updateVisibleMatrix(fullMatrix, newColumns);
             return newColumns;
         });
+    };
+
+    const handleClearMatrix = () => {
+        if (!window.confirm('Вы уверены, что хотите сбросить все сравнения? Все значения будут установлены в 1.')) {
+            return;
+        }
+
+        const resetMatrix = {};
+        parameters.forEach(param1 => {
+            resetMatrix[param1] = {};
+            parameters.forEach(param2 => {
+                resetMatrix[param1][param2] = 1; // Все ячейки = 1
+            });
+        });
+
+        setFullMatrix(resetMatrix);
+        updateVisibleMatrix(resetMatrix, selectedColumns);
+        setConsistentErrors([]);
+        setSaveError(null);
+    };
+
+    const oppositeValue = (value) => {
+        if (value === null) return null;
+
+        if (typeof value === 'string' && value.includes('/')) {
+            const [numerator, denominator] = value.split('/').map(Number);
+            return denominator / numerator;
+        }
+
+        const numValue = typeof value === 'string' ? parseFloat(value) : value;
+
+        const reciprocalPairs = {
+            9: 0.111,
+            8: 1/8,
+            7: 0.143,
+            6: 0.167,
+            5: 1/5,
+            4: 1/4,
+            3: 0.333,
+            2: 1/2,
+            1: 1,
+            0.111: 9,
+            0.125: 8,
+            0.143: 7,
+            0.167: 6,
+            0.2: 5,
+            0.25: 4,
+            0.333: 3,
+            0.5: 2
+        };
+        if (reciprocalPairs.hasOwnProperty(numValue)) {
+            return reciprocalPairs[numValue];
+        }
+        return 1 / numValue;
+    };
+
+    const findLambdaMax = (matrix, weights) => {
+        const parameters = Object.keys(matrix);
+        let lambdaMax = 0;
+
+        parameters.forEach(param2 => { // расчёт собственного значения матрицы 4.1
+            let columnSum = 0;
+            parameters.forEach(param1 => {
+                columnSum += matrix[param1][param2];
+            });
+            lambdaMax += columnSum * weights[param2];
+        });
+
+        return lambdaMax;
+    };
+
+    const findConsistencyIndex = (matrix, weights) => {
+        const n = Object.keys(matrix).length;
+        if (n <= 2) return 0;
+
+        const lambdaMax = findLambdaMax(matrix, weights);
+        const CI = (lambdaMax - n) / (n - 1); // расчёт индекса согласованности 4.2
+
+
+        const RI_TABLE = { 3: 0.58, 4: 0.9, 5: 1.12,
+            6: 1.24, 7: 1.32, 8: 1.41, 9: 1.45, 10: 1.49,
+            11: 1.51, 12: 1.48, 13: 1.56, 14: 1.57, 15: 1.59};
+        const RI = RI_TABLE[n] || 1.49;
+
+        const CR = CI / RI; // расчёт отношения согласованности 4.3
+        return CR;
+    };
+
+
+    const checkConsistency = (matrix) => {
+        const currentErrors = [];
+        const parametersList = Object.keys(matrix);
+
+        for (let i = 0; i < parametersList.length; i++) {
+            for (let j = 0; j < parametersList.length; j++) {
+                for (let k = 0; k < parametersList.length; k++) {
+                    const A = parametersList[i];
+                    const B = parametersList[j];
+                    const C = parametersList[k];
+
+                    const AB = matrix[A][B];
+                    const BC = matrix[B][C];
+                    const AC = matrix[A][C];
+
+                    if (AB && BC && AC) {
+                        if (AB > 1 && BC > 1 && AC <= 1) {
+                            currentErrors.push({
+                                errorCells: [
+                                    [A, B],
+                                    [B, C],
+                                    [A, C]
+                                ],
+
+                                chain: `"${parametersNames[A]}" важнее "${parametersNames[B]}" в ${AB} ${(AB>=2 && AB<=4) ? 'раза' : 'раз' }, 
+                                "${parametersNames[B]}" важнее "${parametersNames[C]}" в ${BC} ${(BC>=2 && BC<=4) ? 'раза' : 'раз' }, 
+                                но "${parametersNames[A]}" менее важен чем "${parametersNames[C]}" в ${AC} ${(AC>=2 && AC<=4) ? 'раза' : 'раз' }`,
+
+                                suggestion: `Исправьте значение в данных ячейках: [${parametersNames[A]}]&[${parametersNames[B]}]
+                                или  [${parametersNames[B]}]&[${parametersNames[C]}]
+                                или [${parametersNames[A]}]&[${parametersNames[C]}]`
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        return currentErrors;
+    };
+
+    const isErrorCell = (rowParam, colParam) => {
+        return consistentErrors.some(error =>
+            error.errorCells.some(([p1, p2]) =>
+                (p1 === rowParam && p2 === colParam) ||
+                (p1 === colParam && p2 === rowParam)
+            )
+        );
     };
 
     const handleCellChange = (rowParameter, colParameter, value) => {
@@ -286,153 +446,6 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
         setVisibleMatrix(updatedVisibleMatrix);
     };
 
-    const handleClearMatrix = () => {
-        if (!window.confirm('Вы уверены, что хотите сбросить все сравнения? Все значения будут установлены в 1.')) {
-            return;
-        }
-
-        const resetMatrix = {};
-        parameters.forEach(param1 => {
-            resetMatrix[param1] = {};
-            parameters.forEach(param2 => {
-                resetMatrix[param1][param2] = 1; // Все ячейки = 1
-            });
-        });
-
-        setFullMatrix(resetMatrix);
-        updateVisibleMatrix(resetMatrix, selectedColumns);
-        setConsistentErrors([]);
-        setSaveError(null);
-    };
-
-
-
-    const oppositeValue = (value) => {
-        if (value === null) return null;
-
-        if (typeof value === 'string' && value.includes('/')) {
-            const [numerator, denominator] = value.split('/').map(Number);
-            return denominator / numerator;
-        }
-
-        const numValue = typeof value === 'string' ? parseFloat(value) : value;
-
-        const reciprocalPairs = {
-            9: 0.111,
-            8: 1/8,
-            7: 0.143,
-            6: 0.167,
-            5: 1/5,
-            4: 1/4,
-            3: 0.333,
-            2: 1/2,
-            1: 1,
-            0.111: 9,
-            0.125: 8,
-            0.143: 7,
-            0.167: 6,
-            0.2: 5,
-            0.25: 4,
-            0.333: 3,
-            0.5: 2
-        };
-        if (reciprocalPairs.hasOwnProperty(numValue)) {
-            return reciprocalPairs[numValue];
-        }
-        return 1 / numValue;
-    };
-
-    const findLambdaMax = (matrix, weights) => {
-        const parameters = Object.keys(matrix);
-        let lambdaSum = 0;
-
-        parameters.forEach(param1 => {
-            let rowSum = 0;
-            parameters.forEach(param2 => {
-                rowSum += matrix[param1][param2] * weights[param2];
-            });
-            lambdaSum += rowSum / weights[param1];
-        });
-
-        return lambdaSum / parameters.length;
-    };
-
-    const findConsistencyIndex = (matrix, weights) => {
-        const n = Object.keys(matrix).length;
-        if (n <= 2) return 0;
-
-        const lambdaMax = findLambdaMax(matrix, weights);
-        const CI = (lambdaMax - n) / (n - 1);
-
-
-        const RI_TABLE = { 3: 0.58, 4: 0.9, 5: 1.12,
-            6: 1.24, 7: 1.32, 8: 1.41, 9: 1.45, 10: 1.49,
-            11: 1.51, 12: 1.48, 13: 1.56, 14: 1.57, 15: 1.59};
-        const RI = RI_TABLE[n] || 1.49;
-
-        const CR = CI / RI;
-        return CR;
-    };
-
-    const checkConsistentIndex = (matrix, weights) => {
-        const CR = findConsistencyIndex(matrix, weights);
-        if (CR > 0.1) {
-            setIsConsistent(false);
-            return false;
-        }else{
-            return true;
-        }
-    };
-
-    const checkConsistency = (matrix) => {
-        const parametersList = Object.keys(matrix);
-
-        for (let i = 0; i < parametersList.length; i++) {
-            for (let j = 0; j < parametersList.length; j++) {
-                for (let k = 0; k < parametersList.length; k++) {
-                    const A = parametersList[i];
-                    const B = parametersList[j];
-                    const C = parametersList[k];
-
-                    const AB = matrix[A][B];
-                    const BC = matrix[B][C];
-                    const AC = matrix[A][C];
-
-                    if (AB && BC && AC) {
-                        if (AB > 1 && BC > 1 && AC <= 1) {
-                            consistentErrors.push({
-                                errorCells: [
-                                    [A, B],
-                                    [B, C],
-                                    [A, C]
-                                ],
-
-                                chain: `"${parametersNames[A]}" важнее "${parametersNames[B]}" в ${AB} ${(AB>=2 && AB<=4) ? 'раза' : 'раз' }, 
-                                "${parametersNames[B]}" важнее "${parametersNames[C]}" в ${BC} ${(BC>=2 && BC<=4) ? 'раза' : 'раз' }, 
-                                но "${parametersNames[A]}" менее важен чем "${parametersNames[C]}" в ${AC} ${(AC>=2 && AC<=4) ? 'раза' : 'раз' }`,
-
-                                suggestion: `Исправьте значение в данных ячейках: [${parametersNames[A]}]&[${parametersNames[B]}]
-                                или  [${parametersNames[B]}]&[${parametersNames[C]}]
-                                или [${parametersNames[A]}]&[${parametersNames[C]}]`
-                            });
-                        }
-                    }
-                }
-            }
-        }
-        /*setIsConsistent(consistentErrors.length === 0);*/
-        return consistentErrors;
-    };
-
-    const isErrorCell = (rowParam, colParam) => {
-        return consistentErrors.some(error =>
-            error.errorCells.some(([p1, p2]) =>
-                (p1 === rowParam && p2 === colParam) ||
-                (p1 === colParam && p2 === rowParam)
-            )
-        );
-    };
-
     const calculateWeights = (matrix) => {
         const parametersList = Object.keys(matrix);
         if (parametersList.length === 0) return {};
@@ -440,7 +453,7 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
         const weights = {};
         const n = parametersList.length;
 
-        parametersList.forEach(parameter => {
+        parametersList.forEach(parameter => { // расчёт среднего геометрического каждой строки 3.1
             let product = 1;
             parametersList.forEach(otherParameter => {
                 product *= matrix[parameter][otherParameter] || 1; // чтобы не было 0
@@ -448,36 +461,38 @@ export const ComparisonMatrix = ({ parameters, parametersNames, flatPreferences,
             weights[parameter] = Math.pow(product, 1/n);
         });
 
+        // расчёт суммы средних геометрических 3.2
         const sum = Object.values(weights).reduce((a, b) => a + b, 0); // сложение всех весов начиная с 0
-        parametersList.forEach(param => {
+        parametersList.forEach(param => {  // расчёт компонентов нормализованного вектора приоритетов (НВП) 3.3
             weights[param] = weights[param] / sum;
         });
 
-        return weights;
+        return weights; // веса параметров
     };
 
     const handleSave = () => {
-        const weights = calculateWeights(fullMatrix);
-        checkConsistentIndex(fullMatrix, weights);
 
-        if (!isConsistent || consistentErrors.length > 0) {
-            setSaveError("Обнаружены противоречия в матрице. Исправьте их перед сохранением.");
+        const finalErrors = checkConsistency(fullMatrix);
+        setConsistentErrors(finalErrors);
+
+        if (finalErrors.length > 0) {
+            setSaveError("Обнаружены явные противоречия в сравнениях. Исправьте их перед сохранением.");
+            return;
+        }
+
+        const weights = calculateWeights(fullMatrix);
+        const CR = findConsistencyIndex(fullMatrix, weights);
+
+        if (CR > 0.1) {
+            setSaveError(`Индекс согласованности CR = ${CR.toFixed(3)} превышает допустимый порог 0.1. 
+                    Упростите сравнения или сделайте их более согласованными.`);
             return;
         }
 
         onSave(fullMatrix, weights);
     };
 
-    /*
-const handleSave = () => {
-    if (consistentErrors.length > 0) {
-        setSaveError("Исправьте противоречия в матрице перед сохранением");
-        return;
-    }
 
-    const weights = calculateWeights(fullMatrix);
-    onSave(fullMatrix, weights);
-};*/
 
 
     return (
@@ -579,7 +594,6 @@ const handleSave = () => {
                             value={selectedColumns[index] || ''}
                             onChange={(e) => handleColumnChange(index, e.target.value)}
                         >
-                            <option value="">Выберите параметр</option>
                             {parameters.map(param => (
                                 <option
                                     key={param}
@@ -679,17 +693,25 @@ const handleSave = () => {
                         </div>
                     </div>
                 )}
-                {/*{!isConsistent && (
-                    <div className={s.consistencyError}>
-                        <h4>Несогласованность матрицы (CR > 0.1):</h4>
-                        <p>Проверьте сравнения параметров, так как они противоречивы.</p>
-                    </div>
-                )}*/}
+
                 {saveError && (
-                    <div className={s.saveError}>
-                        <span className={s.errorIcon}>❌</span>
-                        {saveError}
+                    <div>
+                        <div className={s.saveError}>
+                            <span className={s.errorIcon}>❌</span>
+                            {saveError}
+                        </div>
+                        {saveError.includes("превышает") && (
+                            <div className={s.CRIndexErrorRecommendations}>
+                                <h5>Как улучшить согласованность:</h5>
+                                <ul>
+                                    <li>Замените крайние значения (9, 7) на более умеренные (5, 3).</li>
+                                    <li>Если изменения в текущей матрице не помогли, выберите другие столбцы и исправьте их.</li>
+                                    <li>Если исправить матрицу не получается, отмените изменения кнопкой: "Отменить изменения".</li>
+                                </ul>
+                            </div>
+                        )}
                     </div>
+
                 )}
             </div>
             <div className={s.matrixButtonGroup}>
@@ -717,180 +739,4 @@ const handleSave = () => {
         </div>
     );
 };
-
-/*useEffect(() => {
-       if (flatPreferences.comparisonMatrix && Object.keys(flatPreferences.comparisonMatrix).length > 0) {
-           const savedMatrix = flatPreferences.comparisonMatrix;
-           setMatrix(savedMatrix);
-           setSelectedColumns(Object.keys(savedMatrix));
-       } else {
-           const initialColumns = parameters.slice(0, 5);
-           const initialMatrix = {};
-
-           initialColumns.forEach(param1 => {
-               initialMatrix[param1] = {};
-               initialColumns.forEach(param2 => {
-                   initialMatrix[param1][param2] = param1 === param2 ? 1 : null;
-               });
-           });
-
-           setSelectedColumns(initialColumns);
-           setMatrix(initialMatrix);
-       }
-   }, [flatPreferences.comparisonMatrix, parameters]);*/
-
-/*useEffect(() => {
-    if (!flatPreferences.comparisonMatrix || Object.keys(flatPreferences.comparisonMatrix).length === 0) {
-        const newMatrix = {};
-        selectedColumns.forEach(param1 => {
-            newMatrix[param1] = {};
-            selectedColumns.forEach(param2 => {
-                newMatrix[param1][param2] = param1 === param2 ? 1 : null;
-            });
-        });
-        setMatrix(newMatrix);
-    }
-}, [selectedColumns, flatPreferences.comparisonMatrix]);*/
-
-/*useEffect(() => {
-    if (flatPreferences.comparisonMatrix && Object.keys(flatPreferences.comparisonMatrix).length > 0) {
-        setMatrix(flatPreferences.comparisonMatrix);
-        setSelectedColumns(Object.keys(flatPreferences.comparisonMatrix));
-    } else {
-        const initialColumns = parameters.slice(0, 5);
-        setSelectedColumns(initialColumns);
-    }
-}, []);*/
-
-/*const handleColumnChange = (columnIndex, newParameter) => {
-    if (selectedColumns.includes(newParameter)) return;
-
-    setSelectedColumns(prev => {
-        const newColumns = [...prev];
-        newColumns[columnIndex] = newParameter;
-        return newColumns;
-    });
-};
-*/
-
-/*const handleSave = () => {
-        const weights = calculateWeights();
-        onSave(matrix, weights);
-    };
-*/
-
-/*const handleCellChange = (rowParameter, colParameter, value) => {
-       const newValue = Number(value);
-       const reciprocalValue = oppositeValue(newValue);
-
-       setMatrix(prevMatrix => {
-           const newMatrix = { ...prevMatrix };
-
-           newMatrix[rowParameter] = { ...newMatrix[rowParameter] };
-           newMatrix[rowParameter][colParameter] = newValue;
-
-           if (rowParameter !== colParameter) {
-               newMatrix[colParameter] = { ...newMatrix[colParameter] };
-               newMatrix[colParameter][rowParameter] = reciprocalValue;
-           }
-
-           checkConsistency(newMatrix);
-           return newMatrix;
-       });
-   };*/
-
-/*const checkConsistency = (matrix) => {
-        let isConsistent = true;
-        const parametersList = Object.keys(matrix);
-
-        for (let i = 0; i < parametersList.length; i++) {
-            for (let j = 0; j < parametersList.length; j++) {
-                for (let k = 0; k < parametersList.length; k++) {
-                    const a = matrix[parametersList[i]][parametersList[j]];
-                    const b = matrix[parametersList[j]][parametersList[k]];
-                    const c = matrix[parametersList[i]][parametersList[k]];
-
-                    if (a && b && c) {
-                        if (a > 1 && b > 1 && c <= 1) {
-                            isConsistent = false;
-                            break;
-                        }
-                    }
-                }
-                if (!isConsistent) break;
-            }
-            if (!isConsistent) break;
-        }
-
-        setIsConsistent(isConsistent);
-    };*/
-
-{/*{!isConsistent && (
-                <div className={s.consistencyError}>
-                    Внимание: обнаружены противоречия в сравнениях. Пожалуйста, проверьте ваши оценки.
-                </div>
-            )}*/}
-/*
-{consistentErrors.length > 0 && (
-    <div className={s.consistencyError}>
-        <h4>Обнаружены противоречия:</h4>
-        <ul>
-            {consistentErrors.map((item, index) => (
-                <li key={index}>
-                    {item.chain} → {item.suggestion}
-                </li>
-            ))}
-        </ul>
-    </div>
-)}
-<button onClick={handleSave} className={s.saveButton}>
-    Сохранить веса критериев
-</button>*/
-
-/*const updatedVisibleMatrix = {
-            ...visibleMatrix,
-            [rowParameter]: {
-                ...visibleMatrix[rowParameter],
-                [colParameter]: newValue
-            }
-        };
-
-        if (rowParameter !== colParameter) {
-            updatedVisibleMatrix[colParameter] = {
-                ...updatedVisibleMatrix[colParameter],
-                [rowParameter]: reciprocalValue
-            };
-        }
-*/
-
-{/*<div className={s.textContainer}>
-                <p>
-                    Вес каждого параметра оценивается с помощью матрицы парных сравнений.
-                    Сравнения параметров происходит попарно по их важности.
-                    Параметры для сравнений находятся в строках и столбцах матрицы.
-                    Каждая ячейка матрицы определяет во сколько раз параметр в строке важнее чем параметр в столбце.
-                    В верхней части матрицы выберите 5 параметров для сравнения из списков.
-                    Сравнение происходит попарно, на сколько один параметр важнее другого определяется по шкале Саати:
-                    1 - равная важность
-                    3 - немного важнее
-                    5 - важнее
-                    7 - значительно важнее
-                    9 - гораздо важнее
-                    2,4,6,8 - промежуточные значения
-                    Дробные значения (1/2, 1/3, 1/5 и т.д.) – обратные случаи (если параметр менее важен).
-
-                    Пример: Если для вас "Цена" важнее "Площади" → выберите значение по шкале Саати (в данном случае 5)
-                    в пересечении строки "Цена" и столбца "Площадь" (в ячейке [Цена]&[Площадь]).
-                    Если вы выбрали значение 5 в ячейке [Цена]&[Площадь],
-                    то система автоматически проставит значение 1/5 в ячейке [Площадь]&[Цена] для более удобного заполнения матрицы.
-
-                    Старайтесь оценивать параметры последовательно.
-                    Например, если "Цена" важнее "Площади", а "Площадь" немного важнее "Этажа", то "Цена" должна быть значительно важнее "Этажа".
-                    Система проверит согласованность ваших оценок.
-
-                    После заполнения матрицы и сохранения сравнений система автоматически рассчитает веса параметров.
-                    Чем выше вес, тем важнее параметр и тем сильнее он будет влиять на дальнейший подбор квартиры.
-                </p>
-            </div>*/}
-
 

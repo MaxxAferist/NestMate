@@ -10,7 +10,7 @@ import {ProfileParameterRow,
     FlatParameterRow,
     InfrastructureParameterRow,
     ComparisonMatrix,
-    InlineCheckboxField
+    InlineCheckboxField,
 } from './ProfilePageComponents.jsx';
 
 const ProfilePage = () => {
@@ -172,21 +172,7 @@ const ProfilePage = () => {
         });
     }
 
-    /*const handleViewFromWindowsChange = (e) => {
-        const { value, checked } = e.target;
-        setFlatPreferences((prev) => {
-            const viewFromWindows = [...prev.viewFromWindows];
-            if (checked) {
-                viewFromWindows.push(value);
-            } else {
-                const index = viewFromWindows.indexOf(value);
-                if (index !== -1) {
-                    viewFromWindows.splice(index, 1);
-                }
-            }
-            return { ...prev, viewFromWindows };
-        });
-    }*/
+
 
     const handleHouseMaterialChange = (e) => {
         const { value, checked } = e.target;
@@ -227,38 +213,7 @@ const ProfilePage = () => {
         });
     };
 
-   /* const handleBalconyTypeChange = (e) => {
-        setFlatPreferences({
-            ...flatPreferences,
-            balconyType: e.target.value
-        });
-    };
 
-    const handleApartmentTypeChange = (e) => {
-        setFlatPreferences({
-            ...flatPreferences,
-            apartmentType: e.target.value
-        });
-    };*/
-
-    const handleParkingChange = (e) => {
-        const { name, type, value } = e.target;
-        if(type === 'number') {
-            const numericValue = value === '' ? '' : parseFloat(value);
-            if (!validateNumberInput('parking.countMin', numericValue, true, 0)) {
-                return;
-            }
-        }
-
-
-        setFlatPreferences((prev) => ({
-            ...prev,
-            parking: {
-                ...prev.parking,
-                [name]: value,
-            },
-        }));
-    }
 
     const handleInfrastructureChange = (e) => {
         const { name, type, value } = e.target;
@@ -304,7 +259,7 @@ const ProfilePage = () => {
         const isMaxFloorValid = validateNumberInput('maxFloor', flatPreferences.maxFloor, true, 1);
         const isFloorsInBuildingMinValid = validateNumberInput('floorsInBuildingMin', flatPreferences.floorsInBuildingMin, true, 1);
         const isFloorsInBuildingMaxValid = validateNumberInput('floorsInBuildingMax', flatPreferences.floorsInBuildingMax, true, 1);
-        const isParkingCountMinValid = validateNumberInput('parking.countMin', flatPreferences.parking.countMin, true, 0);
+
 
 
         const isBudgetRangeValid = validateRange('budgetMin', 'budgetMax', flatPreferences.budgetMin, flatPreferences.budgetMax);
@@ -319,7 +274,6 @@ const ProfilePage = () => {
             isMaxFloorValid &&
             isFloorsInBuildingMinValid &&
             isFloorsInBuildingMaxValid &&
-            isParkingCountMinValid &&
             isBudgetRangeValid &&
             isFloorRangeValid &&
             isFloorsInBuildingRangeValid
@@ -347,10 +301,20 @@ const ProfilePage = () => {
             }
         }
 
-        setRentPreferences({
-            ...rentPreferences,
-            [name]: type === 'checkbox' ? checked : value,
-        });
+        if (name === 'petsAllowed' || name === 'childrenAllowed' || name === 'immediateMoveIn' || name === "smokingAllowed") {
+            setRentPreferences(prev => ({
+                ...prev,
+                rentalTerms: {
+                    ...prev.rentalTerms,
+                    [name]: type === 'checkbox' ? checked : value
+                }
+            }));
+        } else {
+            setRentPreferences(prev => ({
+                ...prev,
+                [name]: type === 'checkbox' ? checked : value
+            }));
+        }
     }
 
     const handleRentPaymentChange = (e) => {
@@ -388,36 +352,7 @@ const ProfilePage = () => {
         }
     }
 
-    /*const handleFlatPriorityChange = (name, value) => {
-        setFlatPreferences(prev => ({
-            ...prev,
-            priorities: {
-                ...prev.priorities,
-                [name]: parseInt(value)
-            }
-        }));
-    }
 
-    const handleRentPriorityChange = (name, value) => {
-        setRentPreferences(prev => ({
-            ...prev,
-            priorities: {
-                ...prev.priorities,
-                [name]: parseInt(value)
-            }
-        }));
-    }*/
-
-   /* const handleFlatPrioritySubmit = async(e) => {
-        e.preventDefault();
-        try {
-            await savePreferences();
-            console.log('Параметры аренды успешно изменены!');
-            setEditingFlatPriorities(false);
-        } catch (err) {
-            console.log('Ошибка при сохранении параметров');
-        }
-    }*/
     const handleRentPrioritySubmit = async (e) => {
         e.preventDefault();
         try {
@@ -430,28 +365,14 @@ const ProfilePage = () => {
 
     }
 
-    /*const PrioritySelector = ({ section, name, value }) => (
-        <div className={s.prioritySelector}>
-            <span className={s.priorityLabel}>приоритет:</span>
-            <select
-                value={value}
-                onChange={(e) => ((section === 'flat') ?
-                    (handleFlatPriorityChange(name, e.target.value)) :(handleRentPriorityChange(name, e.target.value)))}
-                className={s.prioritySelect}
-            >
-                {[0, 1, 2, 3, 4, 5].map(num => (
-                    <option key={num} value={num}>{num}</option>
-                ))}
-            </select>
-        </div>
-    );*/
-    const parameters = [
+
+    const flatParameters = [
         'budget', 'area', 'roomCount', 'apartmentType', 'balconyType',
         'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
-        'renovationCondition', 'amenities', 'parking',
+        'renovationCondition', 'amenities',
         'infrastructure', 'transportAccessibility'
     ];
-    const parametersNames = {
+    const flatParametersNames = {
         budget: "Цена",
         area: "Площадь",
         roomCount: "Количество комнат",
@@ -463,26 +384,34 @@ const ProfilePage = () => {
         houseMaterial: "Материал дома",
         renovationCondition: "Состояние ремонта",
         amenities: "Дополнительные удобства",
-        parking: "Парковка",
         infrastructure: "Инфраструктура района",
         transportAccessibility: "Транспортная доступность"
     };
 
-    /*const handleSavePriorities = (weights) => {
-        const newPriorities = {};
-        Object.keys(weights).forEach(parameter => {
-            newPriorities[parameter] = Math.round(weights[parameter] * 4) + 1;
-        });
+    const rentParameters = [
+        'rentPayment','rentalTerms','numberOfBeds','area', 'roomCount', 'balconyType',
+        'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
+        'renovationCondition', 'amenities',
+        'infrastructure', 'transportAccessibility'
+    ];
+    const rentParametersNames = {
+        rentPayment: "Цена и срок аренды",
+        rentalTerms: "Условия аренды и заселения",
+        numberOfBeds: "Количество спальных мест",
+        area: "Площадь",
+        roomCount: "Количество комнат",
+        balconyType: "Балкон/лоджия",
+        ceilingHeight: "Высота потолков",
+        floor: "Этаж",
+        floorsInBuilding: "Этажей в доме",
+        houseMaterial: "Материал дома",
+        renovationCondition: "Состояние ремонта",
+        amenities: "Дополнительные удобства",
+        infrastructure: "Инфраструктура района",
+        transportAccessibility: "Транспортная доступность"
+    };
 
-        setFlatPreferences(prev => ({
-            ...prev,
-            priorities: newPriorities
-        }));
-
-        setEditingFlatPriorities(false);
-    };*/
-
-    const handleSavePriorities = async (matrix, weights) => {
+    const handleSaveFlatPriorities = async (matrix, weights) => {
         try {
             setFlatPreferences(prev => ({
                 ...prev,
@@ -500,8 +429,29 @@ const ProfilePage = () => {
         }
     };
 
-    const handleCancelChangingPriorities = () => {
+    const handleSaveRentPriorities = async (matrix, weights) => {
+        try {
+            setRentPreferences(prev => ({
+                ...prev,
+                comparisonMatrix: matrix,
+                priorities: {
+                    ...prev.priorities,
+                    ...weights
+                }
+            }));
+            await savePreferences();
+            console.log('Приоритеты и матрица сравнений успешно сохранены!');
+            setEditingRentPriorities(false);
+        } catch (err) {
+            console.error('Ошибка при сохранении приоритетов:', err);
+        }
+    };
+
+    const handleCancelChangingFlatPriorities = () => {
         setEditingFlatPriorities(false)
+    }
+    const handleCancelChangingRentPriorities = () => {
+        setEditingRentPriorities(false)
     }
 
 
@@ -619,6 +569,7 @@ const ProfilePage = () => {
                                             value={room}
                                             checked={flatPreferences.roomCount.includes(room)}
                                             onChange={handleRoomCountChange}
+                                            className={s.checkboxInput}
                                         />
                                         {room}
                                     </label>
@@ -693,6 +644,7 @@ const ProfilePage = () => {
                                             value={material}
                                             checked={flatPreferences.houseMaterial.includes(material)}
                                             onChange={handleHouseMaterialChange}
+                                            className={s.checkboxInput}
                                         />
                                         {material}
                                     </label>
@@ -726,6 +678,7 @@ const ProfilePage = () => {
                                             value={amenity}
                                             checked={flatPreferences.amenities.includes(amenity)}
                                             onChange={handleAmenitiesChange}
+                                            className={s.checkboxInput}
                                         />
                                         {amenity}
                                     </label>
@@ -733,37 +686,7 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-                        <div className={s.formGroup}>
-                            <label>Парковка:</label>
-                            <div className={s.rangeFields}>
-                                <input
-                                    type="number"
-                                    name="countMin"
-                                    value={flatPreferences.parking.countMin}
-                                    onChange={handleParkingChange}
-                                    className={s.range}
-                                    placeholder="Количество мест (от)"
-                                />
-                                <select
-                                    name="type"
-                                    value={flatPreferences.parking.type}
-                                    onChange={handleParkingChange}
-                                    className={s.input}>
-                                    <option value="Неважно">Расположение парковки</option>
-                                    <option value="наземная">Наземное</option>
-                                    <option value="подземная">Подземное</option>
-                                </select>
-                                <select
-                                    name="payment"
-                                    value={flatPreferences.parking.payment}
-                                    onChange={handleParkingChange}
-                                    className={s.input}>
-                                    <option value="Неважно">Тип</option>
-                                    <option value="платная">Платная</option>
-                                    <option value="бесплатная">Бесплатная</option>
-                                </select>
-                            </div>
-                        </div>
+
                         <label style={{margin: "10px"}}>Инфраструктура района:</label>
                         <div className={s.formInlineGroup}>
                             <InlineFromField className={s.inlineFormGroup}
@@ -859,27 +782,18 @@ const ProfilePage = () => {
                                              minuteLabel='минут'
                                              error={errors['transportAccessibility.metroTransportTime']}
                             />
-                            <InlineFromField className={s.inlineFormGroup}
-                                             label='Удалённость от центра:'
-                                             type="number"
-                                             name="cityCenterDistance"
-                                             value={flatPreferences.transportAccessibility.cityCenterDistance}
-                                             onChange={handleTransportAccessibilityChange}
-                                             placeholder={'Пешком не более...'}
-                                             minuteLabel='минут'
-                                             error={errors['transportAccessibility.cityCenterDistance']}
-                            />
+
                         </div>
                         <ButtonSave>Сохранить</ButtonSave>
                     </form>
                 }
                 {editingFlatPriorities &&
                     <ComparisonMatrix
-                        parameters={parameters}
-                        parametersNames={parametersNames}
-                        flatPreferences={flatPreferences}
-                        onSave={handleSavePriorities}
-                        cancelChanging={handleCancelChangingPriorities}
+                        parameters={flatParameters}
+                        parametersNames={flatParametersNames}
+                        currentPreferences={flatPreferences}
+                        onSave={handleSaveFlatPriorities}
+                        cancelChanging={handleCancelChangingFlatPriorities}
                     />
                 }
                 { (!editingFlatData && !editingFlatPriorities) &&
@@ -895,7 +809,10 @@ const ProfilePage = () => {
                                 {flatPreferences.budgetMax ? `до ${flatPreferences.budgetMax} руб.` : ''}
                                 {!flatPreferences.budgetMin && !flatPreferences.budgetMax ? 'не указан' : ''}
                             </FlatParameterRow>
-                            <FlatParameterRow name="Площадь" isRange priority={flatPreferences.priorities.area}>
+                            <FlatParameterRow name="Площадь" isRange
+                                              priority={flatPreferences.priorities.area}
+                                              rentPriority={rentPreferences.priorities.area}
+                            >
                                 {flatPreferences.areaMin ? `от ${flatPreferences.areaMin} м²` : ''}
                                 {flatPreferences.areaMin && flatPreferences.areaMax ? ' ' : ''}
                                 {flatPreferences.areaMax ? `до ${flatPreferences.areaMax} м²` : ''}
@@ -908,6 +825,7 @@ const ProfilePage = () => {
                                 isArray
                                 defaultValue="не указано"
                                 priority={flatPreferences.priorities.roomCount}
+                                rentPriority={rentPreferences.priorities.roomCount}
                             />
 
                             <FlatParameterRow name="Тип квартиры (Вторичка/новостройка)" value={flatPreferences.apartmentType} priority={flatPreferences.priorities.apartmentType}/>
@@ -916,13 +834,19 @@ const ProfilePage = () => {
                                 {flatPreferences.ceilingHeight ? `от ${flatPreferences.ceilingHeight} м` : 'не указана'}
                             </FlatParameterRow>
 
-                            <FlatParameterRow name="Этаж" isRange priority={flatPreferences.priorities.floor}>
+                            <FlatParameterRow name="Этаж" isRange
+                                              priority={flatPreferences.priorities.floor}
+                                              rentPriority={rentPreferences.priorities.floor}
+                            >
                                 {flatPreferences.minFloor ? `от ${flatPreferences.minFloor} ` : ''}
                                 {flatPreferences.maxFloor ? `до ${flatPreferences.maxFloor} ` : ''}
                                 { (!flatPreferences.minFloor&&!flatPreferences.maxFloor) ? 'не указан' : 'этажей'}
                             </FlatParameterRow>
 
-                            <FlatParameterRow name="Количество этажей в доме" isRange priority={flatPreferences.priorities.floorsInBuilding}>
+                            <FlatParameterRow name="Количество этажей в доме" isRange
+                                              priority={flatPreferences.priorities.floorsInBuilding}
+                                              rentPriority={rentPreferences.priorities.floorsInBuilding}
+                            >
                                 {flatPreferences.floorsInBuildingMin ? `от ${flatPreferences.floorsInBuildingMin} ` : ''}
                                 {flatPreferences.floorsInBuildingMax ? `до ${flatPreferences.floorsInBuildingMax} ` : ''}
                                 { (!flatPreferences.floorsInBuildingMin&&!flatPreferences.floorsInBuildingMax) ? 'не указано' : 'этажей'}
@@ -933,6 +857,7 @@ const ProfilePage = () => {
                                 value={flatPreferences.houseMaterial}
                                 isArray
                                 priority={flatPreferences.priorities.houseMaterial}
+                                rentPriority={rentPreferences.priorities.houseMaterial}
                             />
 
                             <FlatParameterRow
@@ -940,6 +865,7 @@ const ProfilePage = () => {
                                 value={flatPreferences.renovationCondition}
                                 defaultValue="?"
                                 priority={flatPreferences.priorities.renovationCondition}
+                                rentPriority={rentPreferences.priorities.renovationCondition}
                             />
 
                             <FlatParameterRow
@@ -948,31 +874,16 @@ const ProfilePage = () => {
                                 isArray
                                 defaultValue="не указаны"
                                 priority={flatPreferences.priorities.amenities}
+                                rentPriority={rentPreferences.priorities.amenities}
                             />
 
-                            <div className={s.parameterBlock}>
-                                <div className={s.parameterRow}>
-                                    <strong className={s.parameterName}>Парковка:</strong>
-                                    <span className={s.parameterPriority}>приоритет: {flatPreferences.priorities.parking}</span>
-                                </div>
-                                <div className={s.parameterRow}>
-                                    <span className={s.parameterName}>Количество мест от:</span>
-                                    <span className={s.parameterValue}>{flatPreferences.parking.countMin || 'не указано'}</span>
-                                </div>
-                                <div className={s.parameterRow}>
-                                    <span className={s.parameterName}>Тип парковки:</span>
-                                    <span className={s.parameterValue}>{flatPreferences.parking.type}</span>
-                                </div>
-                                <div className={s.parameterRow}>
-                                    <span className={s.parameterName}>Платная/бесплатная:</span>
-                                    <span className={s.parameterValue}>{flatPreferences.parking.payment}</span>
-                                </div>
-                            </div>
+
 
                             <div className={s.parameterBlock}>
                                 <div className={s.parameterRow}>
                                     <strong className={s.parameterName}>Инфраструктура района:</strong>
-                                    <span className={s.parameterPriority}>приоритет: {flatPreferences.priorities.infrastructure}</span>
+                                    <span className={s.flatPriority}>вес при подборе: {(flatPreferences.priorities.infrastructure * 100).toFixed(1)}%</span>
+                                    <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.infrastructure * 100).toFixed(1)}%</span>
                                 </div>
                                 <InfrastructureParameterRow name="Парки" value={flatPreferences.infrastructure.parks}/>
                                 <InfrastructureParameterRow name="Больницы" value={flatPreferences.infrastructure.hospitals}/>
@@ -985,7 +896,8 @@ const ProfilePage = () => {
                             <div className={s.parameterBlock}>
                                 <div className={s.parameterRow}>
                                     <strong className={s.parameterName}>Транспортная доступность:</strong>
-                                    <span className={s.parameterPriority}>приоритет: {flatPreferences.priorities.transportAccessibility}</span>
+                                    <span className={s.flatPriority}>вес при подборе: {(flatPreferences.priorities.transportAccessibility * 100).toFixed(1)}%</span>
+                                    <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.transportAccessibility * 100).toFixed(1)}%</span>
                                 </div>
                                 <InfrastructureParameterRow name="Остановки общественного транспорта" value={flatPreferences.transportAccessibility.publicTransportStops}/>
                                 <InfrastructureParameterRow name="Расстояние до метро" value={flatPreferences.transportAccessibility.metroDistance}/>
@@ -997,7 +909,6 @@ const ProfilePage = () => {
                                             : 'время не указано'}
                                     </span>
                                 </div>
-                                <InfrastructureParameterRow name="Удалённость от центра города" value={flatPreferences.transportAccessibility.cityCenterDistance}/>
                             </div>
                         </div>
                         <button  onClick={() => setEditingFlatData(true)} className={s.buttonChangeParameters}>
@@ -1011,27 +922,7 @@ const ProfilePage = () => {
                 }
             </div>
 
-            {/* const [rentPreferences, setRentPreferences] = useState({
-        rentPayment: { // условия аренды
-            rentPrice: '', // цена аренды
-            rentPeriod: "неважно", // период аренды
-        },
-        rentalTerms: { // условия проживания
-            petsAllowed: false, // можно с животными
-            childrenAllowed: false, // можно с детьми
-            immediateMoveIn: false, // немедленное заселение
-        },
-        numberOfBeds: '', // количество спальных мест
-        // матрицу добавлю позже
-        priorities: {  // старые приоритеты
-            rentPeriod: 3,
-            petsAllowed: 3,
-            childrenAllowed: 3,
-            immediateMoveIn: 3,
-            numberOfBeds: 3
-        }
-    });*/}
-            <div className={s.rentDataForm}>
+            <div className={s.rentDataForm} style={editingRentPriorities ? { width: '100%' } : {}}>
                 <h2 className={s.parametersText}>Параметры для аренды</h2>
                 { editingRentData &&
                     <form onSubmit={handleRentPreferencesSubmit}>
@@ -1044,12 +935,8 @@ const ProfilePage = () => {
                                                 onChange={handleRentPaymentChange}
                                                 options={[
                                                     { value: 'неважно', label: 'Неважно' },
-                                                    { value: '1 день', label: '1 день' },
-                                                    { value: 'несколько дней', label: 'Несколько дней' },
-                                                    { value: 'месяц', label: 'Месяц' },
-                                                    { value: 'несколько месяцев', label: 'Несколько месяцев' },
-                                                    { value: 'год', label: 'Год' },
-                                                    { value: 'более года', label: 'Более года' },]}
+                                                    { value: 'посуточно', label: 'Посуточно' },
+                                                    { value: 'длительная', label: 'Длительная (помесячно)' },]}
                                 />
 
                                 <RangeInput
@@ -1057,8 +944,7 @@ const ProfilePage = () => {
                                         rentPreferences.rentPayment.rentPeriod === 'неважно'
                                             ? ''
                                             : (
-                                                rentPreferences.rentPayment.rentPeriod === '1 день' ||
-                                                rentPreferences.rentPayment.rentPeriod === 'несколько дней'
+                                                rentPreferences.rentPayment.rentPeriod === 'посуточно'
                                                     ? 'за 1 день'
                                                     : 'за 1 месяц'
                                             )
@@ -1074,25 +960,30 @@ const ProfilePage = () => {
                             </div>
                         </div>
                         <label style={{margin: "10px"}}>Условия аренды и заселения:</label>
-                        <div className={s.formInlineGroup}>
-
+                        <div className={s.inlineCheckboxGroup}>
                             <InlineCheckboxField
-                                             label='Возможность проживания с животными:'
-                                             name="petsAllowed"
-                                             checked={rentPreferences.rentalTerms.petsAllowed}
-                                             onChange={handleRentInputChange}
+                                label='Возможность проживания с животными:'
+                                name="petsAllowed"
+                                checked={rentPreferences.rentalTerms.petsAllowed}
+                                onChange={handleRentInputChange}
                             />
                             <InlineCheckboxField
-                                             label='Возможность проживания с детьми:'
-                                             name="childrenAllowed"
-                                             checked={rentPreferences.rentalTerms.childrenAllowed}
-                                             onChange={handleRentInputChange}
+                                label='Возможность проживания с детьми:'
+                                name="childrenAllowed"
+                                checked={rentPreferences.rentalTerms.childrenAllowed}
+                                onChange={handleRentInputChange}
                             />
                             <InlineCheckboxField
-                                             label='Возможность немедленного заселения:'
-                                             name="immediateMoveIn"
-                                             checked={rentPreferences.rentalTerms.immediateMoveIn}
-                                             onChange={handleRentInputChange}
+                                label='Возможность немедленного заселения:'
+                                name="immediateMoveIn"
+                                checked={rentPreferences.rentalTerms.immediateMoveIn}
+                                onChange={handleRentInputChange}
+                            />
+                            <InlineCheckboxField
+                                label='Возможность курения в квартире:'
+                                name="smokingAllowed"
+                                checked={rentPreferences.rentalTerms.smokingAllowed}
+                                onChange={handleRentInputChange}
                             />
                         </div>
                         <FormInputField
@@ -1111,26 +1002,14 @@ const ProfilePage = () => {
                 }
                 {editingRentPriorities &&
                     <form onSubmit={handleRentPrioritySubmit}>
-                        {/*<div className={s.priorityRow}>
-                            <strong className={s.paramName}>Срок аренды</strong>
-                            <PrioritySelector section="rent" name="rentPeriod" value={rentPreferences.priorities.rentPeriod} />
-                        </div>
-                        <div className={s.priorityRow}>
-                            <strong className={s.paramName}>Проживание с животными</strong>
-                            <PrioritySelector section="rent" name="petsAllowed" value={rentPreferences.priorities.petsAllowed} />
-                        </div>
-                        <div className={s.priorityRow}>
-                            <strong className={s.paramName}>Проживание с детьми</strong>
-                            <PrioritySelector section="rent" name="childrenAllowed" value={rentPreferences.priorities.childrenAllowed} />
-                        </div>
-                        <div className={s.priorityRow}>
-                            <strong className={s.paramName}>Немедленное заселение</strong>
-                            <PrioritySelector section="rent" name="immediateMoveIn" value={rentPreferences.priorities.immediateMoveIn} />
-                        </div>
-                        <div className={s.priorityRow}>
-                            <strong className={s.paramName}>Количество спальных мест</strong>
-                            <PrioritySelector section="rent" name="numberOfBeds" value={rentPreferences.priorities.numberOfBeds} />
-                        </div>*/}
+                        <ComparisonMatrix
+                            parameters={rentParameters}
+                            parametersNames={rentParametersNames}
+                            currentPreferences={rentPreferences}
+                            onSave={handleSaveRentPriorities}
+                            cancelChanging={handleCancelChangingRentPriorities}
+                        />
+
                         <button
                             type="submit"
                             className={s.buttonSave}>
@@ -1144,23 +1023,22 @@ const ProfilePage = () => {
                             <div className={s.parameterBlock}>
                                 <div className={s.parameterRow}>
                                     <strong className={s.parameterName}>Цена и срок аренды:</strong>
-                                    <span className={s.parameterPriority}>приоритет: {rentPreferences.priorities.rentPayment}</span>
+                                    <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.rentPayment * 100).toFixed(1)}%</span>
                                 </div>
                                 <div className={s.parameterRow}>
                                     <span className={s.parameterName}>{`Цена ${
                                         rentPreferences.rentPayment.rentPeriod === 'неважно'
                                             ? ''
                                             : (
-                                                rentPreferences.rentPayment.rentPeriod === '1 день' ||
-                                                rentPreferences.rentPayment.rentPeriod === 'несколько дней'
+                                                rentPreferences.rentPayment.rentPeriod === 'посуточно'
                                                     ? 'за 1 день'
                                                     : 'за 1 месяц'
                                             )
-                                    } руб.:`}
+                                    } руб.`}
                                     </span>
                                     <span className={s.parameterValue}>{rentPreferences.rentPayment.rentPriceMin ? `от ${rentPreferences.rentPayment.rentPriceMin} руб.` : ''}
                                         {rentPreferences.rentPayment.rentPriceMin && rentPreferences.rentPayment.rentPriceMax ? ' ' : ''}
-                                        {rentPreferences.rentPriceMax ? `до ${rentPreferences.rentPayment.rentPriceMax} руб.` : ''}
+                                        {rentPreferences.rentPayment.rentPriceMax ? `до ${rentPreferences.rentPayment.rentPriceMax} руб.` : ''}
                                         {!rentPreferences.rentPayment.rentPriceMin && !rentPreferences.rentPayment.rentPriceMax ? 'не указан' : ''}
                                     </span>
                                 </div>
@@ -1172,22 +1050,26 @@ const ProfilePage = () => {
                             <div className={s.parameterBlock}>
                                 <div className={s.parameterRow}>
                                     <strong className={s.parameterName}>Условия аренды и заселения:</strong>
-                                    <span className={s.parameterPriority}>приоритет: {rentPreferences.priorities.rentalTerms}</span>
+                                    <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.rentalTerms * 100).toFixed(1)}%</span>
                                 </div>
                                 <div className={s.parameterRow}>
                                     <span className={s.parameterName}>Проживание с животными:</span>
-                                    <span className={s.parameterValue}>{rentPreferences.petsAllowed ? 'Да' : 'неважно'}</span>
+                                    <span className={s.parameterValue}>{rentPreferences.rentalTerms.petsAllowed ? 'Да' : 'неважно'}</span>
                                 </div>
                                 <div className={s.parameterRow}>
                                     <span className={s.parameterName}>Проживание с детьми:</span>
-                                    <span className={s.parameterValue}>{rentPreferences.childrenAllowed ? 'Да' : 'неважно'}</span>
+                                    <span className={s.parameterValue}>{rentPreferences.rentalTerms.childrenAllowed ? 'Да' : 'неважно'}</span>
                                 </div>
                                 <div className={s.parameterRow}>
                                     <span className={s.parameterName}>Немедленное заселение:</span>
-                                    <span className={s.parameterValue}>{rentPreferences.immediateMoveIn ? 'Да' : 'неважно'}</span>
+                                    <span className={s.parameterValue}>{rentPreferences.rentalTerms.immediateMoveIn ? 'Да' : 'неважно'}</span>
+                                </div>
+                                <div className={s.parameterRow}>
+                                    <span className={s.parameterName}>Курение в квартире:</span>
+                                    <span className={s.parameterValue}>{rentPreferences.rentalTerms.smokingAllowed ? 'Да' : 'неважно'}</span>
                                 </div>
                             </div>
-                            <FlatParameterRow name="Количество спальных мест" value={rentPreferences.numberOfBeds || 'не указано'} priority={rentPreferences.priorities.numberOfBeds}/>
+                            <FlatParameterRow name="Количество спальных мест" value={rentPreferences.numberOfBeds || 'не указано'} rentPriority={rentPreferences.priorities.numberOfBeds}/>
                         </div>
                         <button onClick={() => setEditingRentData(true)} className={s.buttonChangeParameters}>
                             Редактировать параметры аренды
@@ -1207,55 +1089,3 @@ const ProfilePage = () => {
 
 export default ProfilePage;
 
-/*
-<label>
-    <input
-        type="checkbox"
-        name="petsAllowed"
-        checked={rentPreferences.petsAllowed}
-        onChange={handleRentInputChange}
-    />
-    Возможность проживания с животными
-</label>*/
-
-/*
-<div className={s.formGroup}>
-    <label>
-        <input
-            type="checkbox"
-            name="childrenAllowed"
-            checked={rentPreferences.childrenAllowed}
-            onChange={handleRentInputChange}
-        />
-        Возможность проживания с детьми
-    </label>
-</div>*/
-/*
-<div className={s.formGroup}>
-    <label>
-        <input
-            type="checkbox"
-            name="immediateMoveIn"
-            checked={rentPreferences.immediateMoveIn}
-            onChange={handleRentInputChange}
-        />
-        Возможность немедленного заселения
-    </label>
-</div>*/
-
-{/*<FlatParameterRow name={`Цена ${
-                                        rentPreferences.rentPayment.rentPeriod === 'неважно'
-                                            ? ''
-                                            : (
-                                                rentPreferences.rentPayment.rentPeriod === '1 день' ||
-                                                rentPreferences.rentPayment.rentPeriod === 'несколько дней'
-                                                    ? 'за 1 день'
-                                                    : 'за 1 месяц'
-                                            )
-                                    } руб.`}
-                                                  isRange>
-                                    {rentPreferences.rentPayment.rentPriceMin ? `от ${rentPreferences.rentPayment.rentPriceMin} руб.` : ''}
-                                    {rentPreferences.rentPayment.rentPriceMin && rentPreferences.rentPayment.rentPriceMax ? ' ' : ''}
-                                    {rentPreferences.rentPriceMax ? `до ${rentPreferences.rentPayment.rentPriceMax} руб.` : ''}
-                                    {!rentPreferences.rentPayment.rentPriceMin && !rentPreferences.rentPayment.rentPriceMax ? 'не указан' : ''}
-                                </FlatParameterRow>*/}

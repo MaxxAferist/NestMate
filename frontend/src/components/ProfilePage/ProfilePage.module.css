@@ -80,11 +80,32 @@
     cursor: pointer;
     margin: 10px;
 }
+
+.checkboxGroup{
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
 .checkboxLabel{
     display: flex;
     align-items: center;
     gap: 5px;
+    cursor: pointer;
+    color: #333333;
+    font-size: 16px;
 }
+
+.checkboxInput {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
+.inlineCheckboxRow {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
 .buttonExit{
     padding: 10px 20px;
     background-color: rgba(131, 32, 43, 0.9);
@@ -93,11 +114,7 @@
     border-radius: 4px;
     cursor: pointer;
 }
-.checkboxGroup{
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
+
 .rangeFields{
     display: flex;
     gap: 10px;
@@ -117,9 +134,8 @@
 
 .inlineCheckboxGroup {
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 10px;
+    flex-direction: column;
+    margin: 5px;
 }
 
 .inlineCheckboxGroup label {
@@ -243,10 +259,28 @@
     display: inline-block;
 }
 
-.parameterPriority {
+
+
+.priorityContainer {
+    display: flex;
+    gap: 8px;
+}
+
+.flatPriority {
     color: #000000;
     border: 1px solid #ffd883;
-    background-color: rgba(255, 216, 131, 0.09);
+    background-color: rgba(255, 216, 131, 0.2);
+    border-radius: 4px;
+    padding: 4px 8px;
+    display: inline-block;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+.rentPriority {
+    color: #000000;
+    border: 1px solid #83b9ff;
+    background-color: rgba(131, 185, 255, 0.2);
     border-radius: 4px;
     padding: 4px 8px;
     display: inline-block;
@@ -339,23 +373,6 @@
     font-weight: bold;
 }
 
-/*.scaleValues {
-    margin-left: 24px;
-    margin-bottom: 16px;
-}
-
-.scaleRow {
-    margin-bottom: 6px;
-    display: flex;
-    align-items: baseline;
-}
-
-.scaleNumber {
-    display: inline-block;
-    width: 60px;
-    font-weight: 500;
-    color: #ea4335;
-}*/
 
 .example {
     background-color: #e8f0fe;
@@ -381,21 +398,6 @@
     font-weight: 500;
 }
 
-/*.instructionContainer {
-    margin: 5px;
-    padding: 5px;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    width: 80%;
-}
-
-.instructionText {
-    color: #333;
-}
-
-.instructionLine {
-    margin: 5px;
-}*/
 
 .saatiScale {
     margin: 10px;
@@ -610,4 +612,22 @@
     margin-top: 16px;
     display: flex;
     align-items: center;
+    font-size: 18px;
+}
+
+.CRIndexErrorRecommendations {
+    border: 1px solid #bfd5ff;
+    font-size: 18px;
+    background-color: #e8f0fe;
+    border-radius: 6px;
+    padding-left: 10px;
+}
+.CRIndexErrorRecommendations h5{
+    margin: 6px;
+}
+.CRIndexErrorRecommendations ul{
+    margin: 4px;
+}
+.CRIndexErrorRecommendations ul li{
+    margin-bottom: 8px;
 }
