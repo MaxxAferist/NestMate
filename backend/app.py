@@ -1,172 +1,139 @@
-from flask import Flask, jsonify, request, render_template
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
 from datetime import datetime
 from flask_cors import CORS
+import config
+import psycopg2
+import signal
+from routes import init_routes
 
 
-app = Flask(__name__)
-CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///datta.db'
-db = SQLAlchemy(app)
+class Application():
+    def __init__(self, name):
+        self.app = Flask(name)
+        CORS(self.app)
+        
+        # Config Database
+        self.app.config["bd_host"] = config.host
+        self.app.config["bd_user"] = config.user
+        self.app.config["bd_password"] = config.password
+        self.app.config["bd_port"] = config.port
+        self.app.config["db_name"] = config.db_name
+        # ------------
 
-class UserProfile(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    firstName = db.Column(db.String(30), nullable=False)
-    lastName = db.Column(db.String(30), nullable=True)
-    middleName = db.Column(db.String(30), nullable=True)
-    phone = db.Column(db.String(20), nullable=True)
-    gender = db.Column(db.String(10), nullable=True)
-    email = db.Column(db.String(256), unique=True, nullable=False)
-    password = db.Column(db.String(30), nullable=False)
-    signInDate = db.Column(db.DateTime, default=datetime.utcnow)
-    flatPreferences = db.Column(db.JSON, nullable=True)
-    rentPreferences = db.Column(db.JSON, nullable=True)
-    def __repr__(self):
-        return '<User_id %r  name: %r >' % (self.id, self.name)
+        self.connection = None
+        self.cursor_apartments = None
+        self.cursor_users = None
+        self.connect_to_db() # Connecting to Database
 
-app.app_context().push()
+        # Created tables
+        self.create_apartments_db()
+        self.create_users_db()
 
-@app.route('/api/users')
-def posts():
-    Users = UserProfile.query.order_by(UserProfile.signInDate.desc()).all()  # обратиться к базе данных через класс,
-    # order_by - сортировка данных по полю, all - взять все записи, desc() - формат уменьшения значения
-    return render_template('users.html', users=Users) # передали в шаблон данные
-
-@app.route('/api/signIn', methods=['POST'])
-def signIn():
-    data = request.json # Получаем данные из запроса
-    if not data or not data.get('firstName') or not data.get('email') or not data.get('password'):
-        return jsonify({"status": "error", "message": "Missing data"}), 400
-    if UserProfile.query.filter_by(email=data['email']).first():
-        return jsonify({"status": "error", "message": "Email already exists"}), 400
-
-    new_user = UserProfile(
-        firstName=data['firstName'],
-        email=data['email'],
-        password=data['password']
-    )
-
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({"status": "success", "message": "User registered"}), 201
-
-@app.route('/api/logIn', methods=['POST'])
-def logIn():
-    data = request.json
-    if not data or not data.get('email') or not data.get('password'):
-        return jsonify({"status": "error", "message":"Missing data"}), 400
-
-    user = UserProfile.query.filter_by(email=data['email']).first()
-
-    if not user:
-        return jsonify({"status": "error", "message": "User not found"}), 404
-
-    if user.password != data['password']:
-        return jsonify({"status": "error", "message": "Invalid password"}), 401
-
-    return jsonify({
-        "status": "success",
-        "message": "Login success",
-        "user": {
-            "id": user.id,
-            "firstName": user.firstName,
-            "lastName": user.lastName,
-            "middleName": user.middleName,
-            "gender": user.gender,
-            "phone": user.phone,
-            "email": user.email,
-            "password": user.password,
-            "date": user.signInDate,
-        }
-    }), 200
+        self.app.app_context().push()
+        init_routes(self)
 
 
-@app.route('/api/savePreferences', methods=['POST'])
-def savePreferences():
-    data = request.json
-    if not data or not data.get('user_id'):
-        return jsonify({"status": "error", "message": "Missing user ID"}), 400
+    def connect_to_db(self):
+        try:
+            self.connection = psycopg2.connect(
+                host=self.app.config["bd_host"],
+                user=self.app.config["bd_user"],
+                password=self.app.config["bd_password"],
+                port=self.app.config["bd_port"],
+                database=self.app.config["db_name"]
+            )
 
-    user = UserProfile.query.get(data['user_id'])
-    if not user:
-        return jsonify({"status": "error", "message": "User not found"}), 404
+            print("[INFO] Database connected")
+            self.cursor_apartments = self.connection.cursor() # Cursor for table "apartment_data"
+            self.cursor_users = self.connection.cursor() # Cursor for table "usersuser_profile"
 
-    if 'flatPreferences' in data:
-        user.flatPreferences = data['flatPreferences']
-    if 'rentPreferences' in data:
-        user.rentPreferences = data['rentPreferences']
+        except Exception as e:
+            print(f"[INFO] Database is not connected: {e}")
 
-    db.session.commit()
+    
+    def create_users_db(self):
+        self.cursor_users.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,                              
+                first_name VARCHAR(30),
+                last_name VARCHAR(30),
+                middle_name VARCHAR(30),
+                phone VARCHAR(20),
+                gender VARCHAR(10),
+                email VARCHAR(256),
+                password VARCHAR(200),
+                sign_in_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                flat_preferences JSON,
+                rent_preferences JSON
+            );""")
+        self.connection.commit()
+        
 
-    return jsonify({
-        "status": "success",
-        "message": "Preferences saved successfully"
-    }), 200
+    def create_apartments_db(self):
+        self.cursor_apartments.execute("""
+            CREATE TABLE IF NOT EXISTS apartment_data (
+                id SERIAL PRIMARY KEY,
+                link TEXT,
+                type_sdelki SMALLINT,
+                type_apartment SMALLINT,
+                pictures TEXT[],
+                address TEXT,
+                coord_lat VARCHAR(50),
+                coord_lng VARCHAR(50),
+                region VARCHAR(50),
+                city VARCHAR(50),
+                district VARCHAR(50),
+                price INTEGER,
+                count_rooms VARCHAR(50),
+                balcony VARCHAR(50),
+                ceiling_height REAL,
+                floor SMALLINT,
+                count_floors SMALLINT,
+                area SMALLINT,
+                material_house VARCHAR(50),
+                remont VARCHAR(50),
+                additional_amenities TEXT[],
+                minuts_for_park SMALLINT,
+                minuts_for_hospital SMALLINT,
+                minuts_for_mall SMALLINT,
+                minuts_for_kindergarten SMALLINT,
+                minuts_for_school SMALLINT,
+                minuts_for_store SMALLINT,
+                minuts_for_busstop SMALLINT,
+                minuts_for_subway SMALLINT,
+                kids BOOLEAN DEFAULT FALSE,
+                animals BOOLEAN DEFAULT FALSE,
+                smoking BOOLEAN DEFAULT FALSE,
+                sanuzel VARCHAR(50),
+                multimedia TEXT[],
+                count_of_guests SMALLINT,
+                description TEXT,
+                year_of_construction SMALLINT,
+                count_of_passenger_elevators SMALLINT,
+                count_of_freight_elevators SMALLINT,
+                furniture TEXT[],
+                technique TEXT[]
+            );""")
+        self.connection.commit()
 
 
-@app.route('/api/getPreferences/<int:user_id>', methods=['GET'])
-def getPreferences(user_id):
-    user = UserProfile.query.get(user_id)
-    if not user:
-        return jsonify({"status": "error", "message": "User not found"}), 404
-
-    return jsonify({
-        "status": "success",
-        "flatPreferences": user.flatPreferences,
-        "rentPreferences": user.rentPreferences
-    }), 200
+    def start(self):
+        self.app.run(debug = True)
 
 
-@app.route('/api/getUserData/<int:user_id>', methods=['GET'])
-def getUserData(user_id):
-    user = UserProfile.query.get(user_id)
-    if not user:
-        return jsonify({"status": "error", "message": "User not found"}), 404
+    def handle_shutdown(self):
+        if self.cursor_apartments:
+            self.cursor_apartments.close()
+        if self.cursor_users:
+            self.cursor_users.close()
+        if self.connection:
+            self.connection.close()
 
-    return jsonify({
-        "status": "success",
-        "user": {
-            "id": user.id,
-            "firstName": user.firstName,
-            "lastName": user.lastName,
-            "middleName": user.middleName,
-            "email": user.email,
-            "phone": user.phone,
-            "gender": user.gender,
-            "signInDate": user.signInDate.isoformat()
-        }
-    }), 200
 
-@app.route('/api/saveUserData', methods=['POST'])
-def saveUserData():
-    data = request.json
-    if not data or not data.get('id'):
-        return jsonify({"status": "error", "message": "Missing user ID"}), 400
-
-    user = UserProfile.query.get(data['id'])
-    if not user:
-        return jsonify({"status": "error", "message": "User not found"}), 404
-
-    if 'firstName' in data:
-        user.firstName = data['firstName']
-    if 'lastName' in data:
-        user.lastName = data['lastName']
-    if 'middleName' in data:
-        user.middleName = data['middleName']
-    if 'phone' in data:
-        user.phone = data['phone']
-    if 'gender' in data:
-        user.gender = data['gender']
-
-    db.session.commit()
-
-    return jsonify({
-        "status": "success",
-        "message": "User data updated success"
-    }), 200
-
-@app.route('/api')
-def index():
-    return 'index'
 if __name__ == '__main__':
-    app.run(debug = True)
+    app = Application(__name__)
+
+    signal.signal(signal.SIGINT, app.handle_shutdown)
+    signal.signal(signal.SIGTERM, app.handle_shutdown)
+
+    app.start()

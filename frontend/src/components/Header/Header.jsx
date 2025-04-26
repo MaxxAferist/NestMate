@@ -29,9 +29,11 @@ export default function Header(){
             <header>
                 <div className={s.container}>
                     <div className={s.leftSection}>
-                        <h2 className={s.siteName}>
-                            NestMate
-                        </h2>
+                        <a href='/' className={s.siteNameLink}>
+                            <h2 className={s.siteName}>
+                                NestMate
+                            </h2>
+                        </a>
                     </div>
                     <div className={s.centerSection}>
                         <div className={s.searchContainer}>

@@ -11,6 +11,13 @@ header{
     font-size: 30px;
     color: #6A6A6AFF;
     font-style: italic;
+    text-decoration: none;
+}
+.siteNameLink{
+    font-size: 30px;
+    color: #6A6A6AFF;
+    font-style: italic;
+    text-decoration: none;
 }
 .searchButton{
     height: 40px;

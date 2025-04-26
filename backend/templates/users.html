@@ -10,11 +10,11 @@
     {% if users|length > 0 %}
         {% for el in users %}
         <div>
-          <p> {{ el.id }}</p>
-          <p> {{ el.userName }}</p>
-          <p> {{ el.email }}</p>
-          <p> {{ el.password }}</p>
-          <p><b>Дата: {{el.signInDate.date()}}</b></p>
+          <p> {{ el[0] }}</p>
+          <p> {{ el[1] }}</p>
+          <p> {{ el[6] }}</p>
+          <p> {{ el[7] }}</p>
+          <p><b>Дата: {{ el[8] }}</b></p>
         </div>
         {% endfor %}
     {% else %}
