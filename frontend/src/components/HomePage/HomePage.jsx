@@ -14,7 +14,6 @@ const flatData1 = {
     balconyType: "Балкон",
     renovationCondition: "Не требует ремонта",
     kitchenStove: "Электрическая",
-    viewFromWindows: ["Во двор", "На улицу"],
     area: 65,
     city: 'Санкт-Петербург',
     photos: [
@@ -67,7 +66,6 @@ const flatData2 = {
     balconyType: "Балкон",
     renovationCondition: "Не требует ремонта",
     kitchenStove: "Газовая",
-    viewFromWindows: ["На улицу"],
     area: 56,
     city: 'Санкт-Петербург',
     photos: [
@@ -119,7 +117,6 @@ const flatData3 = {
     balconyType: "Лоджия",
     renovationCondition: "Требует ремонта",
     kitchenStove: "Газовая",
-    viewFromWindows: ["Во двор"],
     area: 85,
     city: 'Санкт-Петербург',
     photos: [
@@ -177,9 +174,7 @@ export default function HomePage() {
     const {comparisonFlats} = useComparison();
 
 
-    /*useEffect(() => {
-        loadFavorites();
-    }, [loadFavorites,addFavorite, removeFavorite]);*/
+
 
     const handleOnNextButtonClicked = ()=>{
         if(currentStartIndex <= 75 && (flatMap.length - currentStartIndex > -25)){
