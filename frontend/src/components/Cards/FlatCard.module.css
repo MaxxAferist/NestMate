@@ -1,0 +1,104 @@
+.card {
+    position: relative;
+    display: flex;
+    border: 1px solid #c1c1c1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 5px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+    background-color: rgb(248, 254, 255);
+    height: 140px;
+}
+
+.card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.imageContainer {
+    width: 250px;
+    flex-shrink: 0;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.contentContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.price {
+    font-size: 19px;
+    font-weight: bold;
+    color: #000000;
+    border-bottom: 1px solid #e3e3e3;
+    padding: 6px;
+}
+
+.contentBlock {
+    display: flex;
+    flex-direction: column;
+    font-size: 17px;
+    color: #272727;
+    border: 1px solid rgba(193, 193, 193, 0.51);
+}
+.contentBlock h3 {
+    padding: 5px;
+    border-bottom: 1px solid #7e7e7e;
+    margin: 0;
+}
+.contentBlock span {
+    padding: 4px;
+    border-bottom: 1px solid #e3e3e3;
+}
+
+
+.markScale{
+    width: 90%;
+    border-radius: 4px;
+    border: 1px solid #000000;
+    margin: 5px;
+}
+.fillScale {
+    height: 20px;
+    background-color: #4CAF50;
+    transition: width 0.3s ease;
+    border: 1px solid #787878;
+}
+
+
+.buttonsSection {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    gap: 5px;
+    border: 1px solid rgba(193, 193, 193, 0.51);
+}
+
+.favoriteButton, .compareButton, .detailsButton {
+    padding: 6px;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border: 1px solid #7c7c7c;
+    font-size: 16px;
+}
+
+.favoriteButton:hover {
+    background-color: #fdb2bc;
+}
+
+
+.compareButton:hover {
+    background-color: #e3f2fd;
+}
+
+.detailsButton:hover {
+    background-color: #e8fde3;
+}

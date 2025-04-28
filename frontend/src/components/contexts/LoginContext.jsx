@@ -51,39 +51,12 @@ export const LoginProvider = ({ children }) => {
         transportAccessibility: { // транспортная доступность
             publicTransportStops: '',
             metroDistance: '',
-            metroTransportTime: '',
         },
-        comparisonMatrix: (() => {
-            const params = [
-                'budget', 'area', 'roomCount', 'apartmentType', 'balconyType',
-                'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
-                'renovationCondition', 'amenities',
-                'infrastructure', 'transportAccessibility'
-            ];
-            const matrix = {};
-            params.forEach(param1 => {
-                matrix[param1] = {};
-                params.forEach(param2 => {
-                    matrix[param1][param2] = 1;
-                });
-            });
-            return matrix;
-        })(),
-        priorities: {
-            budget: 1/13,
-            area: 1/13,
-            roomCount: 1/13,
-            apartmentType: 1/13,
-            balconyType: 1/13,
-            ceilingHeight: 1/13,
-            floor: 1/13,
-            floorsInBuilding: 1/13,
-            houseMaterial: 1/13,
-            renovationCondition: 1/13,
-            amenities: 1/13,
-            infrastructure: 1/13,
-            transportAccessibility: 1/13
-        }
+        comparisonMatrix: {
+            matrix: {},
+            columnsOrder: [] // порядок столбцов
+        },
+        priorities: []
     });
     const [rentPreferences, setRentPreferences] = useState({
         rentPayment: { // условия аренды
@@ -98,38 +71,11 @@ export const LoginProvider = ({ children }) => {
             smokingAllowed: false, // курение разрешено
         },
         numberOfBeds: '', // количество спальных мест
-        comparisonMatrix: (() => {
-            const params = [
-                'rentPayment','rentalTerms','numberOfBeds','area', 'roomCount', 'balconyType',
-                'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
-                'renovationCondition', 'amenities',
-                'infrastructure', 'transportAccessibility'
-            ];
-            const matrix = {};
-            params.forEach(param1 => {
-                matrix[param1] = {};
-                params.forEach(param2 => {
-                    matrix[param1][param2] = 1;
-                });
-            });
-            return matrix;
-        })(),
-        priorities: {
-            rentPayment: 1/14,
-            rentalTerms: 1/14,
-            numberOfBeds: 1/14,
-            area: 1/14,
-            roomCount: 1/14,
-            balconyType: 1/14,
-            ceilingHeight: 1/14,
-            floor: 1/14,
-            floorsInBuilding: 1/14,
-            houseMaterial: 1/14,
-            renovationCondition: 1/14,
-            amenities: 1/14,
-            infrastructure: 1/14,
-            transportAccessibility: 1/14
-        }
+        comparisonMatrix: {
+            matrix: {},
+            columnsOrder: [] // порядок столбцов
+        },
+        priorities: []
     });
 
     const [isLoading, setIsLoading] = useState(false);
@@ -362,39 +308,12 @@ export const LoginProvider = ({ children }) => {
             transportAccessibility: { // транспортная доступность
                 publicTransportStops: '',
                 metroDistance: '',
-                metroTransportTime: '',
             },
-            comparisonMatrix: (() => {
-                const params = [
-                    'budget', 'area', 'roomCount', 'apartmentType', 'balconyType',
-                    'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
-                    'renovationCondition', 'amenities',
-                    'infrastructure', 'transportAccessibility'
-                ];
-                const matrix = {};
-                params.forEach(param1 => {
-                    matrix[param1] = {};
-                    params.forEach(param2 => {
-                        matrix[param1][param2] = 1;
-                    });
-                });
-                return matrix;
-            })(),
-            priorities: {
-                budget: 1/13,
-                area: 1/13,
-                roomCount: 1/13,
-                apartmentType: 1/13,
-                balconyType: 1/13,
-                ceilingHeight: 1/13,
-                floor: 1/13,
-                floorsInBuilding: 1/13,
-                houseMaterial: 1/13,
-                renovationCondition: 1/13,
-                amenities: 1/13,
-                infrastructure: 1/13,
-                transportAccessibility: 1/13
-            }
+            comparisonMatrix: {
+                matrix: {},
+                columnsOrder: [] // порядок столбцов
+            },
+            priorities: []
         });
 
         setRentPreferences({
@@ -409,38 +328,11 @@ export const LoginProvider = ({ children }) => {
                 smokingAllowed: false, // курение разрешено
             },
             numberOfBeds: '', // количество спальных мест
-            comparisonMatrix: (() => {
-                const params = [
-                    'rentPayment','rentalTerms','numberOfBeds','area', 'roomCount', 'balconyType',
-                    'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
-                    'renovationCondition', 'amenities',
-                    'infrastructure', 'transportAccessibility'
-                ];
-                const matrix = {};
-                params.forEach(param1 => {
-                    matrix[param1] = {};
-                    params.forEach(param2 => {
-                        matrix[param1][param2] = 1;
-                    });
-                });
-                return matrix;
-            })(),
-            priorities: {
-                rentPayment: 1/14,
-                rentalTerms: 1/14,
-                numberOfBeds: 1/14,
-                area: 1/14,
-                roomCount: 1/14,
-                balconyType: 1/14,
-                ceilingHeight: 1/14,
-                floor: 1/14,
-                floorsInBuilding: 1/14,
-                houseMaterial: 1/14,
-                renovationCondition: 1/14,
-                amenities: 1/14,
-                infrastructure: 1/14,
-                transportAccessibility: 1/14
-            }
+            comparisonMatrix: {
+                matrix: {},
+                columnsOrder: [] // порядок столбцов
+            },
+            priorities: []
         });
         localStorage.removeItem("user");
     };

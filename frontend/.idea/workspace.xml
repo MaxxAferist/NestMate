@@ -5,6 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d9c70930-1c4a-4f15-8630-7970b0670b5b" name="Changes" comment="Доделал страницу квартиры">
+      <change afterPath="$PROJECT_DIR$/src/components/Cards/FlatCard.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ComparsionMatrix/ComparisonMatrix.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/ComparsionMatrix/ComparisonMatrix.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.module.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/contexts/ComparisonContext.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/contexts/FavoritesContext.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/.idea/NestMate-Backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/NestMate-Backend.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/vcs.xml" afterDir="false" />
@@ -536,33 +546,24 @@
       <change beforePath="$PROJECT_DIR$/../backend/.venv/Scripts/pythonw.exe" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/.venv/pyvenv.cfg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/instance/datta.db" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/instance/datta.db" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/instance/datta.db" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/templates/users.html" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/templates/users.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/@pbe_react-yandex-maps.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/@pbe_react-yandex-maps.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/@pbe_react-yandex-maps.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/@pbe_react-yandex-maps.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/chunk-ILK4XV7T.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/chunk-ILK4XV7T.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/chunk-MVRAC76T.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/chunk-MVRAC76T.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom_client.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom_client.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom_client.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom_client.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-router-dom.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-router-dom.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-router-dom.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-router-dom.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-dev-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-dev-runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-dev-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-dev-runtime.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-runtime.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header/Header.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header/Header.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header/Header.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Cards/FlatCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePageComponents.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePageComponents.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/contexts/LoginContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/LoginContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -614,29 +615,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/artem/WebStormProjects/React+Flask/NestMate/frontend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Node.js.FlatCard.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/artem/WebStormProjects/React+Flask/NestMate/frontend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\artem\WebStormProjects\React+Flask\NestMate\frontend\src\components\ComparsionMatrix" />
       <recent name="C:\Users\artem\WebstormProjects\Site\src\components\contexts" />
       <recent name="C:\Users\artem\WebstormProjects\Site\src\components" />
       <recent name="C:\Users\artem\WebstormProjects\Site\src" />
       <recent name="C:\Users\artem\WebstormProjects\Site\src\components\LoginWindow" />
-      <recent name="C:\Users\artem\WebstormProjects\Site\src\components\SignInWindow" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -713,7 +715,15 @@
       <workItem from="1744634396495" duration="10210000" />
       <workItem from="1744645995376" duration="3662000" />
       <workItem from="1745053062804" duration="13425000" />
-      <workItem from="1745084197193" duration="3615000" />
+      <workItem from="1745084197193" duration="4098000" />
+      <workItem from="1745246440353" duration="5225000" />
+      <workItem from="1745581630703" duration="7316000" />
+      <workItem from="1745596629561" duration="5302000" />
+      <workItem from="1745665230742" duration="22676000" />
+      <workItem from="1745743540115" duration="11088000" />
+      <workItem from="1745777794008" duration="5019000" />
+      <workItem from="1745825353561" duration="8092000" />
+      <workItem from="1745833518120" duration="5000" />
     </task>
     <task id="LOCAL-00001" summary="Доделал страницу квартиры">
       <option name="closed" value="true" />
@@ -730,6 +740,11 @@
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="d2755a90-3b4e-4be4-aeb2-6d5202cd97a8" value="TOOL_WINDOW" />
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
@@ -749,6 +764,11 @@
             </State>
           </value>
         </entry>
+        <entry key="d2755a90-3b4e-4be4-aeb2-6d5202cd97a8">
+          <value>
+            <State />
+          </value>
+        </entry>
       </map>
     </option>
   </component>
@@ -764,23 +784,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx</url>
-          <line>790</line>
+          <line>776</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx</url>
-          <line>81</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx</url>
-          <line>1004</line>
+          <line>982</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx</url>
           <line>368</line>
-          <option name="timeStamp" value="8" />
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

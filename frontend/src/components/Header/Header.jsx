@@ -24,30 +24,24 @@ export default function Header(){
     function handleButtonOnMainClick(){
         navigate('/');
     }
+
+
     return (
         <>
             <header>
                 <div className={s.container}>
                     <div className={s.leftSection}>
-                        <h2 className={s.siteName}>
+                        <h2 className={s.siteName} onClick={()=> navigate('/')}>
                             NestMate
                         </h2>
                     </div>
-                    <div className={s.centerSection}>
-                        <div className={s.searchContainer}>
-                            <input
-                                className={s.searchInput}
-                                type="text"
-                                placeholder="Поиск..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                            />
-                            <button className={s.searchButton} onClick={handleSearch}>
-                                Найти
-                            </button>
-                        </div>
-                    </div>
                     <div className={s.rightSection}>
+                        <button className={s.comparisonButton} onClick={()=>navigate('/Comparison')}>
+                            Сравнение
+                        </button>
+                        <button className={s.favoritesButton} onClick={()=> navigate('/Favorites')}>
+                            Избранное
+                        </button>
                         <button className={s.mainButton} onClick={handleButtonOnMainClick}>
                             На главную
                         </button>
@@ -55,6 +49,7 @@ export default function Header(){
                             {!user && "Вход или регистрация"}
                             {user && "Профиль"}
                         </button>
+
                     </div>
                 </div>
             </header>
