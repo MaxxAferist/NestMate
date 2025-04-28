@@ -5,16 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d9c70930-1c4a-4f15-8630-7970b0670b5b" name="Changes" comment="Доделал страницу квартиры">
-      <change afterPath="$PROJECT_DIR$/src/components/Cards/FlatCard.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ComparsionMatrix/ComparisonMatrix.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ComparsionMatrix/ComparisonMatrix.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/contexts/ComparisonContext.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/contexts/FavoritesContext.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/.idea/NestMate-Backend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/NestMate-Backend.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/vcs.xml" afterDir="false" />
@@ -546,24 +536,7 @@
       <change beforePath="$PROJECT_DIR$/../backend/.venv/Scripts/pythonw.exe" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/.venv/pyvenv.cfg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/instance/datta.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/templates/users.html" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/templates/users.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header/Header.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header/Header.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header/Header.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Cards/FlatCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePageComponents.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePageComponents.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/contexts/LoginContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/LoginContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -724,6 +697,7 @@
       <workItem from="1745777794008" duration="5019000" />
       <workItem from="1745825353561" duration="8092000" />
       <workItem from="1745833518120" duration="5000" />
+      <workItem from="1745839103613" duration="306000" />
     </task>
     <task id="LOCAL-00001" summary="Доделал страницу квартиры">
       <option name="closed" value="true" />
