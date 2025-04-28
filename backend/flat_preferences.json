@@ -1,249 +1,106 @@
 {
-    "budgetMin": "",
-    "budgetMax": "",
-    "areaMin": "",
-    "areaMax": "",
-    "region": "",
-    "city": "",
-    "district": "",
-    "roomCount": [],
-    "apartmentType": "неважно",
-    "balconyType": "неважно",
-    "ceilingHeight": "",
-    "minFloor": "",
-    "maxFloor": "",
-    "floorsInBuildingMin": "",
-    "floorsInBuildingMax": "",
-    "houseMaterial": [],
-    "renovationCondition": "неважно",
     "amenities": [
-        "Газ"
+        "Пожарная сигнализация",
+        "Стиральная машина",
+        "Интернет"
     ],
-    "kitchenStove": "неважно",
-    "viewFromWindows": [],
-    "infrastructure": {
-        "parks": "",
-        "hospitals": "",
-        "shoppingCenters": "",
-        "shops": "",
-        "schools": "",
-        "kindergartens": "34123"
-    },
-    "transportAccessibility": {
-        "publicTransportStops": "",
-        "metroDistance": "",
-        "metroTransportTime": ""
-    },
+    "apartmentType": "неважно",
+    "areaMax": "",
+    "areaMin": "",
+    "balconyType": "неважно",
+    "budgetMax": "",
+    "budgetMin": "",
+    "ceilingHeight": "",
+    "city": "",
     "comparisonMatrix": {
-        "budget": {
-            "budget": 1,
-            "area": 4,
-            "roomCount": 6,
-            "apartmentType": 8,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
+        "matrix": {
+            "apartmentType": {
+                "apartmentType": 1,
+                "area": 1,
+                "balconyType": 1,
+                "budget": 1,
+                "roomCount": 0.25
+            },
+            "area": {
+                "apartmentType": 1,
+                "area": 1,
+                "balconyType": 1,
+                "budget": 0.25,
+                "roomCount": 0.2
+            },
+            "balconyType": {
+                "apartmentType": 1,
+                "area": 1,
+                "balconyType": 1,
+                "budget": 1,
+                "roomCount": 1
+            },
+            "budget": {
+                "apartmentType": 1,
+                "area": 4,
+                "balconyType": 1,
+                "budget": 1,
+                "roomCount": 1
+            },
+            "roomCount": {
+                "apartmentType": 4,
+                "area": 5,
+                "balconyType": 1,
+                "budget": 1,
+                "roomCount": 1
+            }
         },
-        "area": {
-            "budget": 0.25,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 1,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "roomCount": {
-            "budget": 0.167,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 3,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "apartmentType": {
-            "budget": 0.125,
-            "area": 1,
-            "roomCount": 0.333,
-            "apartmentType": 1,
-            "balconyType": 0.25,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "balconyType": {
-            "budget": 1,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 4,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "ceilingHeight": {
-            "budget": 1,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 1,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "floor": {
-            "budget": 1,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 1,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "floorsInBuilding": {
-            "budget": 1,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 1,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "houseMaterial": {
-            "budget": 1,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 1,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "renovationCondition": {
-            "budget": 1,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 1,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "amenities": {
-            "budget": 1,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 1,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "infrastructure": {
-            "budget": 1,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 1,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        },
-        "transportAccessibility": {
-            "budget": 1,
-            "area": 1,
-            "roomCount": 1,
-            "apartmentType": 1,
-            "balconyType": 1,
-            "ceilingHeight": 1,
-            "floor": 1,
-            "floorsInBuilding": 1,
-            "houseMaterial": 1,
-            "renovationCondition": 1,
-            "amenities": 1,
-            "infrastructure": 1,
-            "transportAccessibility": 1
-        }
+        "parametersOrder": [
+            "budget",
+            "area",
+            "roomCount",
+            "apartmentType",
+            "balconyType"
+        ]
     },
-    "priorities": {
-        "budget": 0.11384657921288185,
-        "area": 0.06829188851383516,
-        "roomCount": 0.07204303892808718,
-        "apartmentType": 0.05347682358876413,
-        "balconyType": 0.08452666548672162,
-        "ceilingHeight": 0.07597687553371375,
-        "floor": 0.07597687553371375,
-        "floorsInBuilding": 0.07597687553371375,
-        "houseMaterial": 0.07597687553371375,
-        "renovationCondition": 0.07597687553371375,
-        "amenities": 0.07597687553371375,
-        "infrastructure": 0.07597687553371375,
-        "transportAccessibility": 0.07597687553371375
-    }
+    "district": "",
+    "floorsInBuildingMax": "",
+    "floorsInBuildingMin": "",
+    "houseMaterial": [],
+    "infrastructure": {
+        "hospitals": "",
+        "kindergartens": "",
+        "parks": "",
+        "schools": "",
+        "shoppingCenters": "",
+        "shops": ""
+    },
+    "kitchenStove": "неважно",
+    "maxFloor": "",
+    "minFloor": "",
+    "priorities": [
+        {
+            "parameter": "budget",
+            "weight": 0.2422355203467922
+        },
+        {
+            "parameter": "area",
+            "weight": 0.10083697970569176
+        },
+        {
+            "parameter": "roomCount",
+            "weight": 0.33421953248196085
+        },
+        {
+            "parameter": "apartmentType",
+            "weight": 0.1391277718721055
+        },
+        {
+            "parameter": "balconyType",
+            "weight": 0.1835801955934498
+        }
+    ],
+    "region": "",
+    "renovationCondition": "неважно",
+    "roomCount": [],
+    "transportAccessibility": {
+        "metroDistance": "",
+        "publicTransportStops": ""
+    },
+    "viewFromWindows": []
 }

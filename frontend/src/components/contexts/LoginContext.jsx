@@ -56,7 +56,7 @@ export const LoginProvider = ({ children }) => {
             matrix: {},
             columnsOrder: [] // порядок столбцов
         },
-        priorities: []
+        priorities: {}
     });
     const [rentPreferences, setRentPreferences] = useState({
         rentPayment: { // условия аренды
@@ -75,7 +75,7 @@ export const LoginProvider = ({ children }) => {
             matrix: {},
             columnsOrder: [] // порядок столбцов
         },
-        priorities: []
+        priorities: {}
     });
 
     const [isLoading, setIsLoading] = useState(false);
