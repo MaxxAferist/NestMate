@@ -105,6 +105,7 @@ WHERE id = %s""",
 (json.dumps(data['rentPreferences']), user[0]))
         
         app.connection.commit()
+        print(data['flatPreferences'])
         return jsonify({
             "status": "success",
             "message": "Preferences saved successfully"
@@ -124,12 +125,8 @@ WHERE id = %s""",
         # with open ("flat_preferences.json", "w") as file:
         #     json.dump(user[9], file, ensure_ascii=False, indent=4)
 
-        priorities = user[9].get("priorities")
-        res = 0
-        for key in priorities.keys():
-            res += priorities.get(key)
-        print(res)
-        
+
+
         return jsonify({
             "status": "success",
             "flatPreferences": user[9],
