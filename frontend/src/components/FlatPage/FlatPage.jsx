@@ -201,18 +201,10 @@ const FlatPage = () => {
                                     ? `Пешком ${transportAccessibility.metroDistance} минут`
                                     : 'нет данных'}
                                 </ParameterItem>
-                                <ParameterItem label="Время до метро на транспорте">{transportAccessibility.metroTransportTime
-                                    ? `${transportAccessibility.metroTransportTime} минут`
-                                    : 'нет данных'}
-                                </ParameterItem>
                             </div>
                             <div className={s.parameterColumn}>
                                 <ParameterItem label="Остановки общественного транспорта">{transportAccessibility.publicTransportStops
                                     ? `Пешком ${transportAccessibility.publicTransportStops} минут`
-                                    : 'нет данных'}
-                                </ParameterItem>
-                                <ParameterItem label="Удалённость от центра города">{transportAccessibility.cityCenterDistance
-                                    ? `Пешком ${transportAccessibility.cityCenterDistance} минут`
                                     : 'нет данных'}
                                 </ParameterItem>
                             </div>

@@ -9,9 +9,9 @@ import {ProfileParameterRow,
     InlineFromField,
     FlatParameterRow,
     InfrastructureParameterRow,
-    ComparisonMatrix,
     InlineCheckboxField,
 } from './ProfilePageComponents.jsx';
+import {ComparisonMatrix} from '../ComparsionMatrix/ComparisonMatrix.jsx'
 
 const ProfilePage = () => {
     const navigate = useNavigate();
@@ -416,10 +416,7 @@ const ProfilePage = () => {
             setFlatPreferences(prev => ({
                 ...prev,
                 comparisonMatrix: matrix,
-                priorities: {
-                    ...prev.priorities,
-                    ...weights
-                }
+                priorities: weights
             }));
             await savePreferences();
             console.log('Приоритеты и матрица сравнений успешно сохранены!');
@@ -433,11 +430,11 @@ const ProfilePage = () => {
         try {
             setRentPreferences(prev => ({
                 ...prev,
-                comparisonMatrix: matrix,
-                priorities: {
-                    ...prev.priorities,
-                    ...weights
-                }
+                comparisonMatrix: {
+                    matrix: matrix.matrix,
+                    parametersOrder: matrix.columnsOrder
+                },
+                priorities: weights
             }));
             await savePreferences();
             console.log('Приоритеты и матрица сравнений успешно сохранены!');
@@ -772,17 +769,6 @@ const ProfilePage = () => {
                                              minuteLabel='минут'
                                              error={errors['transportAccessibility.metroDistance']}
                             />
-                            <InlineFromField className={s.inlineFormGroup}
-                                             label='Время до метро на транспорте:'
-                                             type="number"
-                                             name="metroTransportTime"
-                                             value={flatPreferences.transportAccessibility.metroTransportTime}
-                                             onChange={handleTransportAccessibilityChange}
-                                             placeholder={'Не более...'}
-                                             minuteLabel='минут'
-                                             error={errors['transportAccessibility.metroTransportTime']}
-                            />
-
                         </div>
                         <ButtonSave>Сохранить</ButtonSave>
                     </form>
@@ -901,14 +887,6 @@ const ProfilePage = () => {
                                 </div>
                                 <InfrastructureParameterRow name="Остановки общественного транспорта" value={flatPreferences.transportAccessibility.publicTransportStops}/>
                                 <InfrastructureParameterRow name="Расстояние до метро" value={flatPreferences.transportAccessibility.metroDistance}/>
-                                <div className={s.parameterRow}>
-                                    <span className={s.parameterName}>Время до метро на транспорте:</span>
-                                    <span className={s.parameterValue}>
-                                        {flatPreferences.transportAccessibility.metroTransportTime
-                                            ? `Не более ${flatPreferences.transportAccessibility.metroTransportTime} минут`
-                                            : 'время не указано'}
-                                    </span>
-                                </div>
                             </div>
                         </div>
                         <button  onClick={() => setEditingFlatData(true)} className={s.buttonChangeParameters}>
