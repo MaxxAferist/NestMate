@@ -1,6 +1,4 @@
 import s from './ProfilePage.module.css'
-import {useEffect, useState, } from "react";
-
 
 
 export const ProfileParameterRow = ({ name, value, className = '' }) => {

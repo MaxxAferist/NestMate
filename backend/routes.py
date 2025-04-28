@@ -123,7 +123,7 @@ UPDATE users
 SET rent_preferences = %s
 WHERE id = %s""",
 (json.dumps(data['rentPreferences']), user[0]))
-                
+        
             conn.commit()
             return jsonify({
                 "status": "success",
@@ -131,7 +131,6 @@ WHERE id = %s""",
             }), 200
         finally:
             app.connection_pool.putconn(conn)
-
 
     @app.app.route('/api/getPreferences/<int:user_id>', methods=['GET'])
     def getPreferences(user_id):
@@ -150,7 +149,6 @@ WHERE id = %s""",
                 # with open ("flat_preferences.json", "w") as file:
                 #     json.dump(user[9], file, ensure_ascii=False, indent=4)
 
-                
                 # priorities = user[9].get("priorities")
                 res = 0
                 # for key in priorities.keys():

@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useCallback } from 'react'
 
+
 export const LoginContext = createContext({
     user: null,
     login: () => {},
@@ -24,13 +25,13 @@ export const LoginProvider = ({ children }) => {
         budgetMax: '',
         areaMin: '', //площадь
         areaMax: '',
-        region: '', // регион
-        city: '', // город
-        district: '', // район
+        region: 'Санкт-Петербург', // регион
+        city: 'Санкт-Петербург', // город
+        district: 'Адмиралтейский', // район
         roomCount: [], // кол-во комнат
         apartmentType: 'неважно', // тип квартиры (вторичка/новостройка)
         balconyType: 'неважно', // балкон/лоджия
-        ceilingHeight: '', // высота потолков
+        ceilingHeight: 'неважно', // высота потолков
         minFloor: '', // этаж
         maxFloor: '',
         floorsInBuildingMin: '', // этажей в доме
@@ -39,7 +40,6 @@ export const LoginProvider = ({ children }) => {
         renovationCondition: 'неважно', // состояние ремонта
         amenities: [], // удобства
         kitchenStove: 'неважно', // тип кухонной плиты
-        viewFromWindows: [], // вид из окон
         infrastructure: { // инфраструктура района
             parks: '',
             hospitals: '',
@@ -140,16 +140,6 @@ export const LoginProvider = ({ children }) => {
         });
     }, [loadUserData, loadPreferences]);
 
-   /* useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        if (storedUser) {
-            const parsedUser = JSON.parse(storedUser);
-            setUser(parsedUser);
-            loadUserData(parsedUser.id);
-            loadPreferences(parsedUser.id);
-        }
-    }, [loadUserData, loadPreferences]);*/
-
     const saveUserData = async (newData) => {
         setIsLoading(true);
         setError(null);
@@ -233,13 +223,14 @@ export const LoginProvider = ({ children }) => {
         }
     }
 
-    const savePreferences = async () => {
+    /*const savePreferences = async () => {
         if (!user?.id) return;
 
         setIsLoading(true);
         setError(null);
-
+        console.log('Отправка на сервер', flatPreferences)
         try {
+
             const response = await fetch('/api/savePreferences', {
                 method: 'POST',
                 headers: {
@@ -256,6 +247,41 @@ export const LoginProvider = ({ children }) => {
                 const errorData = await response.json();
                 setError(errorData.message || 'Ошибка при сохранении параметров');
             }
+            await loadPreferences(user.id);
+        } catch (err) {
+            setError(err.message);
+            console.error("Ошибка сохранения параметров:", err);
+            throw err;
+        } finally {
+            setIsLoading(false);
+        }
+    };*/
+
+    const savePreferences = async (preferencesToSave) => {
+        if (!user?.id) return;
+
+        setIsLoading(true);
+        setError(null);
+        console.log('Отправка на сервер', preferencesToSave);
+
+        try {
+            const response = await fetch('/api/savePreferences', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    flatPreferences: preferencesToSave || flatPreferences,
+                    rentPreferences: rentPreferences
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                setError(errorData.message || 'Ошибка при сохранении параметров');
+            }
+            await loadPreferences(user.id);
         } catch (err) {
             setError(err.message);
             console.error("Ошибка сохранения параметров:", err);
@@ -281,13 +307,13 @@ export const LoginProvider = ({ children }) => {
             budgetMax: '',
             areaMin: '', //площадь
             areaMax: '',
-            region: '', // регион
-            city: '', // город
-            district: '', // район
+            region: 'Санкт-Петербург', // регион
+            city: 'Санкт-Петербург', // город
+            district: 'Адмиралтейский', // район
             roomCount: [], // кол-во комнат
             apartmentType: 'неважно', // тип квартиры (вторичка/новостройка)
             balconyType: 'неважно', // балкон/лоджия
-            ceilingHeight: '', // высота потолков
+            ceilingHeight: 'неважно', // высота потолков
             minFloor: '', // этаж
             maxFloor: '',
             floorsInBuildingMin: '', // этажей в доме

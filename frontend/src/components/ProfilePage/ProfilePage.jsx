@@ -137,11 +137,6 @@ const ProfilePage = () => {
                     return;
                 }
             }
-            else if (name === 'ceilingHeight') {
-                if (!validateNumberInput(name, numericValue, false, 0)) {
-                    return;
-                }
-            }
             else {
                 if (!validateNumberInput(name, numericValue, true, 0)) {
                     return;
@@ -254,7 +249,6 @@ const ProfilePage = () => {
 
         const isBudgetMinValid = validateNumberInput('budgetMin', flatPreferences.budgetMin, true, 0);
         const isBudgetMaxValid = validateNumberInput('budgetMax', flatPreferences.budgetMax, true, 0);
-        const isCeilingHeightValid = validateNumberInput('ceilingHeight', flatPreferences.ceilingHeight, false, 0);
         const isMinFloorValid = validateNumberInput('minFloor', flatPreferences.minFloor, true, 1);
         const isMaxFloorValid = validateNumberInput('maxFloor', flatPreferences.maxFloor, true, 1);
         const isFloorsInBuildingMinValid = validateNumberInput('floorsInBuildingMin', flatPreferences.floorsInBuildingMin, true, 1);
@@ -269,7 +263,6 @@ const ProfilePage = () => {
         if (
             isBudgetMinValid &&
             isBudgetMaxValid &&
-            isCeilingHeightValid &&
             isMinFloorValid &&
             isMaxFloorValid &&
             isFloorsInBuildingMinValid &&
@@ -413,12 +406,15 @@ const ProfilePage = () => {
 
     const handleSaveFlatPriorities = async (matrix, weights) => {
         try {
-            setFlatPreferences(prev => ({
-                ...prev,
+            const newPreferences = {
+                ...flatPreferences,
                 comparisonMatrix: matrix,
                 priorities: weights
-            }));
-            await savePreferences();
+            };
+
+            setFlatPreferences(newPreferences);
+            await savePreferences(newPreferences); // передаем новые значения напрямую
+
             console.log('Приоритеты и матрица сравнений успешно сохранены!');
             setEditingFlatPriorities(false);
         } catch (err) {
@@ -426,13 +422,33 @@ const ProfilePage = () => {
         }
     };
 
+    /*const handleSaveFlatPriorities = async (matrix, weights) => {
+        try {
+            /!*...prev,
+                comparisonMatrix: matrix,
+                priorities: weights*!/
+            console.log('Матрица', matrix.matrix, matrix.columnsOrder, weights);
+            setFlatPreferences(prev => ({
+                ...prev,
+                comparisonMatrix: matrix,
+                priorities: weights
+            }));
+
+            await savePreferences();
+            console.log('Приоритеты и матрица сравнений успешно сохранены!');
+            setEditingFlatPriorities(false);
+        } catch (err) {
+            console.error('Ошибка при сохранении приоритетов:', err);
+        }
+    };
+*/
     const handleSaveRentPriorities = async (matrix, weights) => {
         try {
             setRentPreferences(prev => ({
                 ...prev,
                 comparisonMatrix: {
                     matrix: matrix.matrix,
-                    parametersOrder: matrix.columnsOrder
+                    columnsOrder: matrix.columnsOrder
                 },
                 priorities: weights
             }));
@@ -521,18 +537,45 @@ const ProfilePage = () => {
                             name="region"
                             label="Регион:"
                             value={flatPreferences.region}
+                            options={[
+                                { value: 'Санкт-Петербург', label: 'Санкт-Петербург' }
+                            ]}
                             onChange={handleInputChange}
                         />
+
                         <FormInputField
                             name="city"
                             label="Город:"
                             value={flatPreferences.city}
+                            options={[
+                                { value: 'Санкт-Петербург', label: 'Санкт-Петербург' }
+                            ]}
                             onChange={handleInputChange}
                         />
                         <FormInputField
                             name="district"
                             label="Район:"
                             value={flatPreferences.district}
+                            options={[
+                                { value: 'Адмиралтейский', label: 'Адмиралтейский' },
+                                { value: 'Василеостровский', label: 'Василеостровский' },
+                                { value: 'Выборгский', label: 'Выборгский' },
+                                { value: 'Калининский', label: 'Калининский' },
+                                { value: 'Кировский', label: 'Кировский' },
+                                { value: 'Колпинский', label: 'Колпинский' },
+                                { value: 'Красногвардейский', label: 'Красногвардейский' },
+                                { value: 'Красносельский', label: 'Красносельский' },
+                                { value: 'Кронштадтский', label: 'Кронштадтский' },
+                                { value: 'Курортный', label: 'Курортный' },
+                                { value: 'Московский', label: 'Московский' },
+                                { value: 'Невский', label: 'Невский' },
+                                { value: 'Петроградский', label: 'Петроградский' },
+                                { value: 'Петродворцовый', label: 'Петродворцовый' },
+                                { value: 'Приморский', label: 'Приморский' },
+                                { value: 'Пушкинский', label: 'Пушкинский' },
+                                { value: 'Фрунзенский', label: 'Фрунзенский' },
+                                { value: 'Центральный', label: 'Центральный' },
+                            ]}
                             onChange={handleInputChange}
                         />
                         <RangeInput
@@ -603,13 +646,16 @@ const ProfilePage = () => {
                         <FormInputField
                             name="ceilingHeight"
                             label="Высота потолков:"
-                            type="number"
                             value={flatPreferences.ceilingHeight}
+                            options={[
+                                { value: 'неважно', label: 'Неважно' },
+                                { value: '2.7', label: 'От 2.7 м.' },
+                                { value: '3', label: 'От 3 м.' },
+                                { value: '3.5', label: 'От 3.5 м.' }
+                            ]}
                             onChange={handleInputChange}
-                            placeholder="Укажите высоту"
-                            step="0.1"
-                            error={errors.ceilingHeight}
                         />
+
                         <RangeInput
                             label="Этаж"
                             minName="minFloor"
@@ -789,6 +835,8 @@ const ProfilePage = () => {
                             <FlatParameterRow name="Город" value={flatPreferences.city}/>
                             <FlatParameterRow name="Район" value={flatPreferences.district}/>
 
+                            {/*<FlatParameterRow name="Бюджет" isRange priority={flatPreferences.priorities.budget}>*/}
+
                             <FlatParameterRow name="Бюджет" isRange priority={flatPreferences.priorities.budget}>
                                 {flatPreferences.budgetMin ? `от ${flatPreferences.budgetMin} руб.` : ''}
                                 {flatPreferences.budgetMin && flatPreferences.budgetMax ? ' ' : ''}
@@ -864,12 +912,16 @@ const ProfilePage = () => {
                             />
 
 
-
+                            {/*<span className={s.flatPriority}>{flatPreferences.priorities.infrastructure ? `вес при подборе: ${(flatPreferences.priorities.infrastructure * 100).toFixed(1)}%`` : ''}</span>*/}
                             <div className={s.parameterBlock}>
                                 <div className={s.parameterRow}>
                                     <strong className={s.parameterName}>Инфраструктура района:</strong>
-                                    <span className={s.flatPriority}>вес при подборе: {(flatPreferences.priorities.infrastructure * 100).toFixed(1)}%</span>
-                                    <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.infrastructure * 100).toFixed(1)}%</span>
+                                    {flatPreferences.priorities.infrastructure &&
+                                        <span className={s.flatPriority}>вес при подборе: {(flatPreferences.priorities.infrastructure * 100).toFixed(1)}%</span>
+                                    }
+                                    {rentPreferences.infrastructure &&
+                                        <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.infrastructure * 100).toFixed(1)}%</span>
+                                    }
                                 </div>
                                 <InfrastructureParameterRow name="Парки" value={flatPreferences.infrastructure.parks}/>
                                 <InfrastructureParameterRow name="Больницы" value={flatPreferences.infrastructure.hospitals}/>
@@ -882,8 +934,12 @@ const ProfilePage = () => {
                             <div className={s.parameterBlock}>
                                 <div className={s.parameterRow}>
                                     <strong className={s.parameterName}>Транспортная доступность:</strong>
-                                    <span className={s.flatPriority}>вес при подборе: {(flatPreferences.priorities.transportAccessibility * 100).toFixed(1)}%</span>
-                                    <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.transportAccessibility * 100).toFixed(1)}%</span>
+                                    {flatPreferences.priorities.transportAccessibility &&
+                                        <span className={s.flatPriority}>вес при подборе: {(flatPreferences.priorities.transportAccessibility * 100).toFixed(1)}%</span>
+                                    }
+                                    {rentPreferences.priorities.transportAccessibility &&
+                                        <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.transportAccessibility * 100).toFixed(1)}%</span>
+                                    }
                                 </div>
                                 <InfrastructureParameterRow name="Остановки общественного транспорта" value={flatPreferences.transportAccessibility.publicTransportStops}/>
                                 <InfrastructureParameterRow name="Расстояние до метро" value={flatPreferences.transportAccessibility.metroDistance}/>
@@ -1001,7 +1057,9 @@ const ProfilePage = () => {
                             <div className={s.parameterBlock}>
                                 <div className={s.parameterRow}>
                                     <strong className={s.parameterName}>Цена и срок аренды:</strong>
-                                    <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.rentPayment * 100).toFixed(1)}%</span>
+                                    {rentPreferences.priorities.rentPayment &&
+                                        <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.rentPayment * 100).toFixed(1)}%</span>
+                                    }
                                 </div>
                                 <div className={s.parameterRow}>
                                     <span className={s.parameterName}>{`Цена ${
@@ -1028,7 +1086,9 @@ const ProfilePage = () => {
                             <div className={s.parameterBlock}>
                                 <div className={s.parameterRow}>
                                     <strong className={s.parameterName}>Условия аренды и заселения:</strong>
-                                    <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.rentalTerms * 100).toFixed(1)}%</span>
+                                    {rentPreferences.priorities.rentalTerms &&
+                                        <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.rentalTerms * 100).toFixed(1)}%</span>
+                                    }
                                 </div>
                                 <div className={s.parameterRow}>
                                     <span className={s.parameterName}>Проживание с животными:</span>

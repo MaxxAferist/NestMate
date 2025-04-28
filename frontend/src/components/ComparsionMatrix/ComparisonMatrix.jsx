@@ -11,6 +11,7 @@ export const ComparisonMatrix = ({ parameters, parametersNames, currentPreferenc
         const savedColumns = currentPreferences.comparisonMatrix.columnsOrder || []; // загрузка выбранных параметров в нужном порядке
         const savedMatrix = currentPreferences.comparisonMatrix.matrix || {}; // загрузка самой матрицы
 
+        console.log(currentPreferences.comparisonMatrix.matrix);
         const initialColumns = (savedColumns.length > 0 ? savedColumns : parameters.slice(0, 5)); // начальные столбцы матрицы
 
         setSelectedColumns(initialColumns);
@@ -256,15 +257,14 @@ export const ComparisonMatrix = ({ parameters, parametersNames, currentPreferenc
                     Упростите сравнения или сделайте их более согласованными.`);
             return;
         }
-
-        const prioritiesArray = selectedColumns.map(parameter => ({
+       /* const prioritiesArray = selectedColumns.map(parameter => ({
             parameter, weight: weights[parameter]
-        }));
+        }));*/
 
         onSave({
             matrix: visibleMatrix,
-            parametersOrder: selectedColumns
-        }, prioritiesArray);
+            columnsOrder: selectedColumns
+        }, weights);
     };
 
 
