@@ -11,6 +11,8 @@ class Application():
     def __init__(self, name):
         self.app = Flask(name)
         CORS(self.app)
+
+        self.__setup_signals()
         
         # Config Database
         self.app.config["bd_host"] = config.host
@@ -28,9 +30,14 @@ class Application():
         # Created tables
         self.create_apartments_db()
         self.create_users_db()
-
-        self.app.app_context().push()
+        
         init_routes(self)
+        self.app.app_context().push()
+
+
+    def __setup_signals(self):
+        signal.signal(signal.SIGINT, self.handle_signal)
+        signal.signal(signal.SIGTERM, self.handle_signal)
 
 
     def connect_to_db(self):
@@ -118,7 +125,16 @@ class Application():
 
 
     def start(self):
-        self.app.run(debug = True)
+        try:
+            self.app.run(debug = True)
+        except KeyboardInterrupt:
+            self.handle_shutdown()
+
+
+    def handle_signal(self, signum, frame):
+        print(f"\nReceived signal {signum}, shutting down...")
+        self.handle_shutdown()
+        exit(0)
 
 
     def handle_shutdown(self):
@@ -132,8 +148,4 @@ class Application():
 
 if __name__ == '__main__':
     app = Application(__name__)
-
-    signal.signal(signal.SIGINT, app.handle_shutdown)
-    signal.signal(signal.SIGTERM, app.handle_shutdown)
-
     app.start()

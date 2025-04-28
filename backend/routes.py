@@ -3,7 +3,10 @@ from datetime import datetime
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
+import os
+import signal
 # from app import Application
+# import MAI
 
 
 def init_routes(app):#: Application):
@@ -118,6 +121,15 @@ WHERE id = %s""",
         if not user:
             return jsonify({"status": "error", "message": "User not found"}), 404
         
+        # with open ("flat_preferences.json", "w") as file:
+        #     json.dump(user[9], file, ensure_ascii=False, indent=4)
+
+        priorities = user[9].get("priorities")
+        res = 0
+        for key in priorities.keys():
+            res += priorities.get(key)
+        print(res)
+        
         return jsonify({
             "status": "success",
             "flatPreferences": user[9],
@@ -142,8 +154,8 @@ WHERE id = %s""",
                 "firstName": user[1],
                 "lastName": user[2],
                 "middleName": user[3],
-                "gender": user[4],
-                "phone": user[5],
+                "gender": user[5],
+                "phone": user[4],
                 "email": user[6],
                 "signInDate": user[8].isoformat()
             }
@@ -201,8 +213,34 @@ WHERE id = %s""",
             "status": "success",
             "message": "User data updated success"
         }), 200
+    
+
+    @app.app.route('/api/getSortedAppartments/<int:user_id>', methods=['GET'])
+    def getSortedAppartments(user_id):
+        return
+        app.cursor_users.execute("""
+SELECT * FROM users
+WHERE id = %s""",
+(user_id,))
+        user = app.cursor_users.fetchone()
+        if not user:
+            return jsonify({"status": "error", "message": "User not found"}), 404
+        
+        flat_preferences = user[9]
+        
+        # return jsonify(MAI.getSortedApartments(app, flat_preferences)), 200
+        
 
 
     @app.app.route('/api')
     def index():
         return 'index'
+    
+
+    @app.app.route('/api/shutdown', methods=['POST'])
+    def shutdown():
+        if request.headers.get('X-Shutdown-Token') != 'exit_token)))':
+            print("token govno")
+            return {"status": "error", "message": "Forbidden"}, 403
+        os.kill(os.getpid(), signal.SIGINT)
+        return {"status": "success", "message": "Выключение сервера..."}
