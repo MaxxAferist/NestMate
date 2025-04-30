@@ -15,8 +15,8 @@ import {ComparisonMatrix} from '../ComparsionMatrix/ComparisonMatrix.jsx'
 
 const ProfilePage = () => {
     const navigate = useNavigate();
-    const { userData, setUserData, saveUserData, user, logout, flatPreferences, setFlatPreferences,
-        rentPreferences, setRentPreferences, savePreferences, loadUserData } = useContext(LoginContext);
+    const {user,userData, setUserData, saveUserData,  logout, flatPreferences, setFlatPreferences,
+        rentPreferences, setRentPreferences, savePreferences, loadUserData, isLoading } = useContext(LoginContext);
 
     const [editingRentData, setEditingRentData] = useState(false);
     const [editingPersonalData, setEditingPersonalData] = useState(false);
@@ -24,11 +24,17 @@ const ProfilePage = () => {
     const [editingFlatPriorities, setEditingFlatPriorities] = useState(false);
     const [editingRentPriorities, setEditingRentPriorities] = useState(false);
 
-    useEffect(() => {
+   /*useEffect(() => {
         if (user?.id) {
             loadUserData(user.id);
         }
-    }, [user, loadUserData]);
+    }, [user, loadUserData]);*/
+
+    useEffect(() => {
+        if (user?.id && !isLoading) {
+            loadUserData(user.id);
+        }
+    }, [user?.id, loadUserData]);
 
 
     const [errors, setErrors] = useState({});
@@ -193,22 +199,14 @@ const ProfilePage = () => {
             if (checked) {
                 newRoomCount.push(value);
             } else {
-                const index = newRoomCount.indexOf(value);
-                if (index !== -1) {
-                    newRoomCount.splice(index, 1);
-                }
+                newRoomCount = newRoomCount.filter(item => item !== value);
             }
 
-            newRoomCount.sort((a, b) => {
-                const order = ['студия', '1 комната', '2 комнаты', '3 комнаты', '4 комнаты', '5 комнат', '6 и более комнат'];
-                return order.indexOf(a) - order.indexOf(b);
-            });
+            newRoomCount.sort((a, b) => Number(a) - Number(b)); // сортировка для отображения
 
             return { ...prev, roomCount: newRoomCount };
         });
     };
-
-
 
     const handleInfrastructureChange = (e) => {
         const { name, type, value } = e.target;
@@ -346,7 +344,7 @@ const ProfilePage = () => {
     }
 
 
-    const handleRentPrioritySubmit = async (e) => {
+    /*const handleRentPrioritySubmit = async (e) => {
         e.preventDefault();
         try {
             await savePreferences();
@@ -357,7 +355,7 @@ const ProfilePage = () => {
         }
 
     }
-
+*/
 
     const flatParameters = [
         'budget', 'area', 'roomCount', 'apartmentType', 'balconyType',
@@ -413,7 +411,7 @@ const ProfilePage = () => {
             };
 
             setFlatPreferences(newPreferences);
-            await savePreferences(newPreferences); // передаем новые значения напрямую
+            await savePreferences(newPreferences);
 
             console.log('Приоритеты и матрица сравнений успешно сохранены!');
             setEditingFlatPriorities(false);
@@ -442,17 +440,19 @@ const ProfilePage = () => {
         }
     };
 */
+
     const handleSaveRentPriorities = async (matrix, weights) => {
         try {
-            setRentPreferences(prev => ({
-                ...prev,
-                comparisonMatrix: {
-                    matrix: matrix.matrix,
-                    columnsOrder: matrix.columnsOrder
-                },
+
+            const newPreferences = {
+                ...rentPreferences,
+                comparisonMatrix: matrix,
                 priorities: weights
-            }));
-            await savePreferences();
+            };
+
+            setRentPreferences(newPreferences);
+            await savePreferences(flatPreferences, newPreferences);
+
             console.log('Приоритеты и матрица сравнений успешно сохранены!');
             setEditingRentPriorities(false);
         } catch (err) {
@@ -472,6 +472,22 @@ const ProfilePage = () => {
         logout();
         navigate('/');
     }
+
+    const showRoomCount = (roomCount) => {
+        if (!roomCount || roomCount.length === 0) return "не указано";
+
+        const roomMap = {
+            '0': 'студия',
+            '1': '1 комната',
+            '2': '2 комнаты',
+            '3': '3 комнаты',
+            '4': '4 комнаты',
+            '5': '5 комнат',
+            '6': '6 и более комнат'
+        };
+
+        return roomCount.map(value => roomMap[value] || value).join(', ');
+    };
 
     if (!user) {
         return <p>Загрузка данных пользователя...</p>;
@@ -493,16 +509,16 @@ const ProfilePage = () => {
                             value={userData.lastName}
                             onChange={handleUserDataChange}
                         />
-                        <FormInputField name="middleName"
+                       {/* <FormInputField name="middleName"
                             label="Отчество:"
                             value={userData.middleName}
                             onChange={handleUserDataChange}
-                        />
-                        <FormInputField name="phone"
+                        />*/}
+                        {/*<FormInputField name="phone"
                             label="Номер телефона:"
                             value={userData.phone}
                             onChange={handleUserDataChange}
-                        />
+                        />*/}
                         <FormInputField name="gender"
                             label="Пол:"
                             value={userData.gender}
@@ -518,8 +534,8 @@ const ProfilePage = () => {
                             <ProfileParameterRow name="ID Профиля" value={userData.id} />
                             <ProfileParameterRow name="Имя" value={userData.firstName} />
                             <ProfileParameterRow name="Фамилия" value={userData.lastName} />
-                            <ProfileParameterRow name="Отчество" value={userData.middleName} />
-                            <ProfileParameterRow name="Номер телефона" value={userData.phone} />
+                            {/*<ProfileParameterRow name="Отчество" value={userData.middleName} />
+                            <ProfileParameterRow name="Номер телефона" value={userData.phone} />*/}
                             <ProfileParameterRow name="Пол" value={userData.gender==="male" && 'Мужской' || userData.gender==="female" && 'Женский' || ''} />
                             <ProfileParameterRow name="Email" value={userData.email} />
                         </div>
@@ -601,6 +617,32 @@ const ProfilePage = () => {
                         <div className={s.formGroup}>
                             <label>Количество комнат:</label>
                             <div className={s.checkboxGroup}>
+                                {[
+                                    { label: 'студия', value: '0' },
+                                    { label: '1 комната', value: '1' },
+                                    { label: '2 комнаты', value: '2' },
+                                    { label: '3 комнаты', value: '3' },
+                                    { label: '4 комнаты', value: '4' },
+                                    { label: '5 комнат', value: '5' },
+                                    { label: '6 и более комнат', value: '6' },
+                                ].map((room) => (
+                                    <label key={room.value} className={s.checkboxLabel}>
+                                        <input
+                                            type="checkbox"
+                                            name="roomCount"
+                                            value={room.value}
+                                            checked={flatPreferences.roomCount.includes(room.value)}
+                                            onChange={handleRoomCountChange}
+                                            className={s.checkboxInput}
+                                        />
+                                        {room.label}
+                                    </label>
+                                ))}
+                            </div>
+                        </div>
+                        {/*<div className={s.formGroup}>
+                            <label>Количество комнат:</label>
+                            <div className={s.checkboxGroup}>
                                 {['студия', '1 комната', '2 комнаты', '3 комнаты', '4 комнаты', '5 комнат', '6 и более комнат'].map(room => (
                                     <label key={room} className={s.checkboxLabel}>
                                         <input
@@ -615,7 +657,7 @@ const ProfilePage = () => {
                                     </label>
                                 ))}
                             </div>
-                        </div>
+                        </div>*/}
 
                         <FormInputField
                             name="apartmentType"
@@ -679,7 +721,7 @@ const ProfilePage = () => {
                         <div className={s.formGroup}>
                             <label>Материал дома:</label>
                             <div className={s.checkboxGroup}>
-                                {['кирпич', 'бетон', 'панельный'].map((material) => (
+                                {['кирпич', 'бетон', 'панельный','блочный', 'монолитный','монолитно-кирпичный'].map((material) => (
                                     <label key={material} className={s.checkboxLabel}>
                                         <input
                                             type="checkbox"
@@ -730,8 +772,9 @@ const ProfilePage = () => {
                         </div>
 
 
-                        <label style={{margin: "10px"}}>Инфраструктура района:</label>
+
                         <div className={s.formInlineGroup}>
+                            <label className={s.formInlineGroupMainLabel}>Инфраструктура района:</label>
                             <InlineFromField className={s.inlineFormGroup}
                                             label='Парки:'
                                             type="number"
@@ -793,8 +836,9 @@ const ProfilePage = () => {
                                              error={errors['infrastructure.kindergartens']}
                             />
                         </div>
-                        <label style={{margin: "10px"}}>Транспортная доступность:</label>
+
                         <div className={s.formInlineGroup}>
+                            <label className={s.formInlineGroupMainLabel}>Транспортная доступность:</label>
                             <InlineFromField className={s.inlineFormGroup}
                                              label='Остановки общественного транспорта:'
                                              type="number"
@@ -855,8 +899,7 @@ const ProfilePage = () => {
 
                             <FlatParameterRow
                                 name="Количество комнат"
-                                value={flatPreferences.roomCount}
-                                isArray
+                                value={showRoomCount(flatPreferences.roomCount)}
                                 defaultValue="не указано"
                                 priority={flatPreferences.priorities.roomCount}
                                 rentPriority={rentPreferences.priorities.roomCount}
@@ -865,7 +908,7 @@ const ProfilePage = () => {
                             <FlatParameterRow name="Тип квартиры (Вторичка/новостройка)" value={flatPreferences.apartmentType} priority={flatPreferences.priorities.apartmentType}/>
                             <FlatParameterRow name="Балкон/лоджия" value={flatPreferences.balconyType} priority={flatPreferences.priorities.balconyType}/>
                             <FlatParameterRow name="Высота потолков" isRange priority={flatPreferences.priorities.ceilingHeight}>
-                                {flatPreferences.ceilingHeight ? `от ${flatPreferences.ceilingHeight} м` : 'не указана'}
+                                {flatPreferences.ceilingHeight === 'неважно' ? '' : `От ${flatPreferences.ceilingHeight} м.`}
                             </FlatParameterRow>
 
                             <FlatParameterRow name="Этаж" isRange
@@ -914,8 +957,8 @@ const ProfilePage = () => {
 
                             {/*<span className={s.flatPriority}>{flatPreferences.priorities.infrastructure ? `вес при подборе: ${(flatPreferences.priorities.infrastructure * 100).toFixed(1)}%`` : ''}</span>*/}
                             <div className={s.parameterBlock}>
-                                <div className={s.parameterRow}>
-                                    <strong className={s.parameterName}>Инфраструктура района:</strong>
+                                <div className={s.parameterRow} style={{border: 'none'}}>
+                                    <strong className={s.groupParameterName}>Инфраструктура района</strong>
                                     {flatPreferences.priorities.infrastructure &&
                                         <span className={s.flatPriority}>вес при подборе: {(flatPreferences.priorities.infrastructure * 100).toFixed(1)}%</span>
                                     }
@@ -932,8 +975,8 @@ const ProfilePage = () => {
                             </div>
 
                             <div className={s.parameterBlock}>
-                                <div className={s.parameterRow}>
-                                    <strong className={s.parameterName}>Транспортная доступность:</strong>
+                                <div className={s.parameterRow} style={{border: 'none'}}>
+                                    <strong className={s.groupParameterName}>Транспортная доступность:</strong>
                                     {flatPreferences.priorities.transportAccessibility &&
                                         <span className={s.flatPriority}>вес при подборе: {(flatPreferences.priorities.transportAccessibility * 100).toFixed(1)}%</span>
                                     }
@@ -993,8 +1036,8 @@ const ProfilePage = () => {
                                 />
                             </div>
                         </div>
-                        <label style={{margin: "10px"}}>Условия аренды и заселения:</label>
                         <div className={s.inlineCheckboxGroup}>
+                            <label className={s.formInlineGroupMainLabel}>Условия аренды и заселения:</label>
                             <InlineCheckboxField
                                 label='Возможность проживания с животными:'
                                 name="petsAllowed"
@@ -1005,12 +1048,6 @@ const ProfilePage = () => {
                                 label='Возможность проживания с детьми:'
                                 name="childrenAllowed"
                                 checked={rentPreferences.rentalTerms.childrenAllowed}
-                                onChange={handleRentInputChange}
-                            />
-                            <InlineCheckboxField
-                                label='Возможность немедленного заселения:'
-                                name="immediateMoveIn"
-                                checked={rentPreferences.rentalTerms.immediateMoveIn}
                                 onChange={handleRentInputChange}
                             />
                             <InlineCheckboxField
@@ -1035,7 +1072,7 @@ const ProfilePage = () => {
                     </form>
                 }
                 {editingRentPriorities &&
-                    <form onSubmit={handleRentPrioritySubmit}>
+                    <form>
                         <ComparisonMatrix
                             parameters={rentParameters}
                             parametersNames={rentParametersNames}
@@ -1044,19 +1081,19 @@ const ProfilePage = () => {
                             cancelChanging={handleCancelChangingRentPriorities}
                         />
 
-                        <button
+                        {/*<button
                             type="submit"
                             className={s.buttonSave}>
                             Сохранить приоритеты
-                        </button>
+                        </button>*/}
                     </form>
                 }
                 {(!editingRentData && !editingRentPriorities) &&
                     <div>
                         <div className={s.parametersContainer}>
                             <div className={s.parameterBlock}>
-                                <div className={s.parameterRow}>
-                                    <strong className={s.parameterName}>Цена и срок аренды:</strong>
+                                <div className={s.parameterRow} style={{border: 'none'}}>
+                                    <strong className={s.groupParameterName}>Цена и срок аренды:</strong>
                                     {rentPreferences.priorities.rentPayment &&
                                         <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.rentPayment * 100).toFixed(1)}%</span>
                                     }
@@ -1075,7 +1112,7 @@ const ProfilePage = () => {
                                     <span className={s.parameterValue}>{rentPreferences.rentPayment.rentPriceMin ? `от ${rentPreferences.rentPayment.rentPriceMin} руб.` : ''}
                                         {rentPreferences.rentPayment.rentPriceMin && rentPreferences.rentPayment.rentPriceMax ? ' ' : ''}
                                         {rentPreferences.rentPayment.rentPriceMax ? `до ${rentPreferences.rentPayment.rentPriceMax} руб.` : ''}
-                                        {!rentPreferences.rentPayment.rentPriceMin && !rentPreferences.rentPayment.rentPriceMax ? 'не указан' : ''}
+                                        {!rentPreferences.rentPayment.rentPriceMin && !rentPreferences.rentPayment.rentPriceMax ? 'не указана' : ''}
                                     </span>
                                 </div>
                                 <div className={s.parameterRow}>
@@ -1084,8 +1121,8 @@ const ProfilePage = () => {
                                 </div>
                             </div>
                             <div className={s.parameterBlock}>
-                                <div className={s.parameterRow}>
-                                    <strong className={s.parameterName}>Условия аренды и заселения:</strong>
+                                <div className={s.parameterRow} style={{border: 'none'}}>
+                                    <strong className={s.groupParameterName}>Условия аренды и заселения:</strong>
                                     {rentPreferences.priorities.rentalTerms &&
                                         <span className={s.rentPriority}>вес при аренде: {(rentPreferences.priorities.rentalTerms * 100).toFixed(1)}%</span>
                                     }
@@ -1097,10 +1134,6 @@ const ProfilePage = () => {
                                 <div className={s.parameterRow}>
                                     <span className={s.parameterName}>Проживание с детьми:</span>
                                     <span className={s.parameterValue}>{rentPreferences.rentalTerms.childrenAllowed ? 'Да' : 'неважно'}</span>
-                                </div>
-                                <div className={s.parameterRow}>
-                                    <span className={s.parameterName}>Немедленное заселение:</span>
-                                    <span className={s.parameterValue}>{rentPreferences.rentalTerms.immediateMoveIn ? 'Да' : 'неважно'}</span>
                                 </div>
                                 <div className={s.parameterRow}>
                                     <span className={s.parameterName}>Курение в квартире:</span>

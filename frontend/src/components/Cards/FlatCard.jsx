@@ -12,7 +12,7 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite, onFavoriteClick, isIn
 
 
     return (
-        <div className={s.card}>
+        <div className={s.card} >
             <div className={s.imageContainer} onClick={cardClick}>
                 <img
                     src={flatData.photos[0]}
@@ -46,14 +46,12 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite, onFavoriteClick, isIn
                 </div>
                 <div className={s.contentBlock}>
                     <h3>Оценка МАИ</h3>
-                    <span>{mark} баллов</span>
+                    <div className={s.markBlock}>{mark} баллов</div>
                     <div className={s.markScale}>
                         <div className={s.fillScale} style={{ width: `${mark}%` }}>
                             {mark} %
                         </div>
                     </div>
-
-
                 </div>
 
             </div>
@@ -63,13 +61,13 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite, onFavoriteClick, isIn
                 <button
                     className={s.favoriteButton}
                     onClick={ onFavoriteClick }
-                    style={{ backgroundColor: isFavorite ? '#ff5d74' : '' }}
+                    style={isFavorite ? { backgroundColor: '#ff5e75', color: 'white', borderColor: '#e53e3e'} : null }
                 >
                     {isFavorite ? 'В избранном' : 'В избранное'}
                 </button>
                 <button className={s.compareButton}
                         onClick={ isInComparison ? () => removeFromComparison(flatData.id) : () => addToComparison(flatData) }
-                        style={{ backgroundColor: isInComparison ? '#5dbcff' : '' }}
+                        style={isInComparison ? { backgroundColor: '#48b5ff', color: 'white', borderColor: '#3182ce' } : null }
                 >
                     {isInComparison ? 'Уже в сравнении' : 'Добавить в сравнение'}
                 </button>

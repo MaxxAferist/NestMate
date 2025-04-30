@@ -7,7 +7,6 @@ import {FavoritesProvider} from './components/contexts/FavoritesContext.jsx'
 const root = document.getElementById('root')
 
 ReactDOM.createRoot(root).render(
-    <React.StrictMode>
         <LoginProvider>
             <FavoritesProvider>
                 <ComparisonProvider>
@@ -15,5 +14,4 @@ ReactDOM.createRoot(root).render(
                 </ComparisonProvider>
             </FavoritesProvider>
         </LoginProvider>
-    </React.StrictMode>
 );

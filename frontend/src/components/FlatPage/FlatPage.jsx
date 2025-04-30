@@ -2,6 +2,7 @@ import { useState } from 'react';
 import s from './FlatPage.module.css';
 import { useLocation } from 'react-router-dom';
 import { ParameterItem } from "./FlatPageComponents.jsx";
+import {useComparison} from "../contexts/ComparisonContext.jsx";
 import YandexMap from "./YandexMap.jsx";
 
 const FlatPage = () => {
@@ -14,6 +15,8 @@ const FlatPage = () => {
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
     const [photoStartIndex, setPhotoStartIndex] = useState(0);
     const photosToShow = 10;
+
+    const { addToComparison, removeFromComparison, isInComparison} = useComparison();
 
     const nextPhoto = () => {
         setCurrentPhotoIndex((prev) =>
@@ -245,11 +248,14 @@ const FlatPage = () => {
                     Перейти к источнику
                 </a>
 
-                <button className={s.actionButton}>
-                    Добавить в сравнение
+                <button className={s.compareButton}
+                        onClick={ isInComparison(flatData.id) ? () => removeFromComparison(flatData.id) : () => addToComparison(flatData) }
+                        style={isInComparison(flatData.id) ? { backgroundColor: '#48b5ff', color: 'white', borderColor: '#3182ce' } : null }
+                >
+                    {isInComparison(flatData.id) ? 'Уже в сравнении' : 'Добавить в сравнение'}
                 </button>
 
-                <button className={s.actionButton}>
+                <button className={s.favoriteButton}>
                     Добавить в избранное
                 </button>
             </div>

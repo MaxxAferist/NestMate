@@ -1,17 +1,12 @@
-import {useContext, useState} from 'react'
+import {useContext, memo} from 'react'
 import s from './Header.module.css'
 import { LoginContext } from '../contexts/LoginContext.jsx'
 import { useNavigate } from 'react-router-dom'
 
-export default function Header(){
+export default memo(function Header(){
+    console.trace('Загрузка данных вызвана здесь:');
     const { user } = useContext(LoginContext);
     const navigate = useNavigate();
-
-    const [searchQuery, setSearchQuery] = useState('');
-
-    const handleSearch = () => {
-        console.log('Поиск:', searchQuery);
-    };
 
     function handleButtonLoginClick(){
         if(!user){
@@ -55,4 +50,4 @@ export default function Header(){
             </header>
         </>
     );
-};
+});
