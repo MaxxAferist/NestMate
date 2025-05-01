@@ -188,9 +188,8 @@ export default function HomePage() {
     }
 
     const handleFavoriteClick = async (flatId, e) => {
-        e.stopPropagation(); // предотвращаем всплытие события
-        e.preventDefault(); // отменяем стандартное поведение
-
+        /*e.stopPropagation(); // предотвращает всплытие события
+        e.preventDefault(); // отменяет стандартное поведение*/
         try {
             if (isFavorite(flatId)) {
                 await removeFavorite(flatId);

@@ -1,319 +1,457 @@
-.container{
+/*основной контейнер со всеми компонентами страницы*/
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     margin: 0 auto;
     padding: 20px;
-    font-family: Arial, sans-serif;
-}
-.header{
-    text-align: center;
-    color: #333;
-}
-.section{
-    margin-bottom: 30px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-}
-.profileDataForm{
-    width: 60%;
-    background-color: rgba(166, 209, 253, 0.13);
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: rgba(177, 177, 177, 0.3);
-}
-.parametersText{
-    margin: 10px;
-}
-.flatDataForm{
-    width: 60%;
-    background: rgba(200, 253, 198, 0.11);
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: rgba(177, 177, 177, 0.3);
-}
-.rentDataForm{
-    width: 60%;
-    background-color: rgba(193, 123, 250, 0.05);
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: rgba(177, 177, 177, 0.3);
-}
-.formGroup{
-   margin: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1200px;
+    background-color: #f8f9fa;
 }
 
-.input{
-    width: 98%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+/* формы разных данных профиля (подбор, аренды, личные данные */
+.profileDataForm,
+.flatDataForm,
+.rentDataForm {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
 }
-.textarea{
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    min-height: 100px;
-}
-.button{
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 10px;
+/*свои цвета*/
+.profileDataForm {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    border-left: 5px solid #4a6bdf;
 }
 
-.checkboxGroup{
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+.flatDataForm {
+    background: linear-gradient(135deg, #f0f9f4 0%, #d4edda 100%);
+    border-left: 5px solid #28a745;
 }
-.checkboxLabel{
+
+.rentDataForm {
+    background: linear-gradient(135deg, #f8f4ff 0%, #e8ddf8 100%);
+    border-left: 5px solid #6f42c1;
+}
+
+/*заголовки основных форм (личных данных и т.д.)*/
+.parametersText {
+    margin: 15px;
+    color: #2c3e50;
+    font-size: 1.5rem;
+    font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 5px;
-    cursor: pointer;
-    color: #333333;
-    font-size: 16px;
+    gap: 10px;
 }
 
+/*для иконок пока не*/
+/*.sectionIcon {
+    color: currentColor;
+}*/
+
+/* формы ввода */
+.formGroup {
+    margin: 15px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #ced7d8;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    caret-color: #000;
+}
+/*поля ввода*/
+.input,
+.textarea {
+    flex: 3;
+    width: 98%;
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid #a2a7ac;
+    font-size: 1rem;
+    /*transition: border-color 0.3s;*/
+    cursor: text;
+    caret-color: #000;
+}
+
+
+.input:focus,
+.textarea:focus {
+    border-color: #80bdff;
+    /*outline: none;*/
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* чекбоксы */
+.checkboxGroup {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+/*заголовки чекбоксов*/
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #495057;
+    font-size: 0.95rem;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.7);
+    transition: all 0.2s;
+}
+
+.checkboxLabel:hover {
+    background-color: #e9ecef;
+}
+/*ввод для чекбоксов*/
 .checkboxInput {
     cursor: pointer;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
+    accent-color: #4a6bdf;
 }
-.inlineCheckboxRow {
-    margin-bottom: 10px;
+
+/* кнопки */
+.buttonExit {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
     display: flex;
     align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
 }
 
-.buttonExit{
+.buttonExit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+}
+
+.buttonIcon {
+    font-size: 1.1rem;
+}
+
+.buttonChangeParameters {
     padding: 10px 20px;
-    background-color: rgba(131, 32, 43, 0.9);
-    color: #fff;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #4a6bdf 0%, #3a56c4 100%);
+    color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
+    margin: 15px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(74, 107, 223, 0.3);
 }
 
-.rangeFields{
+.buttonChangeParameters:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 107, 223, 0.4);
+}
+
+.buttonChangePriorities {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 15px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(111, 66, 193, 0.3);
+}
+
+.buttonChangePriorities:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(111, 66, 193, 0.4);
+}
+
+.buttonSave {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 15px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.buttonSave:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+/* параметры */
+/*контейнер для параметров*/
+.parametersContainer {
     display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px;
+}
+/*строка параметра*/
+.parameterRow {
+    display: flex;
+    align-items: baseline;
     gap: 10px;
+    flex-wrap: wrap;
+    padding: 12px 15px;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 8px;
+    transition: all 0.2s;
+    border: 1px solid #989da3;
 }
-.range{
-    flex: 1;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+
+.parameterRow:hover {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
+/*имя параметра*/
+.parameterName {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 500;
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/*имя группы параметров (инфраструктура и т.д.)*/
+.groupParameterName {
+    font-size: 1.3rem;
+    color: #2c3e50;
+    font-weight: 500;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/*значение параметра*/
+.parameterValue {
+    color: #32363c;
+    border: 1px solid #bbbfc6;
+    border-radius: 6px;
+    background-color: white;
+    padding: 6px 12px;
+    font-size: 1rem;
+}
+
+/*отображение приоритета параметра (веса)*/
+.flatPriority {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-left: auto;
+}
+
+.rentPriority {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-left: auto;
+}
+
+/* блок параметров (инфраструктура и т.д. */
+.parameterBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border: 1px solid #c4cdd1;
+}
+
+
+/* инлайн формы */
 .inlineFormGroup {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 10px;
-}
-
-.inlineCheckboxGroup {
-    display: flex;
-    flex-direction: column;
-    margin: 5px;
-}
-
-.inlineCheckboxGroup label {
-   color: #333333;
+    gap: 15px;
+    margin: 15px;
+    padding: 12px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border: 1px solid #dbe0e3;
 }
 
 .inlineFormGroup label {
     flex: 1;
+    color: #495057;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
     text-align: left;
-    color: #333333;
+    gap: 8px;
 }
-.inlineLabel {
-    color: #666;
-    font-size: 0.9em;
-    white-space: nowrap;
-}
-.inlineFormGroup input {
-    flex: 2;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-.error {
-    color: red;
-    font-size: 0.875rem;
-    margin-top: 5px;
-}
+
+/*форма для группы параметров (инфраструктура и т.д)*/
 .formInlineGroup{
     margin: 10px;
     align-items: center;
     text-align: right;
+    border: 1px solid #a2a7ac;
+    border-radius: 8px;
+    background-color: white;
 }
-.prioritySelector {
+/*основной заголовок группы параметров*/
+.formInlineGroupMainLabel {
+    flex: 1;
+    color: #474950;
+    font-weight: 500;
     display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 5px;
+    text-align: left;
+    font-size: 18px;
+    margin: 10px;
 }
 
-.prioritySelect {
-    padding: 5px 8px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    background-color: #fff;
+/*поля ввода мин и макс значений*/
+.rangeFields{
+    display: flex;
+    gap: 10px;
 }
-.priorityRow {
+
+
+/*чекбоксы для группы параметров (условия аренды)*/
+.inlineCheckboxGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 15px;
+    padding: 15px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    border: 1px solid #a2a7ac;
+}
+
+/* ошибки */
+.error {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+
+/*адаптация страницы*/
+@media (max-width: 768px) {
+    .profileDataForm,
+    .flatDataForm,
+    .rentDataForm {
+        width: 95%;
+    }
+
+    .inlineFormGroup {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .parameterName {
+        min-width: 100%;
+    }
+
+    .flatPriority,
+    .rentPriority {
+        margin-left: 0;
+    }
+}
+
+/* иконки для параметров, пока нет */
+.parameterIcon {
+    margin-right: 8px;
+    color: #6c757d;
+}
+
+
+/*поле чекбокс для вбора параметра из группы параметров (условия аренды)*/
+.inlineCheckboxRow {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 15px;
+    margin: 10px 15px;
+    padding: 12px 16px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 1px solid #9ea3a8;
 }
 
-.paramName {
-    min-width: 150px;
-    margin: 10px;
+
+/*для отображения минут*/
+.inlineLabel {
+    color: #6b7280;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-left: 8px;
 }
 
-.priorityLabel {
-    color: #393939;
-    font-size: 0.9em;
+/*параметры личных данных*/
+.userParameterValue {
+    color: #1f2937;
+    border: 1px solid #abadbd;
+    border-radius: 6px;
+    background-color: #f9fafb;
+    padding: 8px 14px;
+    font-size: 1rem;
+    font-weight: 500;
 }
-.buttonChangeParameters{
-    padding: 8px 16px;
-    font-size: 16px;
-    background-color: rgba(66, 146, 246, 0.93);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 10px;
-}
-.buttonChangePriorities{
-    padding: 8px 16px;
-    font-size: 16px;
-    background-color: rgba(100, 54, 133, 0.87);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 10px;
-}
-.buttonSave{
-    padding: 8px 16px;
-    font-size: 16px;
-    background-color: rgba(0, 255, 82, 0.5);
-    color: #000000;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 10px;
-}
-.editingParameterText{
-    margin: 10px;
-}
-.parametersContainer {
+
+
+/*отображение приоритета параметра*/
+.priorityContainer {
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 15px;
-}
-
-.parameterRow {
-    word-spacing: 3px;
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
+    gap: 10px;
+    margin-left: auto;
     flex-wrap: wrap;
 }
 
-.parameterName {
-    font-size: 18px;
-    color: #1e1e1e;
+/*ввод мин макс*/
+.range {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    font-size: 1rem;
+    caret-color: #000;
+    cursor: text;
 }
 
-.parameterValue {
-    color: #373737;
-    border: 1px solid #83b9ff;
-    border-radius: 4px;
-    background-color: rgba(131, 185, 255, 0.05);
-    padding: 4px 8px;
-    display: inline-block;
+.range:focus {
+    border-color: #4a6bdf;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 107, 223, 0.15);
+    caret-color: #000;
 }
 
-
-
-.priorityContainer {
-    display: flex;
-    gap: 8px;
-}
-
-.flatPriority {
-    color: #000000;
-    border: 1px solid #ffd883;
-    background-color: rgba(255, 216, 131, 0.2);
-    border-radius: 4px;
-    padding: 4px 8px;
-    display: inline-block;
-    font-size: 0.9em;
-    font-style: italic;
-}
-
-.rentPriority {
-    color: #000000;
-    border: 1px solid #83b9ff;
-    background-color: rgba(131, 185, 255, 0.2);
-    border-radius: 4px;
-    padding: 4px 8px;
-    display: inline-block;
-    font-size: 0.9em;
-    font-style: italic;
-}
-
-.userParameterValue {
-    color: #191919;
-    border: 1px solid rgba(140, 132, 132, 0.18);
-    border-radius: 4px;
-    background-color: rgb(255, 255, 255);
-    padding: 4px 8px;
-    display: inline-block;
-}
-
-.nestedParameters {
-    gap: 6px;
-    padding-left: 8px;
-    margin-bottom: 6px;
-}
-
-.nestedParameterRow {
-    display: flex;
-    gap: 8px;
-    font-size: 0.9em;
-    margin: 10px 0;
-}
-
-.parameterBlock {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
-}
 

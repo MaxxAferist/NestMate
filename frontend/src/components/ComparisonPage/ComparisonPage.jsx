@@ -156,7 +156,7 @@ const ComparisonTable = () => {
                                 <div className={s.flatDistrict}>{flat.district}</div>
                                 <div className={s.actions}>
                                     <button className={s.actionButton} onClick={handleFavoriteClick} >
-                                        <FaHeart  />
+                                        <FaHeart style={{ color: isFavorite ? '#ff5d74' : '' }} />
                                     </button>
                                     <button
                                         className={s.actionButton}
