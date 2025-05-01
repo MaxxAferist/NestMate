@@ -59,8 +59,6 @@ class Application():
                     id SERIAL PRIMARY KEY,                              
                     first_name VARCHAR(30),
                     last_name VARCHAR(30),
-                    middle_name VARCHAR(30),
-                    phone VARCHAR(20),
                     gender VARCHAR(10),
                     email VARCHAR(256),
                     password VARCHAR(200),

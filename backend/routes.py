@@ -7,6 +7,7 @@ import os
 import signal
 # from app import Application
 import MAI
+import utils
 
 
 def init_routes(app):#: Application):
@@ -23,6 +24,7 @@ def init_routes(app):#: Application):
             return render_template('users.html', users=users)
         finally:
             app.connection_pool.putconn(conn)
+
 
     @app.app.route('/api/signIn', methods=['POST'])
     def signIn():
@@ -51,6 +53,7 @@ VALUES (%s, %s, %s)""",
         finally:
             app.connection_pool.putconn(conn)
 
+
     @app.app.route('/api/logIn', methods=['POST'])
     def logIn():
         data = request.json
@@ -68,7 +71,7 @@ WHERE email = %s""",
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 404
                 
-                if not check_password_hash(user[7], data['password']):
+                if not check_password_hash(user[5], data['password']):
                     return jsonify({"status": "error", "message": "Invalid password"}), 401
 
             return jsonify({
@@ -78,12 +81,10 @@ WHERE email = %s""",
                     "id": user[0],
                     "firstName": user[1],
                     "lastName": user[2],
-                    "middleName": user[3],
-                    "gender": user[4],
-                    "phone": user[5],
-                    "email": user[6],
-                    "password": user[7],
-                    "date": user[8],
+                    "gender": user[3],
+                    "email": user[4],
+                    "password": user[5],
+                    "date": user[6],
                 }
             }), 200
         finally:
@@ -132,8 +133,9 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
-    @app.app.route('/api/getPreferences/<int:user_id>', methods=['GET'])
-    def getPreferences(user_id):
+
+    @app.app.route('/api/getAllUserData/<int:user_id>', methods=['GET'])
+    def getAllUserData(user_id):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
@@ -142,56 +144,36 @@ SELECT * FROM users
 WHERE id = %s""",
 (user_id,))
                 user = cursor.fetchone()
-                cursor.close()
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 404
                 
-                # with open ("flat_preferences.json", "w") as file:
-                #     json.dump(user[9], file, ensure_ascii=False, indent=4)
+            with open ("flat_preferences.json", "w") as file:
+                json.dump(user[7], file, ensure_ascii=False, indent=4)
 
-                # priorities = user[9].get("priorities")
+            if user[7]:
+                priorities = user[7].get("priorities")
                 res = 0
-                # for key in priorities.keys():
-                #     res += priorities.get(key)
+                for key in priorities.keys():
+                    res += priorities.get(key)
                 print("summa =", res)
-            return jsonify({
-                "status": "success",
-                "flatPreferences": user[9],
-                "rentPreferences": user[10]
-            }), 200
-        finally:
-            app.connection_pool.putconn(conn)
-
-
-    @app.app.route('/api/getUserData/<int:user_id>', methods=['GET'])
-    def getUserData(user_id):
-        conn = app.connection_pool.getconn()
-        try:
-            with conn.cursor() as cursor:
-                cursor.execute("""
-SELECT * FROM users
-WHERE id = %s""",
-(user_id,))
-                user = cursor.fetchone()
-                # print(f"/api/getUserData: {user}")
-                if not user:
-                    return jsonify({"status": "error", "message": "User not found"}), 404
-
-            return jsonify({
+                
+            response_data = {
                 "status": "success",
                 "user": {
                     "id": user[0],
                     "firstName": user[1],
                     "lastName": user[2],
-                    "middleName": user[3],
-                    "gender": user[5],
-                    "phone": user[4],
-                    "email": user[6],
-                    "signInDate": user[8].isoformat()
-                }
-            }), 200
+                    "email": user[4],
+                    "gender": user[3],
+                    "signInDate": user[6].isoformat()
+                },
+                "flatPreferences": user[7] if user[7] else {},
+                "rentPreferences": user[8] if user[8] else {}
+            }
+            return jsonify(response_data), 200
         finally:
             app.connection_pool.putconn(conn)
+        
 
     @app.app.route('/api/saveUserData', methods=['POST'])
     def saveUserData():
@@ -263,7 +245,7 @@ WHERE id = %s""",
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 404
                 
-                flat_preferences = user[9]
+                flat_preferences = user[7]
             return jsonify(MAI.getSortedApartments(app, flat_preferences)), 200
         finally:
             app.connection_pool.putconn(conn)
@@ -295,7 +277,9 @@ WHERE id = %s""",
                 except ValueError:
                     return jsonify({"status": "error", "message": "Invalid flat ID format"}), 400
 
-                current_favorites = user
+                current_favorites = user[0]
+                if not current_favorites:
+                    current_favorites = []
                 if flat_id in current_favorites:
                     return jsonify({'success': False, 'message': 'Flat already in favorites'}), 200
 
@@ -306,14 +290,12 @@ UPDATE users
 SET favorites = %s
 WHERE id = %s""",
 (current_favorites, data['user_id']))
-                    app.logger.info(f"Updating favorites for user {user.id}: {current_favorites}")
+                    app.app.logger.info(f"Updating favorites for user {data['user_id']}: {current_favorites}")
                     conn.commit()
                     return jsonify({'success': True}), 200
                 except Exception as e:
-                    app.logger.error(f"Error adding favorite: {str(e)}")
+                    app.app.logger.error(f"Error adding favorite: {str(e)}")
                     return jsonify({'success': False, 'message': 'Database error'}), 500
-                finally:
-                    app.connection_pool.putconn(conn)
         finally:
             app.connection_pool.putconn(conn)
 
@@ -335,10 +317,10 @@ SELECT favorites FROM users
 WHERE id = %s""",
 (data['user_id'],))
                 user = cursor.fetchone()
-                if not user and user != []:
+                if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 404
-
-                favorites = user
+                favorites = user[0]
+                
 
                 if data['flat_id'] in favorites:
                     new_favorites = [f for f in favorites if f != data['flat_id']]
@@ -358,7 +340,7 @@ WHERE id = %s""",
             app.connection_pool.putconn(conn)
 
 
-    @app.app.route('/api/favorites/<int:user_id>')
+    @app.app.route('/api/favorites/<int:user_id>', methods=['GET'])
     def get_favorites(user_id):
         conn = app.connection_pool.getconn()
         try:
@@ -368,11 +350,47 @@ SELECT favorites FROM users
 WHERE id = %s""",
 (user_id,))
                 favorites = cursor.fetchone()
-                if not favorites and favorites != []:
+                if not favorites:
                     return jsonify({"status": "error", "message": "User not found"}), 404
 
-                # print("favorites =", favorites)
-            return jsonify({'status': 'success', "favorites": favorites})
+                favorites = favorites[0]
+                if not favorites and favorites != []:
+                    return jsonify({"status": "succes", "message": "User do not have favorites apartments"}), 201
+                
+                favorites = list(map(int, favorites))
+                json_favorites = {
+                    "apartments": [],
+                    "favorites_list": favorites
+                }
+                cursor.execute("""
+SELECT id, pictures, count_rooms, area, floor, count_floors, price, address, description FROM apartment_data
+WHERE id = ANY(%s)""",
+(favorites,))
+                favorite_apartments = cursor.fetchall()
+
+            for apartment in favorite_apartments:
+                main_picture_url = apartment[1][0].split(", ")[0]
+                if apartment[2].isdigit():
+                    count_room = f"{apartment[2]}-к. квартира"
+                else:
+                    count_room = "Квартира-студия"
+                area = f"{apartment[3]} м²"
+                floors = f"{apartment[4]}/{apartment[5]} эт."
+                main_text = f"{count_room}, {area}, {floors}"
+                price = apartment[6]
+                address = apartment[7]
+                description = utils.getDescription(apartment[8])
+                is_favorite = True
+                json_favorites["apartments"].append({
+                    "picture": main_picture_url,
+                    "title": main_text,
+                    "price": price,
+                    "address": address,
+                    "description": description,
+                    "is_favorite": is_favorite
+                })
+
+            return jsonify({'status': 'success', "favorites": json_favorites})
         finally:
             app.connection_pool.putconn(conn)
         
