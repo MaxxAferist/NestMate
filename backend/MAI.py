@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def getSortedApartments(app, flat_preferences: dict):
+def getSortedApartments(app, flat_preferences: dict, type_sdelki: int):
     matrix_priorities = []
     priorities = flat_preferences.get("priorities")
     vector_priorities = []
@@ -74,11 +74,13 @@ def getSortedApartments(app, flat_preferences: dict):
         with conn.cursor() as cursor:
             cursor.execute("SELECT id FROM apartment_data WHERE type_sdelki = 0")
             apartments = cursor.fetchall()
-        result_priorities = np.dot(np.array(matrix_priorities), np.array(vector_priorities))
+        result_priorities = np.dot(np.array(matrix_priorities).T, np.array(vector_priorities))
         for i in range(len(result_priorities)):
-            apartments[i] = [apartments[i], result_priorities[i]]
-        apartments.sort(key=lambda x: x[1])
+            apartments[i] = [apartments[i][0], result_priorities[i]]
+        apartments.sort(key=lambda x: x[1], reverse=True)
         return apartments
+    except Exception as e:
+        print(f"[ERROR] Error: {e}")
     finally:
         app.connection_pool.putconn(conn)
 
@@ -102,8 +104,8 @@ def getMatrixAndSummaByBudget(app, budget_min, budget_max): # Составлен
                 if i == j:
                     continue
 
-                price_i = apartments[i]
-                price_j = apartments[j]
+                price_i = apartments[i][0]
+                price_j = apartments[j][0]
                 if price_i < price_j:
                     weight = getWeightByBudget(price_i, price_j, budget_min, budget_max)
                     matrix[i][j] = weight[0]
@@ -181,8 +183,8 @@ def getMatrixAndSummaByArea(app, area_min, area_max): # Составление �
                 if i == j:
                     continue
 
-                area_i = apartments[i]
-                area_j = apartments[j]
+                area_i = apartments[i][0]
+                area_j = apartments[j][0]
                 if area_i < area_j:
                     weight = getWeightByArea(area_i, area_j, area_min, area_max)
                     matrix[i][j] = weight[0]
@@ -258,8 +260,8 @@ def getMatrixAndSummaByRoomCount(app, room_count): # Составление ма
             for j in range(i, N):
                 if i == j:
                     continue
-                count_i = apartments[i]
-                count_j = apartments[j]
+                count_i = apartments[i][0]
+                count_j = apartments[j][0]
 
                 if count_i in room_count and count_j in room_count:
                     matrix[i][j] = 1
@@ -305,8 +307,8 @@ def getMatrixAndSummaByApartmentType(app, apartment_type): # Составлен�
             for j in range(i, N):
                 if i == j:
                     continue
-                apartment_type_i = apartments[i]
-                apartment_type_j = apartments[j]
+                apartment_type_i = apartments[i][0]
+                apartment_type_j = apartments[j][0]
 
                 if apartment_type_i == apartment_type_j:
                     matrix[i][j] = 1
@@ -342,8 +344,8 @@ def getMatrixAndSummaByBalconyType(app, balcony_type): # Составление 
             for j in range(i, N):
                 if i == j:
                     continue
-                balcony_type_i = apartments[i]
-                balcony_type_j = apartments[j]
+                balcony_type_i = apartments[i][0]
+                balcony_type_j = apartments[j][0]
 
                 if balcony_type_i == balcony_type_j:
                     matrix[i][j] = 1
@@ -379,8 +381,8 @@ def getMatrixAndSummaByCeilingHeight(app, height): # Составление ма
             for j in range(i, N):
                 if i == j:
                     continue
-                height_i = apartments[i]
-                height_j = apartments[j]
+                height_i = apartments[i][0]
+                height_j = apartments[j][0]
 
                 if height_i == height_j:
                     matrix[i][j] = 1
@@ -421,8 +423,8 @@ def getMatrixAndSummaByFloor(app, floor_min, floor_max): # Составлени�
                 if i == j:
                     continue
 
-                floor_i = apartments[i]
-                floor_j = apartments[j]
+                floor_i = apartments[i][0]
+                floor_j = apartments[j][0]
                 if floor_i < floor_j:
                     weight = getWeightByFloor(floor_i, floor_j, floor_min, floor_max)
                     matrix[i][j] = weight[0]
@@ -500,8 +502,8 @@ def getMatrixAndSummaByFloorCount(app, floor_count_min, floor_count_max): # Со
                 if i == j:
                     continue
 
-                floor_count_i = apartments[i]
-                floor_count_j = apartments[j]
+                floor_count_i = apartments[i][0]
+                floor_count_j = apartments[j][0]
                 if floor_count_i < floor_count_j:
                     weight = getWeightByFloorCount(floor_count_i, floor_count_j, floor_count_min, floor_count_max)
                     matrix[i][j] = weight[0]
@@ -577,8 +579,8 @@ def getMatrixAndSummaByHouseMaterial(app, material): # Составление м
             for j in range(i, N):
                 if i == j:
                     continue
-                material_i = apartments[i]
-                material_j = apartments[j]
+                material_i = apartments[i][0]
+                material_j = apartments[j][0]
 
                 if material_i in material and material_j in material:
                     matrix[i][j] = 1
@@ -614,8 +616,8 @@ def getMatrixAndSummaByRenovationCondition(app, renovation_condition): # Сос�
             for j in range(i, N):
                 if i == j:
                     continue
-                renovation_condition_i = apartments[i]
-                renovation_condition_j = apartments[j]
+                renovation_condition_i = apartments[i][0]
+                renovation_condition_j = apartments[j][0]
 
                 if renovation_condition_i == renovation_condition_j:
                     matrix[i][j] = 1
@@ -651,8 +653,8 @@ def getMatrixAndSummaByAmenities(app, amenities): # Составление ма�
             for j in range(i, N):
                 if i == j:
                     continue
-                amenties_i = apartments[i]
-                amenties_j = apartments[j]
+                amenties_i = apartments[i][0]
+                amenties_j = apartments[j][0]
 
                 amenties_i[0].extend(amenties_i[1])
                 amenties_i[0].extend(amenties_i[2])
@@ -710,8 +712,8 @@ def getMatrixAndSummaByInfrastructure(app, infrastructure): # Составлен
             for j in range(i, N):
                 if i == j:
                     continue
-                infrastructure_i = apartments[i]
-                infrastructure_j = apartments[j]
+                infrastructure_i = apartments[i][0]
+                infrastructure_j = apartments[j][0]
 
                 count_i = 0
                 count_j = 0
@@ -767,8 +769,8 @@ def getMatrixAndSummaByTransport(app, transport): # Составление ма�
             for j in range(i, N):
                 if i == j:
                     continue
-                transport_i = apartments[i]
-                transport_j = apartments[j]
+                transport_i = apartments[i][0]
+                transport_j = apartments[j][0]
 
                 count_i = 0
                 count_j = 0
