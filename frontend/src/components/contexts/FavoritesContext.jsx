@@ -42,6 +42,7 @@ export const FavoritesProvider = ({ children }) => {
 
 
     const addFavorite = async (flatId) => {
+        console.log('addFavorite', flatId);
         if (!user?.id) return;
 
         setLoading(true);
@@ -72,7 +73,6 @@ export const FavoritesProvider = ({ children }) => {
 
     const removeFavorite = async (flatId) => {
         if (!user?.id) return;
-
         setLoading(true);
         setFavoritesError(null);
         try {
@@ -113,7 +113,7 @@ export const FavoritesProvider = ({ children }) => {
             addFavorite,
             removeFavorite,
             isFavorite,
-            loadFavorites
+            /*loadFavorites*/
         }}
         >
             { children }

@@ -3,6 +3,7 @@ import s from './FlatPage.module.css';
 import { useLocation } from 'react-router-dom';
 import { ParameterItem } from "./FlatPageComponents.jsx";
 import {useComparison} from "../contexts/ComparisonContext.jsx";
+import {useFavorites} from "../contexts/FavoritesContext.jsx";
 import YandexMap from "./YandexMap.jsx";
 
 const FlatPage = () => {
@@ -16,7 +17,22 @@ const FlatPage = () => {
     const [photoStartIndex, setPhotoStartIndex] = useState(0);
     const photosToShow = 10;
 
+    const {addFavorite, removeFavorite, isFavorite} = useFavorites();
+
     const { addToComparison, removeFromComparison, isInComparison} = useComparison();
+
+    const handleFavoriteClick = async () => {
+        try {
+            if (isFavorite(flatData.id)) {
+                await removeFavorite(flatData.id);
+            } else {
+                await addFavorite(flatData.id);
+            }
+        } catch (error) {
+            console.error("Ошибка при изменении избранного:", error);
+        }
+    };
+
 
     const nextPhoto = () => {
         setCurrentPhotoIndex((prev) =>
@@ -52,6 +68,8 @@ const FlatPage = () => {
             maximumFractionDigits: 0
         }).format(price);
     };
+
+
 
     return (
         <div className={s.pageContainer}>
@@ -255,8 +273,12 @@ const FlatPage = () => {
                     {isInComparison(flatData.id) ? 'Уже в сравнении' : 'Добавить в сравнение'}
                 </button>
 
-                <button className={s.favoriteButton}>
-                    Добавить в избранное
+                <button
+                    className={s.favoriteButton}
+                    onClick={ handleFavoriteClick }
+                    style={isFavorite(flatData.id) ? { backgroundColor: '#ff5e75', color: 'white', borderColor: '#e53e3e'} : null }
+                >
+                    {isFavorite(flatData.id) ? 'В избранном' : 'В избранное'}
                 </button>
             </div>
         </div>

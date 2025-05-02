@@ -1,3 +1,4 @@
+/*
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -144,4 +145,160 @@
 
 .clearButton:hover {
     background-color: #d32f2f;
+}*/
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #2d3748;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.tableField {
+    overflow-x: auto;
+    margin-bottom: 30px;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+.tableHeader {
+    /*background-color: #f8fafc;*/
+    background-color: #f5f5f5;
+}
+
+.parameterCell {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 500;
+    border-right: 1px solid #cbd5e0;
+    background-color: #f8fafc;
+    width: 200px;
+    color: #394960;
+}
+
+.flatHeader {
+    padding: 15px;
+    text-align: center;
+    vertical-align: top;
+    border-right: 1px solid #cbd5e0;
+    border-bottom: 1px solid #cbd5e0;
+}
+
+.flatImage {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.flatTitle {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #2a384a;
+}
+
+.flatDistrict {
+    color: #60728f;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.actionButton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #718096;
+    font-size: 1.3em;
+    transition: color 0.2s;
+}
+
+.actionButton:hover {
+    color: #2d3748;
+}
+
+.sectionHeader {
+    padding: 12px 15px;
+    font-weight: 600;
+    background-color: #edf2f7;
+    color: #2b394a;
+    border-bottom: 1px solid #cbd5e0;
+    font-size: 16px;
+}
+
+.sectionRow {
+    border-bottom: 1px solid #cbd5e0;
+}
+
+.dataRow {
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.dataRow:last-child {
+    border-bottom: none;
+}
+
+.valueCell {
+    padding: 12px 15px;
+    text-align: center;
+    border-right: 1px solid #e2e8f0;
+    color: #2f4161;
+}
+
+.valueContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.bestValueIcon {
+    color: #38a169;
+    font-size: 0.9em;
+}
+
+.clearButtonContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.clearButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background-color: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.clearButton:hover {
+    background-color: #c53030;
 }

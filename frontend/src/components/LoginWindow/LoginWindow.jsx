@@ -51,6 +51,8 @@ export default function LoginWindow(){
   const handleLogin = async(e) => {
     e.preventDefault();
 
+    setMessage('');
+
     if (!validateFields()) {
       return; // если ошибки
     }
@@ -85,7 +87,6 @@ export default function LoginWindow(){
   return (
     <div className={s.loginWindow} >
       <div className={s.windowForm}>
-        {/*<img className={s.img} src="https://img.freepik.com/free-photo/still-life-cozy-house-with-toys_23-2149718449.jpg?t=st=1742323134~exp=1742326734~hmac=4bf2879f522a7ee02ed7a6514c865405ce798cd7b05fd35ef670e907388dbc73&w=1060" />*/}
         <img className={s.img} src="https://img.freepik.com/free-photo/still-life-cozy-house-with-toys_23-2149718490.jpg?t=st=1742573666~exp=1742577266~hmac=5f72295e09639da5d510a28567b9c2073271861021792bf9e988667669cda36e&w=1060"
         alt = "Игрушечный домик"/>
         <div className={s.loginForm}>
@@ -126,8 +127,6 @@ export default function LoginWindow(){
           >
             Войти
           </button>
-
-
           <hr/>
           <button className={s.registerButton} onClick={() => navigate('/SignIn')}>
             Зарегистрироваться

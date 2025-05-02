@@ -30,11 +30,11 @@ const ProfilePage = () => {
         }
     }, [user, loadUserData]);*/
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (user?.id && !isLoading) {
             loadUserData(user.id);
         }
-    }, [user?.id, loadUserData]);
+    }, [user?.id, loadUserData]);*/
 
 
     const [errors, setErrors] = useState({});
@@ -342,20 +342,6 @@ const ProfilePage = () => {
             console.log('Исправьте ошибки в форме');
         }
     }
-
-
-    /*const handleRentPrioritySubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await savePreferences();
-            console.log('Параметры аренды успешно изменены!');
-            setEditingRentPriorities(false);
-        } catch (err) {
-            console.log('Ошибка при сохранении параметров');
-        }
-
-    }
-*/
 
     const flatParameters = [
         'budget', 'area', 'roomCount', 'apartmentType', 'balconyType',

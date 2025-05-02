@@ -36,6 +36,7 @@ export const ComparisonProvider = ({ children }) => {
 
     const clearComparison = () => {
         setComparisonFlats([]);
+        localStorage.removeItem('comparisonFlats');
     };
 
     const isInComparison = (id) => {

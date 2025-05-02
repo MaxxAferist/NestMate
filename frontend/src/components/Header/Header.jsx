@@ -4,7 +4,6 @@ import { LoginContext } from '../contexts/LoginContext.jsx'
 import { useNavigate } from 'react-router-dom'
 
 export default memo(function Header(){
-    console.trace('Загрузка данных вызвана здесь:');
     const { user } = useContext(LoginContext);
     const navigate = useNavigate();
 
