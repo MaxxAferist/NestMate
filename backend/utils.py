@@ -34,9 +34,9 @@ def getJsonInformationAboutApartments(connection, ids, favorites, comparison):
     with connection.cursor() as cursor:
         apartments_information = []
         cursor.execute("""
-SELECT id, pictures, count_rooms, area, floor, count_floors, price, address, minuts_for_subway FROM apartment_data
+SELECT id, pictures, count_rooms, area, floor, count_floors, price, address, minuts_for_subway, type_sdelki FROM apartment_data
 WHERE id = ANY(%s)""",
-(ids,))
+                       (ids,))
         apartments = cursor.fetchall()
 
     for apartment in apartments:
@@ -51,6 +51,7 @@ WHERE id = ANY(%s)""",
         price = apartment[6]
         address = apartment[7]
         minuts_for_subway = apartment[8]
+        type_sdelki = apartment[9]
         is_favorite = True if apartment[0] in favorites else False
         is_comparison = True if apartment[0] in comparison else False
         apartments_information.append({
@@ -62,7 +63,9 @@ WHERE id = ANY(%s)""",
             "count_floors": count_floors,
             "address": address,
             "minuts_for_subway": minuts_for_subway,
-            "is_favorite": is_favorite
+            "is_favorite": is_favorite,
+            "is_comparison": is_comparison,
+            "type_sdelki": type_sdelki
         })
     return apartments_information
 
@@ -71,9 +74,9 @@ def getJsonInformationAboutApartmentsForComparison(connection, comparison, favor
     with connection.cursor() as cursor:
         apartments_information = []
         cursor.execute("""
-SELECT id, pictures, address, district, price, count_rooms, area, floor, ceiling_height, balcony, remont, additional_amenities, furniture, technique, year_of_construction, count_floors, material_house, minuts_for_park, minuts_for_hospital, minuts_for_mall, minuts_for_kindergarten, minuts_for_school, minuts_for_store, minuts_for_busstop, minuts_for_subway FROM apartment_data
+SELECT id, pictures, address, district, price, count_rooms, area, floor, ceiling_height, balcony, remont, additional_amenities, furniture, technique, year_of_construction, count_floors, material_house, minuts_for_park, minuts_for_hospital, minuts_for_mall, minuts_for_kindergarten, minuts_for_school, minuts_for_store, minuts_for_busstop, minuts_for_subway, type_sdelki FROM apartment_data
 WHERE id = ANY(%s)""",
-(comparison,))
+                       (comparison,))
         comparison_apartments = cursor.fetchall()
 
     for apartment in comparison_apartments:
@@ -102,9 +105,8 @@ WHERE id = ANY(%s)""",
         minuts_for_store = apartment[22]
         minuts_for_busstop = apartment[23]
         minuts_for_subway = apartment[24]
-        
-        
-        minuts_for_subway = apartment[8]
+        type_sdelki = apartment[25]
+
         is_favorite = True if apartment[0] in favorites else False
         apartments_information.append({
             "picture": main_picture_url,
@@ -129,7 +131,8 @@ WHERE id = ANY(%s)""",
             "minuts_for_store": minuts_for_store,
             "minuts_for_busstop": minuts_for_busstop,
             "minuts_for_subway": minuts_for_subway,
-            "is_favorite": is_favorite
+            "is_favorite": is_favorite,
+            "type_sdelki": type_sdelki
         })
     return apartments_information
 
@@ -139,8 +142,7 @@ def idsFromPage(connection, type_sdelki=0, n=1, counts=25):
         cursor.execute("""
 SELECT id FROM apartment_data
 WHERE type_sdelki = %s""",
-(type_sdelki,))
+                       (type_sdelki,))
         ids = list(map(lambda x: int(x[0]), cursor.fetchall()))
         ids = ids[(n - 1) * counts:n * counts]
         return ids
-        

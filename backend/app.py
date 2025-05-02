@@ -14,7 +14,7 @@ class Application():
         CORS(self.app)
 
         self.__setup_signals()
-        
+
         # Config Database
         self.app.config["bd_host"] = config.host
         self.app.config["bd_user"] = config.user
@@ -28,28 +28,25 @@ class Application():
         # Created tables
         self.create_apartments_db()
         self.create_users_db()
-        
+
         init_routes(self)
         self.app.app_context().push()
-
 
     def __setup_signals(self):
         signal.signal(signal.SIGINT, self.handle_signal)
         signal.signal(signal.SIGTERM, self.handle_signal)
 
-
     def connect_to_db(self):
         try:
             self.connection_pool = ThreadedConnectionPool(
-                minconn =2,
-                maxconn = 10,
+                minconn=2,
+                maxconn=10,
                 dsn=f"postgresql://{config.user}:{config.password}@{config.host}:{config.port}/{config.db_name}"
             )
             print("[INFO] Database connected")
         except Exception as e:
             print(f"[INFO] Database is not connected: {e}")
 
-    
     def create_users_db(self):
         conn = self.connection_pool.getconn()
         try:
@@ -72,8 +69,6 @@ class Application():
             conn.commit()
         finally:
             self.connection_pool.putconn(conn)
-        
-        
 
     def create_apartments_db(self):
         conn = self.connection_pool.getconn()
@@ -127,19 +122,16 @@ class Application():
         finally:
             self.connection_pool.putconn(conn)
 
-
     def start(self):
         try:
-            self.app.run(debug = True)
+            self.app.run(debug=True)
         except KeyboardInterrupt:
             self.handle_shutdown()
-
 
     def handle_signal(self, signum, frame):
         print(f"\nReceived signal {signum}, shutting down...")
         self.handle_shutdown()
         exit(0)
-
 
     def handle_shutdown(self):
         self.connection_pool.closeall()

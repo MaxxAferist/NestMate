@@ -10,7 +10,7 @@ import MAI
 import utils
 
 
-def init_routes(app):#: Application):
+def init_routes(app):  #: Application):
     @app.app.route('/api/users')
     def posts():
         conn = app.connection_pool.getconn()
@@ -25,10 +25,10 @@ def init_routes(app):#: Application):
         finally:
             app.connection_pool.putconn(conn)
 
-
     @app.app.route('/api/signIn', methods=['POST'])
     def signIn():
-        data = request.json # Получаем данные из запроса
+        data = request.json  # Получаем данные из запроса
+        print(type(data))
         if not data or not data.get('firstName') or not data.get('email') or not data.get('password'):
             return jsonify({"status": "error", "message": "Missing data"}), 400
         conn = app.connection_pool.getconn()
@@ -37,40 +37,55 @@ def init_routes(app):#: Application):
                 cursor.execute("""
 SELECT email FROM users
 WHERE email = %s""",
-(data["email"],))
+                               (data["email"],))
                 email = cursor.fetchone()
                 if email:
                     return jsonify({"status": "error", "message": "Email already exists"}), 400
-                
+
                 hashed_password = generate_password_hash(data['password'])
 
                 cursor.execute("""
-INSERT INTO users (first_name, email, password)
-VALUES (%s, %s, %s)""",
-(data["firstName"], data["email"], hashed_password))
+INSERT INTO users (
+                    first_name,
+                    email,
+                    password,
+                    last_name,
+                    gender,
+                    flat_preferences,
+                    rent_preferences,
+                    favorites,
+                    comparison,
+                    ids_last_MAI
+                )
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+RETURNING id""",
+                               (data["firstName"], data["email"], hashed_password,
+                                data.get('lastName', ""), data.get('gender', ""),
+                                json.dumps(data.get('flatPreferences', {})),
+                                json.dumps(data.get('rentPreferences', {})), [], [], []))
+                user_id = cursor.fetchone()[0]
             conn.commit()
-            return jsonify({"status": "success", "message": "User registered"}), 200
+            return jsonify({"status": "success", "message": "User registered", "user_id": user_id}), 200
         finally:
             app.connection_pool.putconn(conn)
-
 
     @app.app.route('/api/logIn', methods=['POST'])
     def logIn():
         data = request.json
         if not data or not data.get('email') or not data.get('password'):
-            return jsonify({"status": "error", "message":"Missing data"}), 400
+            return jsonify({"status": "error", "message": "Missing data"}), 400
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
 SELECT * FROM users
 WHERE email = %s""",
-(data["email"],))
+                               (data["email"],))
                 user = cursor.fetchone()
 
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 401
-                
+
                 if not check_password_hash(user[5], data['password']):
                     return jsonify({"status": "error", "message": "Invalid password"}), 401
 
@@ -78,25 +93,18 @@ WHERE email = %s""",
                 "status": "success",
                 "message": "Login success",
                 "user": {
-                    "id": user[0],
-                    "firstName": user[1],
-                    "lastName": user[2],
-                    "gender": user[3],
-                    "email": user[4],
-                    "password": user[5],
-                    "date": user[6],
+                    "id": user[0]
                 }
             }), 200
         finally:
             app.connection_pool.putconn(conn)
-
 
     @app.app.route('/api/savePreferences', methods=['POST'])
     def savePreferences():
         data = request.json
         if not data or not data.get('user_id'):
             return jsonify({"status": "error", "message": "Missing user ID"}), 400
-        
+
         # with open ("flat_preferences.json", "w") as file:
         #     json.dump(data['flatPreferences'], file, ensure_ascii=False, indent=4)
 
@@ -106,7 +114,7 @@ WHERE email = %s""",
                 cursor.execute("""
 SELECT * FROM users
 WHERE id = %s""",
-(data["user_id"],))
+                               (data["user_id"],))
                 user = cursor.fetchone()
 
                 if not user:
@@ -117,14 +125,14 @@ WHERE id = %s""",
 UPDATE users
 SET flat_preferences = %s
 WHERE id = %s""",
-(json.dumps(data['flatPreferences']), user[0]))
+                                   (json.dumps(data['flatPreferences']), user[0]))
                 if 'rentPreferences' in data:
                     cursor.execute("""
 UPDATE users
 SET rent_preferences = %s
 WHERE id = %s""",
-(json.dumps(data['rentPreferences']), user[0]))
-        
+                                   (json.dumps(data['rentPreferences']), user[0]))
+
             conn.commit()
             return jsonify({
                 "status": "success",
@@ -132,7 +140,6 @@ WHERE id = %s""",
             }), 200
         finally:
             app.connection_pool.putconn(conn)
-
 
     @app.app.route('/api/getAllUserData/<int:user_id>', methods=['GET'])
     def getAllUserData(user_id):
@@ -142,12 +149,12 @@ WHERE id = %s""",
                 cursor.execute("""
 SELECT * FROM users
 WHERE id = %s""",
-(user_id,))
+                               (user_id,))
                 user = cursor.fetchone()
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 401
-                
-            with open ("flat_preferences.json", "w") as file:
+
+            with open("flat_preferences.json", "w") as file:
                 json.dump(user[7], file, ensure_ascii=False, indent=4)
 
             if user[7]:
@@ -156,7 +163,7 @@ WHERE id = %s""",
                 for key in priorities.keys():
                     res += priorities.get(key)
                 print("summa =", res)
-                
+
             response_data = {
                 "status": "success",
                 "user": {
@@ -173,7 +180,6 @@ WHERE id = %s""",
             return jsonify(response_data), 200
         finally:
             app.connection_pool.putconn(conn)
-        
 
     @app.app.route('/api/saveUserData', methods=['POST'])
     def saveUserData():
@@ -186,7 +192,7 @@ WHERE id = %s""",
                 cursor.execute("""
 SELECT * FROM users
 WHERE id = %s""",
-(data["id"],))
+                               (data["id"],))
                 user = cursor.fetchone()
 
                 if not user:
@@ -197,31 +203,31 @@ WHERE id = %s""",
 UPDATE users
 SET first_name = %s
 WHERE id = %s""",
-(data['firstName'], user[0]))
+                                   (data['firstName'], user[0]))
                 if 'lastName' in data:
                     cursor.execute("""
 UPDATE users
 SET last_name = %s
 WHERE id = %s""",
-(data['lastName'], user[0]))
+                                   (data['lastName'], user[0]))
                 if 'middleName' in data:
                     cursor.execute("""
 UPDATE users
 SET middle_name = %s
 WHERE id = %s""",
-(data['middleName'], user[0]))
+                                   (data['middleName'], user[0]))
                 if 'phone' in data:
                     cursor.execute("""
 UPDATE users
 SET phone = %s
 WHERE id = %s""",
-(data['phone'], user[0]))
+                                   (data['phone'], user[0]))
                 if 'gender' in data:
                     cursor.execute("""
 UPDATE users
 SET gender = %s
 WHERE id = %s""",
-(data['gender'], user[0]))
+                                   (data['gender'], user[0]))
 
             conn.commit()
             return jsonify({
@@ -230,7 +236,6 @@ WHERE id = %s""",
             }), 200
         finally:
             app.connection_pool.putconn(conn)
-
 
     @app.app.route('/api/favorites/add', methods=['POST'])
     def add_favorite():
@@ -248,7 +253,7 @@ WHERE id = %s""",
                 cursor.execute("""
 SELECT favorites FROM users
 WHERE id = %s""",
-(data['user_id'],))
+                               (data['user_id'],))
                 user = cursor.fetchone()
 
                 if not user:
@@ -270,7 +275,7 @@ WHERE id = %s""",
 UPDATE users
 SET favorites = %s
 WHERE id = %s""",
-(current_favorites, data['user_id']))
+                                   (current_favorites, data['user_id']))
                     app.app.logger.info(f"Updating favorites for user {data['user_id']}: {current_favorites}")
                     conn.commit()
                     return jsonify({'success': True}), 200
@@ -279,7 +284,6 @@ WHERE id = %s""",
                     return jsonify({'success': False, 'message': 'Database error'}), 500
         finally:
             app.connection_pool.putconn(conn)
-
 
     @app.app.route('/api/favorites/remove', methods=['DELETE'])
     def remove_favorite():
@@ -296,7 +300,7 @@ WHERE id = %s""",
                 cursor.execute("""
 SELECT favorites FROM users
 WHERE id = %s""",
-(data['user_id'],))
+                               (data['user_id'],))
                 user = cursor.fetchone()
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -309,10 +313,10 @@ WHERE id = %s""",
 UPDATE users
 SET favorites = %s
 WHERE id = %s""",
-(new_favorites, data['user_id']))
+                                   (new_favorites, data['user_id']))
                 else:
                     return jsonify({'success': False, 'message': 'Flat not found in favorites'}), 404
-                
+
             try:
                 conn.commit()
                 return jsonify({'success': True}), 200
@@ -320,7 +324,6 @@ WHERE id = %s""",
                 return jsonify({'success': False, 'message': str(e)}), 500
         finally:
             app.connection_pool.putconn(conn)
-
 
     @app.app.route('/api/favorites/<int:user_id>', methods=['GET'])
     def get_favorites(user_id):
@@ -330,7 +333,7 @@ WHERE id = %s""",
                 cursor.execute("""
 SELECT favorites, comparison FROM users
 WHERE id = %s""",
-(user_id,))
+                               (user_id,))
                 apartments = cursor.fetchone()
                 if not apartments:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -342,7 +345,7 @@ WHERE id = %s""",
 
                 comparison = apartments[1]
                 if not comparison:
-                    comparison = [] 
+                    comparison = []
                 comparison = list(map(int, comparison))
 
                 json_favorites = {
@@ -358,7 +361,6 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
-
     @app.app.route('/api/favorites_list/<int:user_id>', methods=['GET'])
     def get_favoritesList(user_id):
         conn = app.connection_pool.getconn()
@@ -367,7 +369,7 @@ WHERE id = %s""",
                 cursor.execute("""
 SELECT favorites FROM users
 WHERE id = %s""",
-(user_id,))
+                               (user_id,))
                 favorites = cursor.fetchone()
 
             if not favorites:
@@ -386,7 +388,6 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
-
     @app.app.route('/api/comparison/add', methods=['POST'])
     def add_comparison_item():
         data = request.json
@@ -403,7 +404,7 @@ WHERE id = %s""",
                 cursor.execute("""
 SELECT comparison FROM users
 WHERE id = %s""",
-(data['user_id'],))
+                               (data['user_id'],))
                 user = cursor.fetchone()
 
                 if not user:
@@ -425,7 +426,7 @@ WHERE id = %s""",
 UPDATE users
 SET comparison = %s
 WHERE id = %s""",
-(current_comparison, data['user_id']))
+                                   (current_comparison, data['user_id']))
                     app.app.logger.info(f"Updating comparison for user {data['user_id']}: {current_comparison}")
                     conn.commit()
                     return jsonify({'success': True}), 200
@@ -434,7 +435,6 @@ WHERE id = %s""",
                     return jsonify({'success': False, 'message': 'Database error'}), 500
         finally:
             app.connection_pool.putconn(conn)
-
 
     @app.app.route('/api/comparison/remove', methods=['DELETE'])
     def remove_comparison():
@@ -451,7 +451,7 @@ WHERE id = %s""",
                 cursor.execute("""
 SELECT comparison FROM users
 WHERE id = %s""",
-(data['user_id'],))
+                               (data['user_id'],))
                 user = cursor.fetchone()
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -465,7 +465,7 @@ WHERE id = %s""",
 UPDATE users
 SET comparison = %s
 WHERE id = %s""",
-(new_favorites, data['user_id']))
+                                   (new_favorites, data['user_id']))
                 else:
                     return jsonify({'success': False, 'message': 'Flat not found in comparison'}), 404
             try:
@@ -476,7 +476,6 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
-
     @app.app.route('/api/comparison/<int:user_id>', methods=['GET'])
     def get_comparison(user_id):
         conn = app.connection_pool.getconn()
@@ -485,7 +484,7 @@ WHERE id = %s""",
                 cursor.execute("""
 SELECT comparison, favorites FROM users
 WHERE id = %s""",
-(user_id,))
+                               (user_id,))
                 apartments = cursor.fetchone()
                 if not apartments:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -499,7 +498,7 @@ WHERE id = %s""",
                 if not favorites:
                     favorites = []
                 favorites = list(map(int, comparison))
-    
+
                 json_comparison = {
                     "apartments": [],
                     "comparison_list": comparison
@@ -513,7 +512,6 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
-
     @app.app.route('/api/mainIndex/<int:user_id>/<int:page>', methods=['GET'])
     def getApartmentsForMainIndex(user_id, page):
         conn = app.connection_pool.getconn()
@@ -522,18 +520,18 @@ WHERE id = %s""",
                 cursor.execute("""
 SELECT ids_last_MAI, favorites, comparison FROM users
 WHERE id = %s""",
-(user_id,))
+                               (user_id,))
                 apartments = cursor.fetchone()
                 if not apartments:
                     return jsonify({"status": "error", "message": "User not found"}), 401
-                
+
                 ids = apartments[0]
                 favorites = apartments[1]
                 if not favorites:
                     favorites = []
                 else:
                     favorites = list(map(int, favorites))
-                
+
                 comparison = apartments[2]
                 if not comparison:
                     comparison = []
@@ -561,25 +559,32 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
-
-    @app.app.route('/api/sorted_mai/<int:user_id>', methods=['POST'])
-    def sortedApartmentsByMAI(user_id):
+    @app.app.route('/api/sorted_mai/<int:user_id>/<int:type_sdelki>', methods=['POST'])
+    def sortedApartmentsByMAI(user_id, type_sdelki):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
-                cursor.execute("""
-SELECT flat_preferences FROM users
-WHERE id = %s""",
-(user_id,))
-                flat_preferences = cursor.fetchone()
-                if not flat_preferences:
+                if type_sdelki == 0:
+                    cursor.execute("""
+    SELECT flat_preferences FROM users
+    WHERE id = %s""",
+                                   (user_id,))
+                else:
+                    cursor.execute("""
+    SELECT rent_preferences FROM users
+    WHERE id = %s""",
+                                   (user_id,))
+                preferences = cursor.fetchone()
+                if not preferences:
                     return jsonify({"status": "error", "message": "User not found"}), 401
-                
-                flat_preferences = flat_preferences[0]
-                if not flat_preferences:
-                    return jsonify({"status": "success", "message": "Flat preferences dos not exist"}), 201
-                
-                ids_and_weights = MAI.getSortedApartments(app, flat_preferences)
+
+                preferences = preferences[0]
+                if not preferences:
+                    return jsonify({"status": "success", "message": "Preferences dos not exist"}), 201
+                try:
+                    ids_and_weights = MAI.getSortedApartments(app, preferences, type_sdelki)
+                except Exception as e:
+                    print(f"[ERROR]: {e}")
                 for elem in ids_and_weights:
                     print(elem)
                     # apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
@@ -589,12 +594,10 @@ WHERE id = %s""",
             return jsonify({'status': 'error', "message": f"Error with getting apartments: {e}"}), 500
         finally:
             app.connection_pool.putconn(conn)
-        
 
     @app.app.route('/api')
     def index():
         return 'index'
-    
 
     @app.app.route('/api/shutdown', methods=['POST'])
     def shutdown():
@@ -602,4 +605,3 @@ WHERE id = %s""",
             return {"status": "error", "message": "Forbidden"}, 403
         os.kill(os.getpid(), signal.SIGINT)
         return {"status": "success", "message": "Выключение сервера..."}
-    
