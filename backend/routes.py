@@ -29,6 +29,7 @@ def init_routes(app):#: Application):
     @app.app.route('/api/signIn', methods=['POST'])
     def signIn():
         data = request.json # Получаем данные из запроса
+        print(type(data))
         if not data or not data.get('firstName') or not data.get('email') or not data.get('password'):
             return jsonify({"status": "error", "message": "Missing data"}), 400
         conn = app.connection_pool.getconn()
@@ -60,9 +61,9 @@ INSERT INTO users (
 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
 RETURNING id""",
 (data["firstName"], data["email"], hashed_password,
- data.get('lastName', ""), data.get('gender', ""), data.get('flatPreferences', {}),
- data.get('rentPreferences', {}), [], [], []))
-            user_id = cursor.fetchone()[0]
+ data.get('lastName', ""), data.get('gender', ""), json.dumps(data.get('flatPreferences', {})),
+ json.dumps(data.get('rentPreferences', {})), [], [], []))
+                user_id = cursor.fetchone()[0]
             conn.commit()
             return jsonify({"status": "success", "message": "User registered", "user_id": user_id}), 200
         finally:
@@ -593,8 +594,10 @@ WHERE id = %s""",
                 preferences = preferences[0]
                 if not preferences:
                     return jsonify({"status": "success", "message": "Preferences dos not exist"}), 201
-                
-                ids_and_weights = MAI.getSortedApartments(app, preferences, type_sdelki)
+                try:
+                    ids_and_weights = MAI.getSortedApartments(app, preferences, type_sdelki)
+                except Exception as e:
+                    print(f"[ERROR]: {e}")
                 for elem in ids_and_weights:
                     print(elem)
                     # apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)

@@ -1,1 +1,86 @@
-null
+{
+    "amenities": [],
+    "apartmentType": "вторичка",
+    "areaMax": "",
+    "areaMin": "",
+    "balconyType": "неважно",
+    "budgetMax": "5000000",
+    "budgetMin": "4000000",
+    "ceilingHeight": "неважно",
+    "city": "Санкт-Петербург",
+    "comparisonMatrix": {
+        "matrix": {
+            "budget": {
+                "budget": 1,
+                "area": 3,
+                "roomCount": 2,
+                "apartmentType": 0.333,
+                "balconyType": 1
+            },
+            "area": {
+                "budget": 0.333,
+                "area": 1,
+                "roomCount": 1,
+                "apartmentType": 0.5,
+                "balconyType": 1
+            },
+            "roomCount": {
+                "budget": 0.5,
+                "area": 1,
+                "roomCount": 1,
+                "apartmentType": 0.5,
+                "balconyType": 1
+            },
+            "apartmentType": {
+                "budget": 3,
+                "area": 2,
+                "roomCount": 2,
+                "apartmentType": 1,
+                "balconyType": 1
+            },
+            "balconyType": {
+                "budget": 1,
+                "area": 1,
+                "roomCount": 1,
+                "apartmentType": 1,
+                "balconyType": 1
+            }
+        },
+        "columnsOrder": [
+            "budget",
+            "area",
+            "roomCount",
+            "apartmentType",
+            "balconyType"
+        ]
+    },
+    "district": "Адмиралтейский",
+    "floorsInBuildingMax": "",
+    "floorsInBuildingMin": "",
+    "houseMaterial": [],
+    "infrastructure": {
+        "hospitals": "",
+        "kindergartens": "",
+        "parks": "",
+        "schools": "",
+        "shoppingCenters": "",
+        "shops": ""
+    },
+    "kitchenStove": "неважно",
+    "maxFloor": "",
+    "minFloor": "",
+    "priorities": {
+        "budget": 0.21880734212832784,
+        "area": 0.13311458469530166,
+        "roomCount": 0.1443878985744421,
+        "apartmentType": 0.3131692002130778,
+        "balconyType": 0.19052097438885068
+    },
+    "region": "Санкт-Петербург",
+    "renovationCondition": "неважно",
+    "roomCount": [],
+    "transportAccessibility": {
+        "metroDistance": "",
+        "publicTransportStops": ""
+    }
+}
