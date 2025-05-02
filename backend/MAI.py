@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def getSortedApartments(app, flat_preferences: dict):
+def getSortedApartments(app, flat_preferences: dict, type_sdelki: int):
     matrix_priorities = []
     priorities = flat_preferences.get("priorities")
     vector_priorities = []

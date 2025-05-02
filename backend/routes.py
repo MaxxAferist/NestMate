@@ -45,11 +45,26 @@ WHERE email = %s""",
                 hashed_password = generate_password_hash(data['password'])
 
                 cursor.execute("""
-INSERT INTO users (first_name, email, password)
-VALUES (%s, %s, %s)""",
-(data["firstName"], data["email"], hashed_password))
+INSERT INTO users (
+                    first_name,
+                    email,
+                    password,
+                    last_name,
+                    gender,
+                    flat_preferences,
+                    rent_preferences,
+                    favorites,
+                    comparison,
+                    ids_last_MAI
+                )
+VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+RETURNING id""",
+(data["firstName"], data["email"], hashed_password,
+ data.get('lastName', ""), data.get('gender', ""), data.get('flatPreferences', {}),
+ data.get('rentPreferences', {}), [], [], []))
+            user_id = cursor.fetchone()[0]
             conn.commit()
-            return jsonify({"status": "success", "message": "User registered"}), 200
+            return jsonify({"status": "success", "message": "User registered", "user_id": user_id}), 200
         finally:
             app.connection_pool.putconn(conn)
 
@@ -78,13 +93,7 @@ WHERE email = %s""",
                 "status": "success",
                 "message": "Login success",
                 "user": {
-                    "id": user[0],
-                    "firstName": user[1],
-                    "lastName": user[2],
-                    "gender": user[3],
-                    "email": user[4],
-                    "password": user[5],
-                    "date": user[6],
+                    "id": user[0]
                 }
             }), 200
         finally:
@@ -562,24 +571,30 @@ WHERE id = %s""",
             app.connection_pool.putconn(conn)
 
 
-    @app.app.route('/api/sorted_mai/<int:user_id>', methods=['POST'])
-    def sortedApartmentsByMAI(user_id):
+    @app.app.route('/api/sorted_mai/<int:user_id>/<int:type_sdelki>', methods=['POST'])
+    def sortedApartmentsByMAI(user_id, type_sdelki):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
-                cursor.execute("""
-SELECT flat_preferences FROM users
-WHERE id = %s""",
-(user_id,))
-                flat_preferences = cursor.fetchone()
-                if not flat_preferences:
+                if type_sdelki == 0:
+                    cursor.execute("""
+    SELECT flat_preferences FROM users
+    WHERE id = %s""",
+    (user_id,))
+                else:
+                    cursor.execute("""
+    SELECT rent_preferences FROM users
+    WHERE id = %s""",
+    (user_id,))
+                preferences = cursor.fetchone()
+                if not preferences:
                     return jsonify({"status": "error", "message": "User not found"}), 401
                 
-                flat_preferences = flat_preferences[0]
-                if not flat_preferences:
-                    return jsonify({"status": "success", "message": "Flat preferences dos not exist"}), 201
+                preferences = preferences[0]
+                if not preferences:
+                    return jsonify({"status": "success", "message": "Preferences dos not exist"}), 201
                 
-                ids_and_weights = MAI.getSortedApartments(app, flat_preferences)
+                ids_and_weights = MAI.getSortedApartments(app, preferences, type_sdelki)
                 for elem in ids_and_weights:
                     print(elem)
                     # apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
