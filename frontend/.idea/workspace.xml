@@ -7,10 +7,12 @@
     <list default="true" id="d9c70930-1c4a-4f15-8630-7970b0670b5b" name="Changes" comment="Доделал страницу квартиры">
       <change beforePath="$PROJECT_DIR$/../backend/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/flat_preferences.json" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/flat_preferences.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/routes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/utils.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
