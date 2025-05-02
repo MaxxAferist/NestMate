@@ -16,12 +16,12 @@ export const FavoritesProvider = ({ children }) => {
         setLoading(true);
         setFavoritesError(null);
         try {
-            const response = await fetch(`/api/favorites/${userId}`);
+            const response = await fetch(`/api/favorites_list/${userId}`);
             if (!response.ok) {
                 throw new Error('Ошибка при получении избранных квартир');
             }
             const data = await response.json();
-            setFavorites(data.favorites || []);
+            setFavorites(data.favorites.favorites_list || []);
         } catch (err) {
             setFavoritesError(err.message);
             console.error("Ошибка при получении избранных квартир:", err);

@@ -1057,8 +1057,8 @@ const ProfilePage = () => {
                         </button>
                     </form>
                 }
+
                 {editingRentPriorities &&
-                    <form>
                         <ComparisonMatrix
                             parameters={rentParameters}
                             parametersNames={rentParametersNames}
@@ -1066,13 +1066,6 @@ const ProfilePage = () => {
                             onSave={handleSaveRentPriorities}
                             cancelChanging={handleCancelChangingRentPriorities}
                         />
-
-                        {/*<button
-                            type="submit"
-                            className={s.buttonSave}>
-                            Сохранить приоритеты
-                        </button>*/}
-                    </form>
                 }
                 {(!editingRentData && !editingRentPriorities) &&
                     <div>

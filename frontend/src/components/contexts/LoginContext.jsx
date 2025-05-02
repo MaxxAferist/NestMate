@@ -103,7 +103,6 @@ export const LoginProvider = ({ children }) => {
             }
 
             const data = await response.json();
-
             if (data.user) {
                 setUser(data.user);
                 localStorage.setItem("user", JSON.stringify(data.user));
@@ -179,7 +178,7 @@ export const LoginProvider = ({ children }) => {
     const register = async (registrationData) => {
         try {
             const initialUserData = {
-                ...registrationData,
+                ...registrationData, // email password firstName
                 lastName: '',
                 gender: '',
                 flatPreferences: getDefaultFlatPreferences(),
@@ -197,7 +196,6 @@ export const LoginProvider = ({ children }) => {
             const data = await response.json();
 
             if (!response.ok) {
-                // Бросаем ошибку с дополнительной информацией
                 throw {
                     message: data.message || 'Ошибка регистрации',
                     status: response.status
