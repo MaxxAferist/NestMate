@@ -12,7 +12,6 @@
       <change beforePath="$PROJECT_DIR$/../backend/flat_preferences.json" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/flat_preferences.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/routes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
