@@ -77,10 +77,10 @@ def getSortedApartments(app, flat_preferences: dict):
         result_priorities = np.dot(np.array(matrix_priorities), np.array(vector_priorities))
         for i in range(len(result_priorities)):
             apartments[i] = [apartments[i], result_priorities[i]]
+        apartments.sort(key=lambda x: x[1])
         return apartments
     finally:
         app.connection_pool.putconn(conn)
-
 
 
 def getMatrixAndSummaByBudget(app, budget_min, budget_max): # Составление матрицы весов для критерия "Бюджет"

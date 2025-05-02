@@ -1,3 +1,12 @@
+from flask import jsonify
+import re
+
+
+def remove_html_tags_re(text):
+    clean = re.compile('<.*?>')
+    return re.sub(clean, '', text)
+
+
 def getDescription(desc: str):
     try:
         desc_list = desc.split()
@@ -21,85 +30,117 @@ def getDescription(desc: str):
         return rows
 
 
-rows = getDescription("""
-Кваpтира-cтудия в истopическoм центpе Caнкт-Пeтepбурга! Потолки 3.1 м.
+def getJsonInformationAboutApartments(connection, ids, favorites, comparison):
+    with connection.cursor() as cursor:
+        apartments_information = []
+        cursor.execute("""
+SELECT id, pictures, count_rooms, area, floor, count_floors, price, address, minuts_for_subway FROM apartment_data
+WHERE id = ANY(%s)""",
+(ids,))
+        apartments = cursor.fetchall()
 
-Подписывайтесь на профиль, чтобы следить за актуальными предложениями и быть в курсе новых объектов!
+    for apartment in apartments:
+        main_picture_url = apartment[1][0].split(", ")[0]
+        if apartment[2].isdigit():
+            count_room = f"{apartment[2]}-комнатная"
+        else:
+            count_room = "Студия"
+        area = f"{apartment[3]} м²"
+        floor = apartment[4]
+        count_floors = apartment[5]
+        price = apartment[6]
+        address = apartment[7]
+        minuts_for_subway = apartment[8]
+        is_favorite = True if apartment[0] in favorites else False
+        is_comparison = True if apartment[0] in comparison else False
+        apartments_information.append({
+            "picture": main_picture_url,
+            "price": price,
+            "count_room": count_room,
+            "area": area,
+            "floor": floor,
+            "count_floors": count_floors,
+            "address": address,
+            "minuts_for_subway": minuts_for_subway,
+            "is_favorite": is_favorite
+        })
+    return apartments_information
 
-Не смогу сдать?
 
-Район — самый востребованный для аренды! Управляющая компания обеспечит поток арендаторов!
+def getJsonInformationAboutApartmentsForComparison(connection, comparison, favorites):
+    with connection.cursor() as cursor:
+        apartments_information = []
+        cursor.execute("""
+SELECT id, pictures, address, district, price, count_rooms, area, floor, ceiling_height, balcony, remont, additional_amenities, furniture, technique, year_of_construction, count_floors, material_house, minuts_for_park, minuts_for_hospital, minuts_for_mall, minuts_for_kindergarten, minuts_for_school, minuts_for_store, minuts_for_busstop, minuts_for_subway FROM apartment_data
+WHERE id = ANY(%s)""",
+(comparison,))
+        comparison_apartments = cursor.fetchall()
 
-Проблемы с документами?
+    for apartment in comparison_apartments:
+        main_picture_url = apartment[1][0].split(", ")[0]
+        address = apartment[2]
+        district = apartment[3]
+        price = apartment[4]
+        count_rooms = apartment[5]
+        area = f"{apartment[6]} м²"
+        floor = apartment[7]
+        ceiling_height = apartment[8]
+        balcony = apartment[9]
+        remont = apartment[10]
+        additional_amenities = apartment[11]
+        furniture = apartment[12]
+        technique = apartment[13]
+        amenties = additional_amenities + furniture + technique
+        year_of_construction = apartment[14]
+        count_floors = apartment[15]
+        material_house = apartment[16]
+        minuts_for_park = apartment[17]
+        minuts_for_hospital = apartment[18]
+        minuts_for_mall = apartment[19]
+        minuts_for_kindergarten = apartment[20]
+        minuts_for_school = apartment[21]
+        minuts_for_store = apartment[22]
+        minuts_for_busstop = apartment[23]
+        minuts_for_subway = apartment[24]
+        
+        
+        minuts_for_subway = apartment[8]
+        is_favorite = True if apartment[0] in favorites else False
+        apartments_information.append({
+            "picture": main_picture_url,
+            "address": address,
+            "district": district,
+            "price": price,
+            "count_rooms": count_rooms,
+            "area": area,
+            "floor": floor,
+            "ceiling_height": ceiling_height,
+            "balcony": balcony,
+            "remont": remont,
+            "amenties": amenties,
+            "year_of_construction": year_of_construction,
+            "count_floors": count_floors,
+            "material_house": material_house,
+            "minuts_for_park": minuts_for_park,
+            "minuts_for_hospital": minuts_for_hospital,
+            "minuts_for_mall": minuts_for_mall,
+            "minuts_for_kindergarten": minuts_for_kindergarten,
+            "minuts_for_school": minuts_for_school,
+            "minuts_for_store": minuts_for_store,
+            "minuts_for_busstop": minuts_for_busstop,
+            "minuts_for_subway": minuts_for_subway,
+            "is_favorite": is_favorite
+        })
+    return apartments_information
 
-Полный пакет, выписка Егрн, нотариальная сделка — гарантия безопасности!
 
-Долгая окупаемость?
-
-Недвижимость всегда в цене! Всегда можно продать или использовать под.
-
-Другие цели.
-
-Отделка Включена В Стоимость!
-
-Вам не потребуется вкладывать дополнительные средства в ремонт и отделку!
-
-Свежая качественная отделка в стиле Неоклассика, Моп в общем стиле!
-
-Новая металлическая дверь с системой «умный замок» с бесключевым доступом.
-
-Через телефон — удобно и прозрачно при сдаче в посуточную аренду!
-
-*на фото представлен Уже выполненный нами раннее объект!
-
-Локация:
-
-Рядом метро Спортивная, 5 минут прогулочным шагом.
-
-Исторический Петроградский район, сердце Санкт-Петербурга!
-
-Рядом расположены станции метро «Спортивная» и «Горьковская», а также.
-
-Множество достопримечательностей и культурных объектов.
-
-Вузы — Для Проживания Детей У Лучших Вузов Столицы ( Спбгу, ФУ, Итмо,
-
-спбиэу, ранхигс, Пгупс).
-
-Рядом: Большой проспект Петроградской стороны, Малый пр. ПС, проспект.
-
-Добролюбова, ул. Блохина, Тучков мост.
-
-Мы работаем по существующим границам жилого помещения и Не проводим.
-
-Изменений в планировочных решениях.
-
-Планировка помещения соответствует сведениям из Егрн.
-
-Студия без второго яруса предлагает более просторное и функциональное.
-
-Пространство, которое можно организовать по вашему вкусу.
-
-Возможна индивидуальная комплектация мебелью, отделка по предложенному.
-
-Вами дизайн-проекту.
-
-Звоните или пишите нам! Подробно расскажем о наших предложениях,
-
-подберём студию под Ваши параметры, покажем готовые объекты, организуем.
-
-Просмотр в удобное Вам время. Свяжитесь с нами прямо сейчас, для получения.
-
-Бесплатной консультацию от наших специалистов и записи на просмотр.
-
-Сделка:
-
-1 собственник- физ. Лицо.
-
-Без обременений.
-
-Нотариальная сделка — все документы Уже готовы.
-
-Без комиссий и переплат.
-
-Прямая продажа.""")
+def idsFromPage(connection, type_sdelki=0, n=1, counts=25):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+SELECT id FROM apartment_data
+WHERE type_sdelki = %s""",
+(type_sdelki,))
+        ids = list(map(lambda x: int(x[0]), cursor.fetchall()))
+        ids = ids[(n - 1) * counts:n * counts]
+        return ids
+        

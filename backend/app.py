@@ -65,7 +65,9 @@ class Application():
                     sign_in_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     flat_preferences JSON,
                     rent_preferences JSON,
-                    favorites INTEGER[]
+                    favorites INTEGER[],
+                    comparison INTEGER[],
+                    ids_last_MAI INTEGER[]
                 );""")
             conn.commit()
         finally:

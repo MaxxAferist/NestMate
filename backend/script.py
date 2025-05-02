@@ -5,8 +5,13 @@
 # os.environ["password"] = "s5a3b78ebudga"
 # os.environ["port"] = "5433"
 
-a = []
-if a:
-    print(a)
+# a = []
+# if a:
+#     print(a)
+# else:
+#     print("adsakdo")
+
+if []:
+    print('y')
 else:
-    print("adsakdo")
+    print('n')
