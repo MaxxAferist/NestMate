@@ -7,11 +7,11 @@ import {FavoritesProvider} from './components/contexts/FavoritesContext.jsx'
 const root = document.getElementById('root')
 
 ReactDOM.createRoot(root).render(
+    <ComparisonProvider>
         <LoginProvider>
             <FavoritesProvider>
-                <ComparisonProvider>
-                    <App />
-                </ComparisonProvider>
+                <App />
             </FavoritesProvider>
         </LoginProvider>
+    </ComparisonProvider>
 );

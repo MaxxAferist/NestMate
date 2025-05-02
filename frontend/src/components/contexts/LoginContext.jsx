@@ -1,5 +1,5 @@
-import { createContext, useState, useEffect, useCallback } from 'react'
-
+import {createContext, useState, useEffect, useCallback} from 'react'
+import { useComparison } from './ComparisonContext';
 
 export const LoginContext = createContext({
     user: null,
@@ -8,81 +8,95 @@ export const LoginContext = createContext({
 });
 
 export const LoginProvider = ({ children }) => {
-    const [user, setUser] = useState(() => {
-        const storedUser = localStorage.getItem("user");
-        return storedUser ? JSON.parse(storedUser) : null;
+    const [user, setUser] = useState(() => { //основные данные пользователя
+        try {
+            const storedUser = localStorage.getItem("user"); //загрузка из хранилища
+            return storedUser ? JSON.parse(storedUser) : null;
+        } catch (error) {
+            console.error("Ошибка загрузки из хранилища", error);
+            return null;
+        }
     });
 
+    const { clearComparison } = useComparison();
 
-    const [flatPreferences, setFlatPreferences] = useState({
-        budgetMin: '', //бюджет
-        budgetMax: '',
-        areaMin: '', //площадь
-        areaMax: '',
-        region: 'Санкт-Петербург', // регион
-        city: 'Санкт-Петербург', // город
-        district: 'Адмиралтейский', // район
-        roomCount: [], // кол-во комнат
-        apartmentType: 'неважно', // тип квартиры (вторичка/новостройка)
-        balconyType: 'неважно', // балкон/лоджия
-        ceilingHeight: 'неважно', // высота потолков
-        minFloor: '', // этаж
-        maxFloor: '',
-        floorsInBuildingMin: '', // этажей в доме
-        floorsInBuildingMax: '',
-        houseMaterial: [], // материал дома
-        renovationCondition: 'неважно', // состояние ремонта
-        amenities: [], // удобства
-        kitchenStove: 'неважно', // тип кухонной плиты
-        infrastructure: { // инфраструктура района
-            parks: '',
-            hospitals: '',
-            shoppingCenters: '',
-            shops: '',
-            schools: '',
-            kindergartens: '',
-        },
-        transportAccessibility: { // транспортная доступность
-            publicTransportStops: '',
-            metroDistance: '',
-        },
-        comparisonMatrix: {
-            matrix: {},
-            columnsOrder: [] // порядок столбцов
-        },
-        priorities: {}
-    });
-    const [rentPreferences, setRentPreferences] = useState({
-        rentPayment: { // условия аренды
-            rentPriceMin: '', // цена аренды
-            rentPriceMax: '',
-            rentPeriod: "неважно", // период аренды
-        },
-        rentalTerms: { // условия проживания
-            petsAllowed: false, // можно с животными
-            childrenAllowed: false, // можно с детьми
-            smokingAllowed: false, // курение разрешено
-        },
-        numberOfBeds: '', // количество спальных мест
-        comparisonMatrix: {
-            matrix: {},
-            columnsOrder: [] // порядок столбцов
-        },
-        priorities: {}
-    });
+    function getDefaultFlatPreferences() { //парамтры для покупки
+        return {
+            budgetMin: '',
+            budgetMax: '',
+            areaMin: '',
+            areaMax: '',
+            region: 'Санкт-Петербург',
+            city: 'Санкт-Петербург',
+            district: 'Адмиралтейский',
+            roomCount: [],
+            apartmentType: 'неважно',
+            balconyType: 'неважно',
+            ceilingHeight: 'неважно',
+            minFloor: '',
+            maxFloor: '',
+            floorsInBuildingMin: '',
+            floorsInBuildingMax: '',
+            houseMaterial: [],
+            renovationCondition: 'неважно',
+            amenities: [],
+            kitchenStove: 'неважно',
+            infrastructure: {
+                parks: '',
+                hospitals: '',
+                shoppingCenters: '',
+                shops: '',
+                schools: '',
+                kindergartens: '',
+            },
+            transportAccessibility: {
+                publicTransportStops: '',
+                metroDistance: '',
+            },
+            comparisonMatrix: {
+                matrix: {},
+                columnsOrder: []
+            },
+            priorities: {}
+        };
+    }
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    function getDefaultRentPreferences() { //параметры для аренды
+        return {
+            rentPayment: {
+                rentPriceMin: '',
+                rentPriceMax: '',
+                rentPeriod: "неважно",
+            },
+            rentalTerms: {
+                petsAllowed: false,
+                childrenAllowed: false,
+                smokingAllowed: false,
+            },
+            numberOfBeds: '',
+            comparisonMatrix: {
+                matrix: {},
+                columnsOrder: []
+            },
+            priorities: {}
+        };
+    }
 
+    const [flatPreferences, setFlatPreferences] = useState(getDefaultFlatPreferences);
+    const [rentPreferences, setRentPreferences] = useState(getDefaultRentPreferences);
 
+    const [isLoading, setIsLoading] = useState(false);  // состояние загрузки
+    const [error, setError] = useState(null); // ошибки
 
-    const loadAllUserData = useCallback(async (userId) => {
-        if (isLoading) return;
+    //useCallback - возвращает один и тот же экземпляр функции между рендерами, пока не изменятся указанные зависимости.
+    const loadAllUserData = useCallback(async (userId) => { // загрузка данных пользователя
+        if (!userId || isLoading) return;
 
         setIsLoading(true);
         setError(null);
+
         try {
-            const response = await fetch(`/api/getAllUserData/${userId}`);
+            const response = await fetch(`/api/getAllUserData/${userId}`); // апи запрос
             if (!response.ok) {
                 setError('Ошибка загрузки данных пользователя');
                 return;
@@ -90,11 +104,15 @@ export const LoginProvider = ({ children }) => {
 
             const data = await response.json();
 
-            setUser(data.user);
+            if (data.user) {
+                setUser(data.user);
+                localStorage.setItem("user", JSON.stringify(data.user));
+            }
 
             if (data.flatPreferences) {
                 setFlatPreferences(data.flatPreferences);
             }
+
             if (data.rentPreferences) {
                 setRentPreferences(data.rentPreferences);
             }
@@ -106,25 +124,27 @@ export const LoginProvider = ({ children }) => {
         }
     }, []);
 
+
+    //для загрузки данных из хранилища при открытии сайта
     useEffect(() => {
-        const fetchUserData = async () => {
-            const storedUser = localStorage.getItem("user");
-            if (!storedUser) return;
-                /*{
-                const parsedUser = JSON.parse(storedUser);
-                await loadAllUserData(parsedUser.id);
-            }*/
-            const parsedUser = JSON.parse(storedUser);
-            if (!user || user.id !== parsedUser.id) {
-                console.log(user);
-                await loadAllUserData(parsedUser.id);
+        const loadUserSession  = async () => {
+            const storedUser = localStorage.getItem("user"); // загрузка из хранилища
+            if (!storedUser) return; //если нет юзера
+            const parsedUser = JSON.parse(storedUser); //преобразование в json
+            if (!parsedUser?.id) return; //ошибка загрузки из хранилища
+
+            if (parsedUser?.id) {
+                await loadAllUserData(parsedUser.id); // загрузка полных данных
             }
         };
-        fetchUserData().catch((error) => {
+        loadUserSession ().catch((error) => {
             console.error("Ошибка загрузки данных:", error);
         });
+
+        //loadUserSession();
     }, []);
-    /*loadAllUserData*/
+
+    // сохранение личных данных
     const saveUserData = async (newData) => {
         setIsLoading(true);
         setError(null);
@@ -145,8 +165,7 @@ export const LoginProvider = ({ children }) => {
                 setError(errorData.message || 'Ошибка обновления данных пользователя');
                 return;
             }
-
-            setUser(prev => ({ ...prev, ...newData }));
+            await loadAllUserData(user.id); // загрузка актуальных данных
         } catch (err) {
             setError(err.message);
             console.error("Ошибка обновления данных пользователя:", err);
@@ -156,71 +175,15 @@ export const LoginProvider = ({ children }) => {
         }
     };
 
-
-
-    const register = async(registrationData) => {
+    // регистрация
+    const register = async (registrationData) => {
         try {
-            // начальные данные
             const initialUserData = {
                 ...registrationData,
                 lastName: '',
                 gender: '',
-                flatPreferences: {
-                    budgetMin: '', //бюджет
-                    budgetMax: '',
-                    areaMin: '', //площадь
-                    areaMax: '',
-                    region: 'Санкт-Петербург', // регион
-                    city: 'Санкт-Петербург', // город
-                    district: 'Адмиралтейский', // район
-                    roomCount: [], // кол-во комнат
-                    apartmentType: 'неважно', // тип квартиры (вторичка/новостройка)
-                    balconyType: 'неважно', // балкон/лоджия
-                    ceilingHeight: 'неважно', // высота потолков
-                    minFloor: '', // этаж
-                    maxFloor: '',
-                    floorsInBuildingMin: '', // этажей в доме
-                    floorsInBuildingMax: '',
-                    houseMaterial: [], // материал дома
-                    renovationCondition: 'неважно', // состояние ремонта
-                    amenities: [], // удобства
-                    kitchenStove: 'неважно', // тип кухонной плиты
-                    infrastructure: { // инфраструктура района
-                        parks: '',
-                        hospitals: '',
-                        shoppingCenters: '',
-                        shops: '',
-                        schools: '',
-                        kindergartens: '',
-                    },
-                    transportAccessibility: { // транспортная доступность
-                        publicTransportStops: '',
-                        metroDistance: '',
-                    },
-                    comparisonMatrix: {
-                        matrix: {},
-                        columnsOrder: [] // порядок столбцов
-                    },
-                    priorities: {}
-                },
-                rentPreferences: {
-                    rentPayment: { // условия аренды
-                        rentPriceMin: '', // цена аренды
-                        rentPriceMax: '',
-                        rentPeriod: "неважно", // период аренды
-                    },
-                    rentalTerms: { // условия проживания
-                        petsAllowed: false, // можно с животными
-                        childrenAllowed: false, // можно с детьми
-                        smokingAllowed: false, // курение разрешено
-                    },
-                    numberOfBeds: '', // количество спальных мест
-                    comparisonMatrix: {
-                        matrix: {},
-                        columnsOrder: [] // порядок столбцов
-                    },
-                    priorities: {}
-                }
+                flatPreferences: getDefaultFlatPreferences(),
+                rentPreferences: getDefaultRentPreferences()
             };
 
             const response = await fetch('/api/signIn', {
@@ -231,24 +194,29 @@ export const LoginProvider = ({ children }) => {
                 body: JSON.stringify(initialUserData),
             });
 
-            if(!response.ok) {
-                const errorData = await response.json();
-                setError(errorData.message || 'Ошибка регистрации');
-                return;
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Бросаем ошибку с дополнительной информацией
+                throw {
+                    message: data.message || 'Ошибка регистрации',
+                    status: response.status
+                };
             }
 
-            const data = await response.json();
-            setUser(data.user);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            return data;
-        } catch(err) {
+
+            if (data.user_id) {
+                await loadAllUserData(data.user_id); // загрузка актуальных данных
+            }
+            return data; // сообщение для страницы регистрации
+        } catch (err) {
             console.error("Ошибка регистрации", err);
+            setError(err.message || 'Ошибка регистрации');
             throw err;
         }
     }
 
-
-
+    // авторизация
     const login = async (userData) => {
         try {
             const response = await fetch('/api/logIn', {
@@ -258,28 +226,29 @@ export const LoginProvider = ({ children }) => {
                 },
                 body: JSON.stringify(userData),
             });
-            if(!response.ok) {
-                const errorData = await response.json();
-                setError(errorData.message || 'Ошибка авторизации');
-                return;
-            }
 
             const data = await response.json();
-            setUser(data.user);
-            localStorage.setItem('user', JSON.stringify(data.user));
 
-            await loadAllUserData(data.user.id);
-            return data;
+            if(!response.ok) {
+                throw {
+                    message: data.message || 'Ошибка входа',
+                    status: response.status
+                };
+            }
+            if (data.user_id) {
+                await loadAllUserData(data.user_id);
+            }
+            return data; // сообщение для страницы авторизации
         } catch(e) {
             console.error("Ошибка авторизации", e)
+            setError(e.message || 'Ошибка авторизации');
             throw e;
         }
     }
 
-
-
+    // сохранение параметров подбора квартиры
     const savePreferences = async (flatPreferencesToSave, rentPreferencesToSave) => {
-        if (!user?.id) return;
+        if (!user?.id || isLoading) return;
 
         setIsLoading(true);
         setError(null);
@@ -313,73 +282,10 @@ export const LoginProvider = ({ children }) => {
 
     const logout = () => {
         setUser(null);
-        /*setUserData({
-            id: ' ',
-            firstName: " ",
-            lastName: ' ',
-            middleName: ' ',
-            email: ' ',
-            phone: ' ',
-            gender: ' ',
-        });*/
-        setFlatPreferences({
-            budgetMin: '', //бюджет
-            budgetMax: '',
-            areaMin: '', //площадь
-            areaMax: '',
-            region: 'Санкт-Петербург', // регион
-            city: 'Санкт-Петербург', // город
-            district: 'Адмиралтейский', // район
-            roomCount: [], // кол-во комнат
-            apartmentType: 'неважно', // тип квартиры (вторичка/новостройка)
-            balconyType: 'неважно', // балкон/лоджия
-            ceilingHeight: 'неважно', // высота потолков
-            minFloor: '', // этаж
-            maxFloor: '',
-            floorsInBuildingMin: '', // этажей в доме
-            floorsInBuildingMax: '',
-            houseMaterial: [], // материал дома
-            renovationCondition: 'неважно', // состояние ремонта
-            amenities: [], // удобства
-            kitchenStove: 'неважно', // тип кухонной плиты
-            viewFromWindows: [], // вид из окон
-            infrastructure: { // инфраструктура района
-                parks: '',
-                hospitals: '',
-                shoppingCenters: '',
-                shops: '',
-                schools: '',
-                kindergartens: '',
-            },
-            transportAccessibility: { // транспортная доступность
-                publicTransportStops: '',
-                metroDistance: '',
-            },
-            comparisonMatrix: {
-                matrix: {},
-                columnsOrder: [] // порядок столбцов
-            },
-            priorities: []
-        });
-
-        setRentPreferences({
-            rentPayment: { // условия аренды
-                rentPrice: '', // цена аренды
-                rentPeriod: "неважно", // период аренды
-            },
-            rentalTerms: { // условия проживания
-                petsAllowed: false, // можно с животными
-                childrenAllowed: false, // можно с детьми
-                smokingAllowed: false, // курение разрешено
-            },
-            numberOfBeds: '', // количество спальных мест
-            comparisonMatrix: {
-                matrix: {},
-                columnsOrder: [] // порядок столбцов
-            },
-            priorities: []
-        });
+        setFlatPreferences(null);
+        setRentPreferences(null);
         localStorage.removeItem("user");
+        clearComparison();
     };
 
     return(
@@ -405,6 +311,59 @@ export const LoginProvider = ({ children }) => {
         </LoginContext.Provider>
     );
 }
+
+/*export const useLogin = () => useContext(LoginContext)*/
+
+/*const loadAllUserData = useCallback(async (userId) => {
+       if (isLoading) return;
+
+       setIsLoading(true);
+       setError(null);
+       try {
+           const response = await fetch(`/api/getAllUserData/${userId}`);
+           if (!response.ok) {
+               setError('Ошибка загрузки данных пользователя');
+               return;
+           }
+
+           const data = await response.json();
+
+           setUser(data.user);
+
+           if (data.flatPreferences) {
+               setFlatPreferences(data.flatPreferences);
+           }
+           if (data.rentPreferences) {
+               setRentPreferences(data.rentPreferences);
+           }
+       } catch (err) {
+           setError(err.message);
+           console.error("Ошибка загрузки данных пользователя:", err);
+       } finally {
+           setIsLoading(false);
+       }
+   }, []);*/
+
+/*useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (!storedUser) return;
+
+    try {
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser?.id) {
+            loadAllUserData(parsedUser.id);
+        }
+    } catch (error) {
+        console.error("Failed to load user data", error);
+    }
+}, [loadAllUserData]);*/
+
+/*loadAllUserData*/
+
+/*const [user, setUser] = useState(() => {
+       const storedUser = localStorage.getItem("user");
+       return storedUser ? JSON.parse(storedUser) : null;
+   });*/
 
 /*const savePreferences = async () => {
         if (!user?.id) return;
@@ -609,4 +568,94 @@ const loadPreferences = useCallback(async (userId) => {
         throw e;
     }
 }*/
+
+/* const register = async(registrationData) => {
+        try {
+            // начальные данные
+            const initialUserData = {
+                ...registrationData,
+                lastName: '',
+                gender: '',
+                flatPreferences: {
+                    budgetMin: '', //бюджет
+                    budgetMax: '',
+                    areaMin: '', //площадь
+                    areaMax: '',
+                    region: 'Санкт-Петербург', // регион
+                    city: 'Санкт-Петербург', // город
+                    district: 'Адмиралтейский', // район
+                    roomCount: [], // кол-во комнат
+                    apartmentType: 'неважно', // тип квартиры (вторичка/новостройка)
+                    balconyType: 'неважно', // балкон/лоджия
+                    ceilingHeight: 'неважно', // высота потолков
+                    minFloor: '', // этаж
+                    maxFloor: '',
+                    floorsInBuildingMin: '', // этажей в доме
+                    floorsInBuildingMax: '',
+                    houseMaterial: [], // материал дома
+                    renovationCondition: 'неважно', // состояние ремонта
+                    amenities: [], // удобства
+                    kitchenStove: 'неважно', // тип кухонной плиты
+                    infrastructure: { // инфраструктура района
+                        parks: '',
+                        hospitals: '',
+                        shoppingCenters: '',
+                        shops: '',
+                        schools: '',
+                        kindergartens: '',
+                    },
+                    transportAccessibility: { // транспортная доступность
+                        publicTransportStops: '',
+                        metroDistance: '',
+                    },
+                    comparisonMatrix: {
+                        matrix: {},
+                        columnsOrder: [] // порядок столбцов
+                    },
+                    priorities: {}
+                },
+                rentPreferences: {
+                    rentPayment: { // условия аренды
+                        rentPriceMin: '', // цена аренды
+                        rentPriceMax: '',
+                        rentPeriod: "неважно", // период аренды
+                    },
+                    rentalTerms: { // условия проживания
+                        petsAllowed: false, // можно с животными
+                        childrenAllowed: false, // можно с детьми
+                        smokingAllowed: false, // курение разрешено
+                    },
+                    numberOfBeds: '', // количество спальных мест
+                    comparisonMatrix: {
+                        matrix: {},
+                        columnsOrder: [] // порядок столбцов
+                    },
+                    priorities: {}
+                }
+            };
+
+            const response = await fetch('/api/signIn', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(initialUserData),
+            });
+
+            if(!response.ok) {
+                const errorData = await response.json();
+                setError(errorData.message || 'Ошибка регистрации');
+                return;
+            }
+
+            const data = await response.json();
+            await loadAllUserData(data.user_id);
+            /!*setUser(data.user);
+            localStorage.setItem('user', JSON.stringify(data.user));*!/
+            return data;
+        } catch(err) {
+            console.error("Ошибка регистрации", err);
+            throw err;
+        }
+    }*/
 

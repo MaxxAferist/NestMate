@@ -5,7 +5,7 @@ import { useNavigate, Link } from 'react-router-dom'
 
 export default function SignInWindow(){
     const navigate = useNavigate();
-    const { register, login } = useContext(LoginContext)
+    const { register } = useContext(LoginContext)
 
     const [userData, setUserData]=useState({
         firstName: '',
@@ -62,31 +62,32 @@ export default function SignInWindow(){
 
     const handleRegister = async(e) => {
         e.preventDefault();
+
+        setMessage('');
+
         if (!validateFields()) {
-            return; //если ошибки останавливаем регистрацию
+            return;
         }
 
         if (userData.password !== confirmPassword) {
             setMessage("Пароли не совпадают");
-        }else{
-            try{
-                const data = await register(userData);
+            return;
+        }
 
-                if(data.message === 'User registered'){
-                    setMessage('Профиль успешно создан!');
-                    setIsRegistered(true);
-                    login(userData)
-                }else{
-                    setMessage(data.message)
-                }
-            }catch(err){
-                console.log(err.message);
-                if(err.message === 'Email already exists'){
-                    setMessage("Пользователь с таким email уже существует");
-                }else{
-                    setMessage(err.message)
-                }
+        try {
+            const data = await register(userData);
+
+            if(data.message === 'User registered'){
+                setMessage('Профиль успешно создан!');
+                setIsRegistered(true);
+                /*login(userData)*/
+            } else {
+                setMessage(data.message || 'Успешная регистрация');
             }
+        } catch(err) {
+            setMessage(
+                (err.message === 'Email already exists' ? "Пользователь с таким email уже существует" : "Ошибка регистрации")
+            );
         }
     };
 

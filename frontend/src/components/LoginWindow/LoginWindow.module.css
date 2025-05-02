@@ -1,4 +1,4 @@
-.loginWindow{
+.loginWindow {
     top: 0;
     left: 0;
     width: 100%;
@@ -8,39 +8,73 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-.windowForm{
+
+.windowForm {
     width: 800px;
     height: 450px;
     display: flex;
     flex-direction: row;
     justify-content: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
-.img{
+
+.img {
     height: 100%;
     width: 500px;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
+    /*object-fit: cover;*/
 }
-.loginForm{
-    background-color: rgba(241, 241, 241, 0.78);
+
+.loginForm {
+    background-color: #ffffff;
     width: 350px;
     height: 100%;
     position: relative;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     text-align: center;
+    /*padding: 30px;
+    display: flex;*/
+    /*flex-direction: column;
+    justify-content: center;*/
+    border-left: 1px solid #e2e8f0;
 }
-.closeButton{
+.closeButton {
     position: absolute;
     top: 10px;
     right: 10px;
     background: none;
     border: none;
-    font-size: 30px;
+    font-size: 28px;
     cursor: pointer;
+    color: #4a5568;
+    transition: color 0.2s ease;
 }
-.title{
+
+.closeButton:hover {
+    color: #2d3748;
+}
+
+
+.title {
+    font-size: 24px;
+    margin-bottom: 5px;
+    text-align: center;
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.siteName {
+    margin-bottom: 5px;
+    color: #4a5568;
+    font-size: 32px;
+    font-weight: 600;
+    font-style: italic;
+}
+/*.title{
     font-size: 25px;
     margin-bottom: 5px;
     text-align: center;
@@ -53,8 +87,28 @@
     color: #6A6A6AFF;
     font-style: italic;
     font-size: 35px;
+}*/
+
+.input {
+    min-height: 40px;
+    width: 91%;
+    padding: 5px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    border: 1px solid #cbd5e0;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    background-color: #f8fafc;
 }
-.input{
+
+.input:focus {
+    border-color: #4299e1;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+    background-color: #fff;
+}
+
+/*.input{
     min-height: 40px;
     width: 91%;
     padding: 5px;
@@ -62,8 +116,39 @@
     border-radius: 4px;
     border: 1px solid #ccc;
     font-size: 16px;
+}*/
+
+.loginButton {
+    width: 93%;
+    min-height: 50px;
+    padding: 10px;
+    background-color: #d3eeff;
+    color: #2b6cb0;
+    border: 1px solid #bee3f8;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-bottom: 6px;
 }
-.loginButton{
+
+.loginButton:hover {
+    background-color: #a0cffd;
+}
+
+.loginButtonActive {
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: white;
+    border: 1px solid #3182ce;
+}
+
+.loginButtonActive:hover {
+    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+}
+
+
+/*.loginButton{
     width: 93%;
     min-height: 50px;
     padding: 10px;
@@ -74,23 +159,32 @@
     cursor: pointer;
     margin-bottom: 6px;
     font-size: 20px;
-}
-.registerButton{
+}*/
+.registerButton {
     min-height: 50px;
     width: 93%;
     padding: 10px;
     background-color: rgba(51, 146, 255, 0.85);
     color: #fff;
-    border: none;
-    border-radius: 4px;
+    border: 1px solid #98ceff;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
-.messageText{
-    font-size: 20px;
+
+.registerButton:hover {
+    background-color: #0969ff;
+}
+
+.messageText {
+    font-size: 16px;
     text-align: center;
-    color: #ff4040;
+    color: #e53e3e;
+    font-weight: 500;
 }
+
 .inputGroup {
     margin-bottom: 8px;
 }
@@ -100,12 +194,16 @@
 }
 
 .errorText {
+    color: #e53e3e;
+    font-size: 14px;
+    margin-top: 3px;
+    display: block;
+    font-weight: 500;
+}
+
+/*.errorText {
     color: red;
     font-size: 14px;
     margin-top: 3px;
     display: block;
-}
-
-.loginButtonActive {
-    background-color: #007bff !important;
-}
+}*/

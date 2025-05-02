@@ -56,9 +56,6 @@ const ComparisonTable = () => {
     const { isFavorite, addFavorite, removeFavorite } = useFavorites();
 
     const handleFavoriteClick = async (flatId, e) => {
-        e.stopPropagation(); // предотвращаем всплытие события
-        e.preventDefault(); // отменяем стандартное поведение
-
         try {
             if (isFavorite(flatId)) {
                 await removeFavorite(flatId);
@@ -138,7 +135,7 @@ const ComparisonTable = () => {
         <div className={s.container}>
             <h1 className={s.title}>Сравнение квартир</h1>
 
-            <div className={s.tableWrapper}>
+            <div className={s.tableField}>
                 <table className={s.table}>
                     <thead>
                     <tr className={s.tableHeader}>
@@ -151,12 +148,12 @@ const ComparisonTable = () => {
                                     className={s.flatImage}
                                 />
                                 <div className={s.flatTitle}>
-                                    {flat.street}, {flat.house}, кв. {flat.apartment}
+                                    ул. {flat.street}, д. {flat.house}, кв. {flat.apartment}
                                 </div>
-                                <div className={s.flatDistrict}>{flat.district}</div>
+                                <div className={s.flatDistrict}>{flat.district} р-н</div>
                                 <div className={s.actions}>
-                                    <button className={s.actionButton} onClick={handleFavoriteClick} >
-                                        <FaHeart style={{ color: isFavorite ? '#ff5d74' : '' }} />
+                                    <button className={s.actionButton} onClick={() => handleFavoriteClick(flat.id)} >
+                                        <FaHeart style={{ color: isFavorite(flat.id) ? '#ff5d74' : '' }} />
                                     </button>
                                     <button
                                         className={s.actionButton}
