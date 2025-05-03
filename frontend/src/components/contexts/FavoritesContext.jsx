@@ -103,6 +103,17 @@ export const FavoritesProvider = ({ children }) => {
         return favorites.some(f => f === flatId);
     };
 
+    const handleFavoriteClick = async (flatId) => {
+        try {
+            if (isFavorite(flatId)) {
+                await removeFavorite(flatId);
+            } else {
+                await addFavorite(flatId);
+            }
+        } catch (error) {
+            console.error("Ошибка при изменении избранного:", error);
+        }
+    };
 
     return(
         <FavoritesContext.Provider value={{
@@ -112,6 +123,7 @@ export const FavoritesProvider = ({ children }) => {
             addFavorite,
             removeFavorite,
             isFavorite,
+            handleFavoriteClick
             /*loadFavorites*/
         }}
         >

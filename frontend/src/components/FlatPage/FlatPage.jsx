@@ -17,11 +17,11 @@ const FlatPage = () => {
     const [photoStartIndex, setPhotoStartIndex] = useState(0);
     const photosToShow = 10;
 
-    const {addFavorite, removeFavorite, isFavorite} = useFavorites();
+    const {handleFavoriteClick, isFavorite} = useFavorites();
 
-    const { addToComparison, removeFromComparison, isInComparison} = useComparison();
+    const { handleComparisonClick, isInComparison} = useComparison();
 
-    const handleFavoriteClick = async () => {
+   /* const handleFavoriteClick = async () => {
         try {
             if (isFavorite(flatData.id)) {
                 await removeFavorite(flatData.id);
@@ -31,7 +31,7 @@ const FlatPage = () => {
         } catch (error) {
             console.error("Ошибка при изменении избранного:", error);
         }
-    };
+    };*/
 
 
     const nextPhoto = () => {
@@ -267,18 +267,18 @@ const FlatPage = () => {
                 </a>
 
                 <button className={s.compareButton}
-                        onClick={ isInComparison(flatData.id) ? () => removeFromComparison(flatData.id) : () => addToComparison(flatData) }
+                        onClick={ (e) => handleComparisonClick(flatData.id, e)}
                         style={isInComparison(flatData.id) ? { backgroundColor: '#48b5ff', color: 'white', borderColor: '#3182ce' } : null }
                 >
                     {isInComparison(flatData.id) ? 'Уже в сравнении' : 'Добавить в сравнение'}
                 </button>
 
-                <button
+               <button
                     className={s.favoriteButton}
-                    onClick={ handleFavoriteClick }
+                    onClick={ () => handleFavoriteClick(flatData.id) }
                     style={isFavorite(flatData.id) ? { backgroundColor: '#ff5e75', color: 'white', borderColor: '#e53e3e'} : null }
                 >
-                    {isFavorite(flatData.id) ? 'В избранном' : 'В избранное'}
+                   {isFavorite(flatData.id) ? 'В избранном' : 'В избранное'}
                 </button>
             </div>
         </div>

@@ -1,8 +1,16 @@
 .matrixContainer {
     margin: 20px 0;
     padding: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.matrixContainer h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #26384a;
+    margin-bottom: 20px;
 }
 
 .comparisonTable {
@@ -12,177 +20,193 @@
     font-size: 16px;
 }
 
-.colName{
-    border: 1px solid #ddd;
-    padding: 1px 2px;
+.colName {
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
     text-align: center;
-    background-color: #f2f2f2;
+    background-color: #ced9fb;
+    font-weight: 500;
+    color: #2f4960;
 }
 
 .instructionsContainer {
-    background-color: #f8f9fa;
+    background-color: #f8fafc;
     border-radius: 8px;
-    padding: 16px;
+    padding: 20px;
     margin-bottom: 20px;
-    border-left: 4px solid #4285f4;
+    border-left: 4px solid #4299e1;
 }
 
 .instructionsTitle {
-    color: #202124;
+    color: #1f2e3e;
     margin-top: 0;
     margin-bottom: 12px;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 600;
 }
 
 .instructionsList {
-    margin: 0 0 12px 0;
+    margin: 0 0 16px 0;
     padding: 0 0 0 20px;
     list-style: none;
+    color: #2b374e;
+    line-height: 1.6;
 }
 
 .instructionItem {
-    margin-bottom: 8px;
-    line-height: 1.5;
+    margin-bottom: 10px;
     position: relative;
+    font-size: 17px;
 }
 
 .bullet {
     position: absolute;
     left: -20px;
-    color: #4285f4;
+    color: #2e8fe6;
     font-weight: bold;
 }
 
-
 .example {
-    background-color: #e8f0fe;
+    background-color: #ebf8ff;
     border-radius: 6px;
-    padding: 12px;
-    margin-top: 16px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    border-left: 3px solid #bee3f8;
 }
 
 .exampleTitle {
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 6px;
-    color: #4285f4;
+    color: #2369b3;
+    font-size: 17px;
 }
 
 .exampleText {
     line-height: 1.5;
+    font-size: 16px;
 }
 
 .light {
-    background-color: #d2e3fc;
-    padding: 2px 4px;
+    background-color: #bee3f8;
+    padding: 2px 6px;
     border-radius: 4px;
     font-weight: 500;
+    color: #2c5282;
 }
 
-
 .saatiScale {
-    margin: 10px;
-    padding-left: 20px;
+    margin: 12px 0;
+    padding-left: 24px;
+    font-size: 16px;
 }
 
 .saatiScale li {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .scaleValue {
     display: inline-block;
-    font-weight: bold;
-    color: #2c3e50;
+    font-weight: 600;
+    color: #273445;
+    min-width: 30px;
 }
 
 .errorContainer {
     margin: 20px 0;
-    font-size: 14px;
 }
 
 .consistencyError {
-    background-color: #fff8e1;
-    border-left: 4px solid #ffc107;
-    padding: 12px;
-    margin-bottom: 15px;
+    background-color: #fffaf0;
+    border-left: 4px solid #dd6b20;
+    padding: 16px;
+    margin-bottom: 20px;
+    border-radius: 4px;
 }
 
 .saveError {
-    color: #d32f2f;
-    background-color: #ffebee;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 15px;
+    color: #c53030;
+    background-color: #fff5f5;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 17px;
+    font-weight: 500;
+    border-left: 4px solid #e53e3e;
 }
 
 .matrixButtonGroup {
     display: flex;
     gap: 12px;
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 
-.saveButton{
-    background-color: #4caf50;
+.saveButton {
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
     color: white;
-    padding: 10px 15px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
+    font-size: 17px;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
 .saveButton:disabled {
-    background-color: #7c7c7c;
+    background: #a0aec0;
     cursor: not-allowed;
-    opacity: 0.7;
 }
 
-.saveButton:hover{
-    background-color: #388e3c;
+.saveButton:hover:not(:disabled) {
+    background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
 }
-
 
 .cancelButton {
-    background-color: #d3a83c;
-    color: #ffffff;
-    padding: 10px 15px;
+    background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+    color: white;
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
+    font-size: 17px;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
-.cancelButton:hover{
-    background-color: #ffb600;
+.cancelButton:hover {
+    background: linear-gradient(135deg, #dd6b20 0%, #c05621 100%);
 }
 
 .clearButton {
-    background-color: #8c4343;
-    color: #ffffff;
-    padding: 10px 15px;
+    background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+    color: white;
+    padding: 10px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
-    margin: 10px;
+    font-size: 17px;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
 .clearButton:hover {
-    background-color: #ba1c1c;
+    background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
 }
 
 .oppositeValue {
-    font-size: 0.8em;
-    color: #666;
-    margin-top: 3px;
+    font-size: 14px;
+    color: #46566a;
+    margin-top: 4px;
+    font-weight: 400;
 }
 
 .columnSelectors {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
     margin-bottom: 20px;
 }
 
@@ -190,61 +214,60 @@
     display: flex;
     flex-direction: column;
     min-width: 200px;
+    font-size: 16px;
+}
+
+.columnSelector label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #354255;
 }
 
 .columnSelector select {
-    padding: 5px;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    background-color: #f8fafc;
+    font-size: 16px;
 }
 
-.normalCell{
-    border: 1px solid #ddd;
-    padding: 8px;
+.normalCell {
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
     text-align: center;
     background-color: #ffffff;
 }
-.comparisonTable th {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-    background-color: #f2f2f2;
-}
 
 .comparisonTable select {
-    padding: 5px;
+    padding: 6px 8px;
     width: 80px;
-}
-
-.oppositeValue {
-    font-size: 0.8em;
-    color: #666;
-    margin-top: 3px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    background-color: #f8fafc;
+    font-size: 16px;
 }
 
 .rowName {
-    border: 1px solid #ddd;
-    padding: 8px;
+    border: 1px solid #e2e8f0;
+    padding: 8px 12px;
     text-align: center;
-    font-weight: bold;
-    background-color: #f9f9f9;
-}
-
-.textContainer{
-    display: flex;
-    flex-direction: column;
+    font-weight: 500;
+    background-color: #e7f7fd;
+    color: #2e3c50;
 }
 
 .errorCell {
-    background-color: #ffebee;
-    border: 2px solid #ffb5ae;
+    background-color: #ffd3d3;
+    border: 1px solid #ff9595;
     position: relative;
 }
 
-
 .errorTitle {
-    color: #d32f2f;
+    color: #c53030;
     margin-top: 0;
     margin-bottom: 12px;
-    font-size: 15px;
+    font-size: 17px;
+    font-weight: 600;
 }
 
 .errorList {
@@ -258,57 +281,57 @@
 }
 
 .errorChain {
-    color: #555;
+    color: #4a5568;
     margin-bottom: 6px;
     display: flex;
     align-items: flex-start;
     line-height: 1.4;
+    font-size: 16px;
 }
 
 .errorSuggestion {
-    color: #2e7d32;
-    background-color: #f1f8e9;
+    color: #2f855a;
+    background-color: #f0fff4;
     padding: 8px 12px;
     border-radius: 6px;
     margin-left: 24px;
-    border-left: 3px solid #7cb342;
+    border-left: 3px solid #68d391;
+    font-size: 16px;
 }
 
 .errorIcon {
     margin-right: 8px;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 .errorSpacer {
-    height: 12px;
-    border-bottom: 1px dashed #eee;
-    margin: 8px 0;
-}
-
-.saveError {
-    color: #d32f2f;
-    background-color: #ffebee;
-    padding: 12px;
-    border-radius: 6px;
-    margin-top: 16px;
-    display: flex;
-    align-items: center;
-    font-size: 18px;
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 12px 0;
 }
 
 .CRIndexErrorRecommendations {
-    border: 1px solid #bfd5ff;
-    font-size: 18px;
-    background-color: #e8f0fe;
+    border: 1px solid #bee3f8;
+    background-color: #ebf8ff;
     border-radius: 6px;
-    padding-left: 10px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 18px;
 }
-.CRIndexErrorRecommendations h5{
-    margin: 6px;
+
+.CRIndexErrorRecommendations h5 {
+    margin: 0 0 8px 0;
+    font-size: 19px;
+    color: #2b6cb0;
+    font-weight: 600;
 }
-.CRIndexErrorRecommendations ul{
-    margin: 4px;
+
+.CRIndexErrorRecommendations ul {
+    margin: 8px 0 0 0;
+    padding-left: 20px;
 }
-.CRIndexErrorRecommendations ul li{
+
+.CRIndexErrorRecommendations ul li {
     margin-bottom: 8px;
+    line-height: 1.5;
 }

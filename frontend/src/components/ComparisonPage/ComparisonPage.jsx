@@ -58,7 +58,7 @@ const ComparisonTable = () => {
     const [error, setError] = useState(null);
     const { removeFromComparison, clearComparison } = useComparison();
     const {user} = useContext(LoginContext);
-    const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+    const { isFavorite, handleFavoriteClick } = useFavorites();
 
     useEffect(() => {
         if(user && user.id) {
@@ -69,7 +69,12 @@ const ComparisonTable = () => {
                     const data = await response.json();
                     console.log('getting data', data);
                     if (data.status === 'success') {
+                        if(data.message === 'User do not have comparison apartments') {
+                            setComparisonFlats([]);
+                            // установить список сравнения
+                        }
                         setComparisonFlats(data.comparison.apartments || []);
+                        // установить список сравнения
                     } else {
                         setError(data.message || 'Ошибка загрузки квартир для сравнения');
                     }
@@ -83,21 +88,6 @@ const ComparisonTable = () => {
             fetchComparison();
         }
     }, [removeFromComparison]);
-
-    const handleFavoriteClick = async (flatId, e) => {
-        try {
-            if (isFavorite(flatId)) {
-                await removeFavorite(flatId);
-            } else {
-                await addFavorite(flatId);
-            }
-        } catch (error) {
-            console.error("Ошибка при изменении избранного:", error);
-        }
-    };
-
-
-
 
     // форматирование значения
     const formatValue = (param, value) => {
@@ -134,7 +124,6 @@ const ComparisonTable = () => {
             const formattedNumber = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             return `${PARAM_INTRODUCTION[param] ? ` ${PARAM_INTRODUCTION[param]}` : ''}${formattedNumber}${PARAM_UNITS[param] ? ` ${PARAM_UNITS[param]}` : ''}`;
         }
-
 
         // для строк
         return value;
@@ -174,7 +163,7 @@ const ComparisonTable = () => {
         return (
             <div className={s.container}>
                 <h1 className={s.title}>Сравнение квартир</h1>
-                <p>Нет квартир для сравнения</p>
+                <p className={s.empty}>Нет квартир для сравнения</p>
             </div>
         );
     }

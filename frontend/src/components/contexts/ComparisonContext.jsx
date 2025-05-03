@@ -14,7 +14,7 @@ export const ComparisonProvider = ({ children }) => {
     });
 */
 
-    /*const [comparisonError, setComparisonError] = useState(null);*/
+    const [comparisonError, setComparisonError] = useState(null);
    /* // сохранение в хранилище
     useEffect(() => {
         localStorage.setItem('comparisonFlats', JSON.stringify(comparisonFlats));
@@ -27,6 +27,49 @@ export const ComparisonProvider = ({ children }) => {
             setComparisonFlats(JSON.parse(savedFlats));
         }
     }, []); // только при первом рендере*/
+
+    const handleComparisonClick = async (flatId, event) => {
+        try {
+            if(isInComparison(flatId)) {
+                await removeFromComparison(flatId);
+            } else {
+                await addToComparison(flatId);
+            }
+        } catch(error) {
+            console.error("Ошибка при изменении сравнения:", error);
+
+            // Показываем сообщение только для ошибки лимита
+            if (error.isComparisonLimitError && event) {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'comparison-error-tooltip';
+                tooltip.textContent = error.message;
+
+
+
+                // возле курсора
+                tooltip.style.position = 'fixed';
+                tooltip.style.left = `${event.clientX + 10}px`;
+                tooltip.style.top = `${event.clientY + 10}px`;
+                tooltip.style.backgroundColor = '#fffce6';
+                tooltip.style.padding = '8px 12px';
+                tooltip.style.borderRadius = '4px';
+                tooltip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+                tooltip.style.zIndex = '9999';
+                tooltip.style.color = '#bf5617';
+                tooltip.style.border = '1px solid #ffcdd2';
+                tooltip.style.maxWidth = '250px';
+
+                document.body.appendChild(tooltip);
+
+                setTimeout(() => {
+                    tooltip.style.opacity = '0';
+                    tooltip.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => tooltip.remove(), 300);
+                }, 2000);
+            }
+        }
+    }
+
 
     const loadComparison = useCallback(async (userId) => {
         if (!userId || loading) return;
@@ -58,8 +101,13 @@ export const ComparisonProvider = ({ children }) => {
 
 
     const addToComparison = async (flatId) => {
-        if (!user?.id || comparisonFlats.length >= 3 || loading) return;
-
+        if (!user?.id || loading) return;
+        if (comparisonFlats.length >= 4) {
+            const error = new Error('Всего можно сравнивать до 4-х квартир!');
+            error.isComparisonLimitError = true;
+            throw error;
+        }
+        setComparisonError(null);
         setLoading(true);
 
         try {
@@ -140,6 +188,7 @@ export const ComparisonProvider = ({ children }) => {
             removeFromComparison,
             clearComparison,
             isInComparison,
+            handleComparisonClick
         }}>
             {children}
         </ComparisonContext.Provider>

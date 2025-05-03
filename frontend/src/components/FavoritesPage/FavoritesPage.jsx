@@ -5,6 +5,7 @@ import {LoginContext} from "../contexts/LoginContext.jsx";
 import {useComparison} from "../contexts/ComparisonContext.jsx";
 import s from './FavoritesPage.module.css';
 import {useFavorites} from "../contexts/FavoritesContext.jsx";
+import {FaTrash} from "react-icons/fa";
 
 const FavoritesPage = ({ userId }) => {
     const [flats, setFlats] = useState([]);
@@ -15,7 +16,10 @@ const FavoritesPage = ({ userId }) => {
     const {user} = useContext(LoginContext);
     const { isFavorite, addFavorite, removeFavorite } = useFavorites();
     const navigate = useNavigate();
-    const {comparisonFlats} = useComparison();
+    const {isInComparison, handleComparisonClick} = useComparison();
+
+    const [currentStartIndex, setCurrentStartIndex] = useState(0);
+
 
 
 
@@ -26,9 +30,15 @@ const FavoritesPage = ({ userId }) => {
                     const response = await fetch(`/api/favorites/${user.id}`);
                     const data = await response.json();
                     if (data.status === 'success') {
-                        setFlats(data.favorites.apartments || []);
-                        setFilteredFlats(data.favorites.apartments || []);
-                        // установить избранные квартиры
+                        if(data.message === 'User do not have favorites apartments') {
+                            setFlats([]);
+                            setFilteredFlats([]);
+                            // установить избранные квартиры
+                        }else{
+                            setFlats(data.favorites.apartments || []);
+                            setFilteredFlats(data.favorites.apartments || []);
+                            // установить избранные квартиры
+                        }
                     } else {
                         setError(data.message || 'Ошибка загрузки избранных квартир');
                     }
@@ -65,60 +75,88 @@ const FavoritesPage = ({ userId }) => {
 
     const handleFilterChange = (type) => {
         setFilterType(type);
+        setCurrentStartIndex(0);
     };
 
     const clearFavorites = () => {
         setFlats([]);
         setFilteredFlats([]);
-        // Здесь должна быть логика очистки на сервере
+        setCurrentStartIndex(0);
+        // Здесь логика очистки на сервере
     };
 
+    const handleOnNextButtonClicked = ()=>{
+        if((filteredFlats.length - currentStartIndex - 25) > 0){
+            setCurrentStartIndex(currentStartIndex + 25);
+        }
+    }
+    const handleOnPrevButtonClicked = ()=>{
+        if(currentStartIndex >= 25){
+            setCurrentStartIndex(currentStartIndex - 25);
+        }
+    }
+
     if (loading) {
-        return <div className={s.loading}>Загрузка...</div>;
+        return (
+            <div className={s.mainContainer}>
+                <div className={s.loading}>Загрузка...</div>
+            </div>
+            );
     }
 
     if (error) {
-        return <div className={s.error}>Ошибка: {error}</div>;
+        return (
+            <div className={s.mainContainer}>
+                <div className={s.error}>Ошибка: {error}</div>
+            </div>
+            );
     }
 
     if (flats.length === 0) {
-        return <div className={s.empty}>Нет избранных квартир</div>;
+        return (
+            <div className={s.mainContainer}>
+                <div className={s.empty}>В списке ещё нет избранных квартир.</div>
+            </div>
+        );
     }
 
     return (
         <div className={s.mainContainer}>
             <div className={s.filterPanel}>
                 <div className={s.filterOptions}>
-                    <label className={s.filterLabel}>
+                    <label className={`${s.filterLabel} ${filterType === 'all' ? s.checked : ''}`}>
                         <input
+                            className={s.radioButton}
                             type="radio"
                             name="filter"
                             checked={filterType === 'all'}
                             onChange={() => handleFilterChange('all')}
                         />
-                        Все
+                        <span className={s.radioLabel}>Все</span>
                     </label>
-                    <label className={s.filterLabel}>
+                    <label className={`${s.filterLabel} ${filterType === 'rent' ? s.checked : ''}`}>
                         <input
+                            className={s.radioButton}
                             type="radio"
                             name="filter"
                             checked={filterType === 'rent'}
                             onChange={() => handleFilterChange('rent')}
                         />
-                        Аренда
+                        <span className={s.radioLabel}>Аренда</span>
                     </label>
-                    <label className={s.filterLabel}>
+                    <label className={`${s.filterLabel} ${filterType === 'sell' ? s.checked : ''}`}>
                         <input
+                            className={s.radioButton}
                             type="radio"
                             name="filter"
                             checked={filterType === 'sell'}
                             onChange={() => handleFilterChange('sell')}
                         />
-                        Покупка
+                        <span className={s.radioLabel}>Покупка</span>
                     </label>
                 </div>
                 <button className={s.clearButton} onClick={clearFavorites}>
-                    Очистить избранное
+                    <FaTrash /> Очистить избранное
                 </button>
             </div>
             {filteredFlats.length > 0 ? (
@@ -128,17 +166,29 @@ const FavoritesPage = ({ userId }) => {
                             Избранные квартиры:
                         </h2>
                     </div>
-                    {filteredFlats.map((flat) => (
+                    {filteredFlats.slice(currentStartIndex, ((filteredFlats.length - currentStartIndex-25) > 0)?(currentStartIndex+25) : filteredFlats.length-currentStartIndex).map((flatData) => (
                         <FlatCard
-                            key={flat.id}
+                            key={flatData.id}
                             mark={null}
-                            flatData={flat}
-                            isFavorite={isFavorite(flat.id)}
-                            onFavoriteClick={() => handleFavoriteClick(flat.id)}
-                            isInComparison={comparisonFlats.some(f => f.id === flat.id)} // Можно добавить логику сравнения
-                            cardClick={() => navigate(`/FlatPage/${flat.id}`, { state: { flatData: flat } })}
+                            flatData={flatData}
+                            isFavorite={isFavorite(flatData.id)}
+                            onFavoriteClick={() => handleFavoriteClick(flatData.id)}
+                            isInComparison={isInComparison(flatData.id)}
+                            onComparisonClick={(e) => handleComparisonClick(flatData.id, e)}
+                            cardClick={() => navigate(`/FlatPage/${flatData.id}`, { state: { flatData: flatData } })}
                         />
+
                     ))}
+                    <div className={s.cardsContainerFooter}>
+                        <div className={s.nextPrevButtonsSection}>
+                            <button className={s.nextPrevButtons} onClick={handleOnPrevButtonClicked} disabled={currentStartIndex === 0}>
+                                ← Предыдущие квартиры
+                            </button>
+                            <button className={s.nextPrevButtons} onClick={handleOnNextButtonClicked} disabled={(filteredFlats.length - currentStartIndex - 25) <= 0 }>
+                                Следующие квартиры →
+                            </button>
+                        </div>
+                    </div>
                 </div>
             ):(
                 <div className={s.empty}>Нет избранных квартир</div>

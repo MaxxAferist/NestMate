@@ -159,25 +159,219 @@ const flatData3 = {
     source: 'ЦИАН',
     sourceLink: 'https://cian.ru/some-link'
 };
+const flatData4 = {
+    id: 15,
+    type: 'sell', // или 'rent'
+    rooms: 6,
+    ceilingHeight: 3.7,
+    balconyType: "Балкон",
+    renovationCondition: "Не требует ремонта",
+    kitchenStove: "Электрическая",
+    area: 76,
+    city: 'Санкт-Петербург',
+    photos: [
+        'https://img.freepik.com/free-photo/low-angle-office-building-city_23-2148767059.jpg?t=st=1743418225~exp=1743421825~hmac=57e579de25d19b4d219aeb51098404fd1f2a8324c89d044e528e6f68c2fa44a8&w=1380',
+        'https://img.freepik.com/free-photo/hallway-hotel-floor_23-2149304103.jpg?t=st=1743418258~exp=1743421858~hmac=86f7b07efb1c570ac2524ad328952d43b90e68c318885b733cb84e70e121b14d&w=740',
+        'https://img.freepik.com/free-photo/parking_1127-2914.jpg?t=st=1743418282~exp=1743421882~hmac=d6fb1283bea827687e0a248c202d9ac01eed222821626f0b631cf3c7058aea8f&w=1380',
+    ],
+    region: '',
+    district: 'Курортный',
+    street: 'Купчинская',
+    house: '56',
+    apartment: '32',
+    description: 'Светлая просторная квартира с современным ремонтом. Панорамные окна, вид на город. Встроенная кухня, санузел раздельный.',
+    floor: 6,
+    amenities: ['Видеонаблюдение', 'Домофон', 'Охрана', 'Пожарная сигнализация', 'Двор закрытого типа','Грузовой лифт'],
 
+    buildingFloors: 56,
+    buildingYear: 2003,
+    buildingMaterial: 'Деревянный',
+
+    infrastructure: {
+        parks: 40,
+        hospitals: 35,
+        shoppingCenters: 25,
+        shops: 10,
+        schools: 10,
+        kindergartens: 10,
+    },
+    coords: {
+        lat: 49.90393204625359,
+        lng: 32.517566538418627,
+        zoom: 16
+    },
+    transportAccessibility: {
+        publicTransportStops: 34,
+        metroDistance: 12,
+    },
+    price: 17600000,
+    source: 'ЦИАН',
+    sourceLink: 'https://cian.ru/some-link'
+};
+const flatData5 = {
+    id: 16,
+    type: 'sell', // или 'rent'
+    rooms: 4,
+    ceilingHeight: 6.7,
+    balconyType: "Лоджия",
+    renovationCondition: "Требует ремонта",
+    kitchenStove: "Газовая",
+    area: 43,
+    city: 'Санкт-Петербург',
+    photos: [
+        'https://img.freepik.com/free-photo/low-angle-office-building-city_23-2148767059.jpg?t=st=1743418225~exp=1743421825~hmac=57e579de25d19b4d219aeb51098404fd1f2a8324c89d044e528e6f68c2fa44a8&w=1380',
+        'https://img.freepik.com/free-photo/hallway-hotel-floor_23-2149304103.jpg?t=st=1743418258~exp=1743421858~hmac=86f7b07efb1c570ac2524ad328952d43b90e68c318885b733cb84e70e121b14d&w=740',
+        'https://img.freepik.com/free-photo/parking_1127-2914.jpg?t=st=1743418282~exp=1743421882~hmac=d6fb1283bea827687e0a248c202d9ac01eed222821626f0b631cf3c7058aea8f&w=1380',
+    ],
+    region: '',
+    district: 'Центральный',
+    street: 'Невский проспект',
+    house: '4',
+    apartment: '12',
+    description: 'Светлая просторная квартира с современным ремонтом. Панорамные окна, вид на город. Встроенная кухня, санузел раздельный.',
+    floor: 2,
+    amenities: ['Лифт', 'Электричество', 'Газ', 'Интернет', 'Водоснабжение',  'Охрана', 'Пожарная сигнализация', 'Двор закрытого типа','Грузовой лифт'],
+
+    buildingFloors: 34,
+    buildingYear: 1810,
+    buildingMaterial: 'Камень',
+
+    infrastructure: {
+        parks: 40,
+        hospitals: 35,
+        shoppingCenters: 25,
+        shops: 10,
+        schools: 10,
+        kindergartens: 10,
+    },
+    coords: {
+        lat: 49.90393204625359,
+        lng: 32.517566538418627,
+        zoom: 16
+    },
+    transportAccessibility: {
+        publicTransportStops: 34,
+        metroDistance: 12,
+    },
+    price: 12000000,
+    source: 'ЦИАН',
+    sourceLink: 'https://cian.ru/some-link'
+};
+const flatData6 = {
+    id: 17,
+    type: 'sell', // или 'rent'
+    rooms: 6,
+    ceilingHeight: 2.7,
+    balconyType: "Лоджия",
+    renovationCondition: "Евроремонт",
+    kitchenStove: "Электрическая",
+    area: 91,
+    city: 'Санкт-Петербург',
+    photos: [
+        'https://img.freepik.com/free-photo/hallway-hotel-floor_23-2149304103.jpg?t=st=1743418258~exp=1743421858~hmac=86f7b07efb1c570ac2524ad328952d43b90e68c318885b733cb84e70e121b14d&w=740',
+        'https://img.freepik.com/free-photo/parking_1127-2914.jpg?t=st=1743418282~exp=1743421882~hmac=d6fb1283bea827687e0a248c202d9ac01eed222821626f0b631cf3c7058aea8f&w=1380',
+    ],
+    region: '',
+    district: 'Московский',
+    street: 'Сталина',
+    house: '2',
+    apartment: '21',
+    description: 'Светлая просторная квартира с современным ремонтом. Панорамные окна, вид на город. Встроенная кухня, санузел раздельный.',
+    floor: 5,
+    amenities: ['Лифт', 'Электричество', 'Газ', 'Интернет', 'Водоснабжение',  'Мебель', 'Видеонаблюдение', 'Домофон', 'Охрана', 'Пожарная сигнализация', 'Двор закрытого типа','Грузовой лифт'],
+
+    buildingFloors: 5,
+    buildingYear: 1878,
+    buildingMaterial: 'Еловые ветки',
+
+    infrastructure: {
+        parks: 40,
+        hospitals: 35,
+        shoppingCenters: 25,
+        shops: 10,
+        schools: 10,
+        kindergartens: 10,
+    },
+    coords: {
+        lat: 49.90393204625359,
+        lng: 32.517566538418627,
+        zoom: 16
+    },
+    transportAccessibility: {
+        publicTransportStops: 34,
+        metroDistance: 12,
+    },
+    price: 25000000,
+    source: 'ЦИАН',
+    sourceLink: 'https://cian.ru/some-link'
+};
+const flatData7 = {
+    id: 14,
+    type: 'sell', // или 'rent'
+    rooms: 1,
+    ceilingHeight: 2.7,
+    balconyType: "Лоджия",
+    renovationCondition: "Требует ремонта",
+    kitchenStove: "Газовая",
+    area: 23,
+    city: 'Санкт-Петербург',
+    photos: [
+        'https://img.freepik.com/free-photo/parking_1127-2914.jpg?t=st=1743418282~exp=1743421882~hmac=d6fb1283bea827687e0a248c202d9ac01eed222821626f0b631cf3c7058aea8f&w=1380',
+    ],
+    region: '',
+    district: 'Василеостровский',
+    street: 'Красная',
+    house: '5',
+    apartment: '10',
+    description: 'Светлая просторная квартира с современным ремонтом. Панорамные окна, вид на город. Встроенная кухня, санузел раздельный.',
+    floor: 2,
+    amenities: ['Лифт', 'Электричество', 'Газ', 'Интернет', 'Водоснабжение',  'Мебель', 'Видеонаблюдение', 'Домофон', 'Охрана'],
+
+    buildingFloors: 5,
+    buildingYear: 1985,
+    buildingMaterial: 'Кирпич',
+
+    infrastructure: {
+        parks: 40,
+        hospitals: 35,
+        shoppingCenters: 25,
+        shops: 10,
+        schools: 10,
+        kindergartens: 10,
+    },
+    coords: {
+        lat: 49.90393204625359,
+        lng: 32.517566538418627,
+        zoom: 16
+    },
+    transportAccessibility: {
+        publicTransportStops: 34,
+        metroDistance: 12,
+    },
+    price: 12000000,
+    source: 'ЦИАН',
+    sourceLink: 'https://cian.ru/some-link'
+};
 const flatMap = {
     56: flatData1,
     67: flatData2,
     89: flatData3,
+    100: flatData4,
+    32: flatData5,
+    43: flatData6,
+    54: flatData7
 }
 
 export default function HomePage() {
     const navigate = useNavigate();
     const [currentStartIndex, setCurrentStartIndex] = useState(0);
-    const { isFavorite, addFavorite, removeFavorite} = useFavorites();
+    const { isFavorite, handleFavoriteClick} = useFavorites();
     //const {user} = useContext(LoginContext);
-    const {isInComparison, addToComparison, removeFromComparison} = useComparison();
-
-
+    const {isInComparison, handleComparisonClick} = useComparison();
 
 
     const handleOnNextButtonClicked = ()=>{
-        if(currentStartIndex <= 75 && (flatMap.length - currentStartIndex > -25)){
+        if(currentStartIndex <= 75 && (flatMap.length - currentStartIndex - 25 > 0)){
             setCurrentStartIndex(currentStartIndex + 25);
         }
     }
@@ -186,33 +380,6 @@ export default function HomePage() {
             setCurrentStartIndex(currentStartIndex - 25);
         }
     }
-
-    const handleFavoriteClick = async (flatId) => {
-        try {
-            if (isFavorite(flatId)) {
-                await removeFavorite(flatId);
-            } else {
-                await addFavorite(flatId);
-            }
-        } catch (error) {
-            console.error("Ошибка при изменении избранного:", error);
-        }
-    };
-
-    const handleComparisonClick = async (flatId) => {
-        try{
-            if(isInComparison(flatId)) {
-                await removeFromComparison(flatId);
-            }else{
-                await addToComparison(flatId);
-            }
-        }catch(error){
-            console.error("Ошибка при изменении сравнения:", error);
-        }
-    }
-
-
-
 
    /* if (loading) return <div>Загрузка...</div>;
     if (error) return <div>Ошибка: {error}</div>;
@@ -231,17 +398,17 @@ export default function HomePage() {
                                   isFavorite={isFavorite(item.id)}
                                   isInComparison={isInComparison(item.id)}
                                   onFavoriteClick={() => handleFavoriteClick(item.id)}
-                                  onComparisonClick={() => handleComparisonClick(item.id)}
+                                  onComparisonClick={(e) => handleComparisonClick(item.id, e)}
                                   cardClick={() => navigate(`/FlatPage/${item.id}`, { state: { flatData: item } })}
                         />
                     ))}
                 <div className={s.cardsContainerFooter}>
                     <div className={s.nextPrevButtonsSection}>
                         <button className={s.nextPrevButtons} onClick={handleOnPrevButtonClicked} disabled={currentStartIndex === 0}>
-                            Предыдущие 25 квартир
+                            ← Предыдущие 25 квартир
                         </button>
-                        <button className={s.nextPrevButtons} onClick={handleOnNextButtonClicked} disabled={currentStartIndex === 75 || (Object.keys(flatMap).length - currentStartIndex - 25) <= -25 }>
-                            Следующие 25 квартир
+                        <button className={s.nextPrevButtons} onClick={handleOnNextButtonClicked} disabled={currentStartIndex === 75 || (Object.keys(flatMap).length - currentStartIndex - 25) <= 0 }>
+                            Следующие 25 квартир →
                         </button>
                     </div>
                 </div>
