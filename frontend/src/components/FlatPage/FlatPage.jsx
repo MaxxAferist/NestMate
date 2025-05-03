@@ -171,10 +171,10 @@ const FlatPage = () => {
                 <div className={s.section}>
                     <h2 className={s.sectionTitle}>Удобства</h2>
                     <div className={s.parametersGrid} style={{gridTemplateColumns: "1fr 1fr 1fr"}}>
-                        {flatData.features.map((feature, index) => (
+                        {flatData.amenities.map((item, index) => (
                             <div className={s.parameterItem} key={index}>
                                 <span className={s.parameterName}></span>
-                                <span className={s.parameterValue}>{feature}</span>
+                                <span className={s.parameterValue}>{item}</span>
                             </div>
                             ))}
                     </div>

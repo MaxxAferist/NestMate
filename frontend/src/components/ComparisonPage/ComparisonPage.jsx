@@ -2,17 +2,19 @@ import s from './ComparisonPage.module.css';
 import { useComparison } from '../contexts/ComparisonContext';
 import { FaCheck, FaHeart, FaTimes, FaTrash } from 'react-icons/fa';
 import {useFavorites} from '../contexts/FavoritesContext.jsx'
+import {useEffect, useContext, useState} from "react";
+import {LoginContext} from "../contexts/LoginContext.jsx";
 
 // Словарь названий параметров
 const PARAM_NAMES = {
     price: 'Цена',
     rooms: 'Количество комнат',
     area: 'Площадь',
+    type: 'Тип сделки',
     ceilingHeight: 'Высота потолков',
     buildingYear: 'Год постройки',
     balconyType: 'Балкона/лоджия',
     renovationCondition: 'Состояние ремонта',
-    kitchenStove: 'Тип кухонной плита',
     floor: 'Этаж',
     features: 'Удобства',
     buildingFloors: 'Этажей в доме',
@@ -43,7 +45,7 @@ const PARAM_INTRODUCTION = {
 
 const PARAM_GROUPS = {
     comparisonFlatDetails: ['price', 'rooms', 'area', 'floor','ceilingHeight'],
-    restFlatDetails: ['balconyType', 'renovationCondition', 'kitchenStove', 'features'],
+    restFlatDetails: ['type','balconyType', 'renovationCondition', 'features'],
     comparisonBuildingDetails: ['buildingYear'],
     restBuildingDetails: ['buildingFloors', 'buildingMaterial'],
     infrastructure: ['parks', 'hospitals', 'shoppingCenters', 'shops', 'schools', 'kindergartens'],
@@ -51,9 +53,36 @@ const PARAM_GROUPS = {
 };
 
 const ComparisonTable = () => {
-    const { comparisonFlats, removeFromComparison, clearComparison } = useComparison();
-
+    const [comparisonFlats, setComparisonFlats] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const { removeFromComparison, clearComparison } = useComparison();
+    const {user} = useContext(LoginContext);
     const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+
+    useEffect(() => {
+        if(user && user.id) {
+            const fetchComparison = async () => {
+                try {
+                    console.log('fetch comparison');
+                    const response = await fetch(`/api/comparison/${user.id}`);
+                    const data = await response.json();
+                    console.log('getting data', data);
+                    if (data.status === 'success') {
+                        setComparisonFlats(data.comparison.apartments || []);
+                    } else {
+                        setError(data.message || 'Ошибка загрузки квартир для сравнения');
+                    }
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchComparison();
+        }
+    }, [removeFromComparison]);
 
     const handleFavoriteClick = async (flatId, e) => {
         try {
@@ -66,6 +95,8 @@ const ComparisonTable = () => {
             console.error("Ошибка при изменении избранного:", error);
         }
     };
+
+
 
 
     // форматирование значения
@@ -82,11 +113,28 @@ const ComparisonTable = () => {
             );
         }
 
+        if(param === 'type') {
+            if(value === 1){
+                return "аренда";
+            }else{
+                return "покупка";
+            }
+        }
+
+        if(param === 'buildingYear') {
+            if(value === 0){
+                return '-';
+            }else{
+                return value;
+            }
+        }
+
         // форматирование чисел
         if (typeof value === 'number') {
             const formattedNumber = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             return `${PARAM_INTRODUCTION[param] ? ` ${PARAM_INTRODUCTION[param]}` : ''}${formattedNumber}${PARAM_UNITS[param] ? ` ${PARAM_UNITS[param]}` : ''}`;
         }
+
 
         // для строк
         return value;
@@ -143,13 +191,11 @@ const ComparisonTable = () => {
                         {comparisonFlats.map(flat => (
                             <th key={flat.id} className={s.flatHeader}>
                                 <img
-                                    src={flat.photos[0]}
+                                    src={flat.picture}
                                     alt="Квартира"
                                     className={s.flatImage}
                                 />
-                                <div className={s.flatTitle}>
-                                    ул. {flat.street}, д. {flat.house}, кв. {flat.apartment}
-                                </div>
+                                <div className={s.flatTitle}>{flat.address}</div>
                                 <div className={s.flatDistrict}>{flat.district} р-н</div>
                                 <div className={s.actions}>
                                     <button className={s.actionButton} onClick={() => handleFavoriteClick(flat.id)} >

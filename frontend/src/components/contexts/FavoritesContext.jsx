@@ -11,7 +11,7 @@ export const FavoritesProvider = ({ children }) => {
 
 
     const loadFavorites = useCallback(async (userId) => {
-        if (!userId) return;
+        if (!userId || loading) return;
 
         setLoading(true);
         setFavoritesError(null);
@@ -42,8 +42,7 @@ export const FavoritesProvider = ({ children }) => {
 
 
     const addFavorite = async (flatId) => {
-        console.log('addFavorite', flatId);
-        if (!user?.id) return;
+        if (!user?.id || loading) return;
 
         setLoading(true);
         setFavoritesError(null);

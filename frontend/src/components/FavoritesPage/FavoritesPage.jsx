@@ -13,7 +13,7 @@ const FavoritesPage = ({ userId }) => {
     const [error, setError] = useState(null);
     const [filterType, setFilterType] = useState('all');
     const {user} = useContext(LoginContext);
-    const { isFavorite, addFavorite, removeFavorite, loadFavorites } = useFavorites();
+    const { isFavorite, addFavorite, removeFavorite } = useFavorites();
     const navigate = useNavigate();
     const {comparisonFlats} = useComparison();
 
@@ -25,12 +25,12 @@ const FavoritesPage = ({ userId }) => {
                 try {
                     const response = await fetch(`/api/favorites/${user.id}`);
                     const data = await response.json();
-                    console.log(data);
                     if (data.status === 'success') {
                         setFlats(data.favorites.apartments || []);
                         setFilteredFlats(data.favorites.apartments || []);
+                        // установить избранные квартиры
                     } else {
-                        setError(data.message || 'Failed to fetch favorites');
+                        setError(data.message || 'Ошибка загрузки избранных квартир');
                     }
                 } catch (err) {
                     setError(err.message);

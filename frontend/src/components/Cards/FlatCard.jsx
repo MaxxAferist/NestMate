@@ -1,7 +1,5 @@
 import s from './FlatCard.module.css';
-import {useComparison} from "../contexts/ComparisonContext.jsx";
-const FlatCard = ({ mark, flatData, cardClick, isFavorite, onFavoriteClick, isInComparison }) => {
-    const { addToComparison, removeFromComparison } = useComparison();
+const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison, onFavoriteClick, onComparisonClick }) => {
 
     const getRoomsText = (rooms) => {
         if (rooms === 0 || rooms === "Студия") return 'Студия';
@@ -80,7 +78,7 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite, onFavoriteClick, isIn
                     {isFavorite ? 'В избранном' : 'В избранное'}
                 </button>
                 <button className={s.compareButton}
-                        onClick={ isInComparison ? () => removeFromComparison(flatData.id) : () => addToComparison(flatData) }
+                        onClick={ onComparisonClick}
                         style={isInComparison ? { backgroundColor: '#48b5ff', color: 'white', borderColor: '#3182ce' } : null }
                 >
                     {isInComparison ? 'Уже в сравнении' : 'Добавить в сравнение'}

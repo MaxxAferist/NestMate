@@ -1,5 +1,4 @@
 import {createContext, useState, useEffect, useCallback} from 'react'
-import { useComparison } from './ComparisonContext';
 
 export const LoginContext = createContext({
     user: null,
@@ -18,7 +17,6 @@ export const LoginProvider = ({ children }) => {
         }
     });
 
-    const { clearComparison } = useComparison();
 
     function getDefaultFlatPreferences() { //парамтры для покупки
         return {
@@ -283,7 +281,6 @@ export const LoginProvider = ({ children }) => {
         setFlatPreferences(null);
         setRentPreferences(null);
         localStorage.removeItem("user");
-        clearComparison();
     };
 
     return(

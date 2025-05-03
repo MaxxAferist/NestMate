@@ -21,6 +21,7 @@
 
 .imageContainer {
     width: 260px;
+    height: 200px;
     flex-shrink: 0;
     position: relative;
 }

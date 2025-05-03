@@ -31,7 +31,7 @@ const flatData1 = {
     apartment: '25',
     description: 'Светлая просторная квартира с современным ремонтом. Панорамные окна, вид на город. Встроенная кухня, санузел раздельный.',
     floor: 5,
-    features: ['Лифт', 'Электричество', 'Газ', 'Интернет', 'Водоснабжение', 'Холодильник', 'Микроволновая печь', 'Стиральная машина', 'Кондиционер', 'Мебель', 'Видеонаблюдение', 'Домофон', 'Охрана', 'Пожарная сигнализация', 'Двор закрытого типа','Грузовой лифт'],
+    amenities: ['Лифт', 'Электричество', 'Газ', 'Интернет', 'Водоснабжение', 'Холодильник', 'Микроволновая печь', 'Стиральная машина', 'Кондиционер', 'Мебель', 'Видеонаблюдение', 'Домофон', 'Охрана', 'Пожарная сигнализация', 'Двор закрытого типа','Грузовой лифт'],
 
     buildingFloors: 9,
     buildingYear: 2015,
@@ -82,7 +82,7 @@ const flatData2 = {
     apartment: '12',
     description: 'Светлая просторная квартира с современным ремонтом. Панорамные окна, вид на город. Встроенная кухня, санузел раздельный.',
     floor: 8,
-    features: ['Микроволновая печь', 'Стиральная машина', 'Кондиционер', 'Мебель', 'Видеонаблюдение', 'Домофон', 'Охрана', 'Пожарная сигнализация', 'Двор закрытого типа','Грузовой лифт'],
+    amenities: ['Микроволновая печь', 'Стиральная машина', 'Кондиционер', 'Мебель', 'Видеонаблюдение', 'Домофон', 'Охрана', 'Пожарная сигнализация', 'Двор закрытого типа','Грузовой лифт'],
 
     buildingFloors: 12,
     buildingYear: 2004,
@@ -132,7 +132,7 @@ const flatData3 = {
     apartment: '56',
     description: 'Светлая просторная квартира с современным ремонтом. Панорамные окна, вид на город. Встроенная кухня, санузел раздельный.',
     floor: 2,
-    features: ['Лифт', 'Электричество', 'Газ', 'Интернет', 'Водоснабжение',  'Мебель', 'Видеонаблюдение', 'Домофон', 'Охрана', 'Пожарная сигнализация', 'Двор закрытого типа','Грузовой лифт'],
+    amenities: ['Лифт', 'Электричество', 'Газ', 'Интернет', 'Водоснабжение',  'Мебель', 'Видеонаблюдение', 'Домофон', 'Охрана', 'Пожарная сигнализация', 'Двор закрытого типа','Грузовой лифт'],
 
     buildingFloors: 13,
     buildingYear: 1985,
@@ -169,9 +169,9 @@ const flatMap = {
 export default function HomePage() {
     const navigate = useNavigate();
     const [currentStartIndex, setCurrentStartIndex] = useState(0);
-    const { isFavorite, addFavorite, removeFavorite, loadFavorites } = useFavorites();
+    const { isFavorite, addFavorite, removeFavorite} = useFavorites();
     //const {user} = useContext(LoginContext);
-    const {comparisonFlats} = useComparison();
+    const {isInComparison, addToComparison, removeFromComparison} = useComparison();
 
 
 
@@ -187,7 +187,7 @@ export default function HomePage() {
         }
     }
 
-    const handleFavoriteClick = async (flatId, e) => {
+    const handleFavoriteClick = async (flatId) => {
         try {
             if (isFavorite(flatId)) {
                 await removeFavorite(flatId);
@@ -198,6 +198,18 @@ export default function HomePage() {
             console.error("Ошибка при изменении избранного:", error);
         }
     };
+
+    const handleComparisonClick = async (flatId) => {
+        try{
+            if(isInComparison(flatId)) {
+                await removeFromComparison(flatId);
+            }else{
+                await addToComparison(flatId);
+            }
+        }catch(error){
+            console.error("Ошибка при изменении сравнения:", error);
+        }
+    }
 
 
 
@@ -217,8 +229,9 @@ export default function HomePage() {
                     .slice(currentStartIndex, (((Object.keys(flatMap).length - currentStartIndex - 25) > 0) ? (currentStartIndex+25) : (Object.keys(flatMap).length - currentStartIndex))).map(([key, item]) => (
                         <FlatCard key={key}  flatData={item} mark={key}
                                   isFavorite={isFavorite(item.id)}
-                                  onFavoriteClick={(e) => handleFavoriteClick(item.id, e)}
-                                  isInComparison={comparisonFlats.some(f => f.id === item.id)}
+                                  isInComparison={isInComparison(item.id)}
+                                  onFavoriteClick={() => handleFavoriteClick(item.id)}
+                                  onComparisonClick={() => handleComparisonClick(item.id)}
                                   cardClick={() => navigate(`/FlatPage/${item.id}`, { state: { flatData: item } })}
                         />
                     ))}

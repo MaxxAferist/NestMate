@@ -201,7 +201,7 @@
 .flatImage {
     width: 100%;
     max-width: 200px;
-    height: auto;
+    height: 150px;
     border-radius: 4px;
     margin-bottom: 10px;
 }
