@@ -92,9 +92,7 @@ WHERE email = %s""",
             return jsonify({
                 "status": "success",
                 "message": "Login success",
-                "user": {
-                    "id": user[0]
-                }
+                "user_id" : user[0]
             }), 200
         finally:
             app.connection_pool.putconn(conn)
@@ -385,6 +383,33 @@ WHERE id = %s""",
             return jsonify({'status': 'success', "favorites": json_favorites}), 200
         except Exception as e:
             return jsonify({'status': 'error', "message": f"Error with getting favorites: {e}"}), 500
+        finally:
+            app.connection_pool.putconn(conn)
+
+    @app.app.route('/api/comparison_list/<int:user_id>', methods=['GET']) # функция для отправки id квартир для сравнения
+    def get_comparisonList(user_id):
+        conn = app.connection_pool.getconn()
+        try:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+    SELECT comparison FROM users
+    WHERE id = %s""",
+                               (user_id,))
+                comparison = cursor.fetchone()
+
+            if not comparison:
+                return jsonify({"status": "error", "message": "User not found"}), 401
+
+            comparison = comparison[0]
+            if not comparison:
+                comparison = []
+            comparison = list(map(int, comparison))
+            json_comparison = {
+                "comparison_list": comparison
+            }
+            return jsonify({'status': 'success', "comparison": json_comparison}), 200
+        except Exception as e:
+            return jsonify({'status': 'error', "message": f"Error with getting comparison: {e}"}), 500
         finally:
             app.connection_pool.putconn(conn)
 

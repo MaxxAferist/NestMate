@@ -34,9 +34,9 @@ def getJsonInformationAboutApartments(connection, ids, favorites, comparison):
     with connection.cursor() as cursor:
         apartments_information = []
         cursor.execute("""
-SELECT id, pictures, count_rooms, area, floor, count_floors, price, address, minuts_for_subway, type_sdelki FROM apartment_data
+SELECT id,pictures, count_rooms, area, floor, count_floors, price, address, minuts_for_subway, type_sdelki, count_floors FROM apartment_data
 WHERE id = ANY(%s)""",
-                       (ids,))
+(ids,))
         apartments = cursor.fetchall()
 
     for apartment in apartments:
@@ -45,29 +45,36 @@ WHERE id = ANY(%s)""",
             count_room = f"{apartment[2]}-комнатная"
         else:
             count_room = "Студия"
-        area = f"{apartment[3]} м²"
+        if apartment[9] == 0: #добавил
+            type = 'sell'
+        else:
+            type = 'rent'
+        id = apartment[0]
+        area = apartment[3] # изменил с f"{apartment[3]} м²"
         floor = apartment[4]
         count_floors = apartment[5]
         price = apartment[6]
         address = apartment[7]
         minuts_for_subway = apartment[8]
-        type_sdelki = apartment[9]
+        count_floors = apartment[10]
         is_favorite = True if apartment[0] in favorites else False
         is_comparison = True if apartment[0] in comparison else False
         apartments_information.append({
+            "id": id, # добавил
             "picture": main_picture_url,
+            "type": type, # добавил
             "price": price,
-            "count_room": count_room,
+            "rooms": count_room, # изменено с room_count
             "area": area,
             "floor": floor,
             "count_floors": count_floors,
             "address": address,
-            "minuts_for_subway": minuts_for_subway,
-            "is_favorite": is_favorite,
-            "is_comparison": is_comparison,
-            "type_sdelki": type_sdelki
+            "buildingFloors" : count_floors, # добавил
+            "metroDistance": minuts_for_subway, #  название сменил
+            "is_favorite": is_favorite
         })
     return apartments_information
+
 
 
 def getJsonInformationAboutApartmentsForComparison(connection, comparison, favorites):
@@ -80,12 +87,13 @@ WHERE id = ANY(%s)""",
         comparison_apartments = cursor.fetchall()
 
     for apartment in comparison_apartments:
+        id = apartment[0] # добавил
         main_picture_url = apartment[1][0].split(", ")[0]
         address = apartment[2]
         district = apartment[3]
         price = apartment[4]
         count_rooms = apartment[5]
-        area = f"{apartment[6]} м²"
+        area = apartment[6]
         floor = apartment[7]
         ceiling_height = apartment[8]
         balcony = apartment[9]
@@ -108,31 +116,35 @@ WHERE id = ANY(%s)""",
         type_sdelki = apartment[25]
 
         is_favorite = True if apartment[0] in favorites else False
-        apartments_information.append({
+        apartments_information.append({ #изменил отправляемый JSON
+            "id": id,
+            "type": type_sdelki,
+            "rooms": count_rooms,
+            "ceilingHeight": ceiling_height,
+            "balconyType": balcony,
+            "renovationCondition": remont,
+            "area": area,
             "picture": main_picture_url,
             "address": address,
             "district": district,
-            "price": price,
-            "count_rooms": count_rooms,
-            "area": area,
             "floor": floor,
-            "ceiling_height": ceiling_height,
-            "balcony": balcony,
-            "remont": remont,
-            "amenties": amenties,
-            "year_of_construction": year_of_construction,
-            "count_floors": count_floors,
-            "material_house": material_house,
-            "minuts_for_park": minuts_for_park,
-            "minuts_for_hospital": minuts_for_hospital,
-            "minuts_for_mall": minuts_for_mall,
-            "minuts_for_kindergarten": minuts_for_kindergarten,
-            "minuts_for_school": minuts_for_school,
-            "minuts_for_store": minuts_for_store,
-            "minuts_for_busstop": minuts_for_busstop,
-            "minuts_for_subway": minuts_for_subway,
-            "is_favorite": is_favorite,
-            "type_sdelki": type_sdelki
+            "amenities": amenties,
+            "buildingFloors": count_floors,
+            "buildingYear": year_of_construction,
+            "buildingMaterial": material_house,
+            "infrastructure": {
+                "parks": minuts_for_park,
+                "hospitals": minuts_for_hospital,
+                "shoppingCenters": minuts_for_mall,
+                "shops": minuts_for_store,
+                "schools": minuts_for_school,
+                "kindergartens": minuts_for_kindergarten
+            },
+            "transportAccessibility": {
+                "publicTransportStops": minuts_for_busstop,
+                "metroDistance": minuts_for_subway
+            },
+            "price": price
         })
     return apartments_information
 

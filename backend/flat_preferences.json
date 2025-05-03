@@ -1,86 +1,102 @@
 {
-    "amenities": [],
-    "apartmentType": "РІС‚РѕСЂРёС‡РєР°",
-    "areaMax": "",
-    "areaMin": "",
-    "balconyType": "РЅРµРІР°Р¶РЅРѕ",
-    "budgetMax": "5000000",
-    "budgetMin": "4000000",
-    "ceilingHeight": "РЅРµРІР°Р¶РЅРѕ",
-    "city": "РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі",
+    "amenities": [
+        "Лифт",
+        "Электричество",
+        "Стиральная машина",
+        "Видеонаблюдение",
+        "Двор закрытого типа",
+        "Грузовой лифт",
+        "Домофон"
+    ],
+    "apartmentType": "вторичка",
+    "areaMax": "66",
+    "areaMin": "45",
+    "balconyType": "балкон",
+    "budgetMax": "5600",
+    "budgetMin": "3600",
+    "ceilingHeight": "3",
+    "city": "Санкт-Петербург",
     "comparisonMatrix": {
-        "matrix": {
-            "budget": {
-                "budget": 1,
-                "area": 3,
-                "roomCount": 2,
-                "apartmentType": 0.333,
-                "balconyType": 1
-            },
-            "area": {
-                "budget": 0.333,
-                "area": 1,
-                "roomCount": 1,
-                "apartmentType": 0.5,
-                "balconyType": 1
-            },
-            "roomCount": {
-                "budget": 0.5,
-                "area": 1,
-                "roomCount": 1,
-                "apartmentType": 0.5,
-                "balconyType": 1
-            },
-            "apartmentType": {
-                "budget": 3,
-                "area": 2,
-                "roomCount": 2,
-                "apartmentType": 1,
-                "balconyType": 1
-            },
-            "balconyType": {
-                "budget": 1,
-                "area": 1,
-                "roomCount": 1,
-                "apartmentType": 1,
-                "balconyType": 1
-            }
-        },
         "columnsOrder": [
-            "budget",
-            "area",
-            "roomCount",
-            "apartmentType",
-            "balconyType"
-        ]
+            "floor",
+            "amenities",
+            "infrastructure",
+            "transportAccessibility",
+            "renovationCondition"
+        ],
+        "matrix": {
+            "amenities": {
+                "amenities": 1,
+                "floor": 0.5,
+                "infrastructure": 1,
+                "renovationCondition": 1,
+                "transportAccessibility": 1
+            },
+            "floor": {
+                "amenities": 2,
+                "floor": 1,
+                "infrastructure": 3,
+                "renovationCondition": 5,
+                "transportAccessibility": 4
+            },
+            "infrastructure": {
+                "amenities": 1,
+                "floor": 0.333,
+                "infrastructure": 1,
+                "renovationCondition": 1,
+                "transportAccessibility": 1
+            },
+            "renovationCondition": {
+                "amenities": 1,
+                "floor": 0.2,
+                "infrastructure": 1,
+                "renovationCondition": 1,
+                "transportAccessibility": 1
+            },
+            "transportAccessibility": {
+                "amenities": 1,
+                "floor": 0.25,
+                "infrastructure": 1,
+                "renovationCondition": 1,
+                "transportAccessibility": 1
+            }
+        }
     },
-    "district": "РђРґРјРёСЂР°Р»С‚РµР№СЃРєРёР№",
-    "floorsInBuildingMax": "",
-    "floorsInBuildingMin": "",
-    "houseMaterial": [],
+    "district": "Московский",
+    "floorsInBuildingMax": "7",
+    "floorsInBuildingMin": "4",
+    "houseMaterial": [
+        "кирпич",
+        "панельный",
+        "блочный"
+    ],
     "infrastructure": {
-        "hospitals": "",
-        "kindergartens": "",
-        "parks": "",
-        "schools": "",
-        "shoppingCenters": "",
-        "shops": ""
+        "hospitals": "6",
+        "kindergartens": "10",
+        "parks": "5",
+        "schools": "9",
+        "shoppingCenters": "7",
+        "shops": "8"
     },
-    "kitchenStove": "РЅРµРІР°Р¶РЅРѕ",
-    "maxFloor": "",
-    "minFloor": "",
+    "kitchenStove": "неважно",
+    "maxFloor": "6",
+    "minFloor": "4",
     "priorities": {
-        "budget": 0.21880734212832784,
-        "area": 0.13311458469530166,
-        "roomCount": 0.1443878985744421,
-        "apartmentType": 0.3131692002130778,
-        "balconyType": 0.19052097438885068
+        "amenities": 0.15111257556462984,
+        "floor": 0.45221280531318914,
+        "infrastructure": 0.13931422187817388,
+        "renovationCondition": 0.1258092594650905,
+        "transportAccessibility": 0.13155113777891664
     },
-    "region": "РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі",
-    "renovationCondition": "РЅРµРІР°Р¶РЅРѕ",
-    "roomCount": [],
+    "region": "Санкт-Петербург",
+    "renovationCondition": "требует ремонта",
+    "roomCount": [
+        "0",
+        "1",
+        "2"
+    ],
     "transportAccessibility": {
-        "metroDistance": "",
-        "publicTransportStops": ""
+        "metroDistance": "34",
+        "publicTransportStops": "32"
     }
 }
