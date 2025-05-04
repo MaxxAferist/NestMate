@@ -16,25 +16,13 @@ import {ComparisonMatrix} from '../ComparsionMatrix/ComparisonMatrix.jsx'
 const ProfilePage = () => {
     const navigate = useNavigate();
     const {user,userData, setUserData, saveUserData,  logout, flatPreferences, setFlatPreferences,
-        rentPreferences, setRentPreferences, savePreferences, loadUserData, isLoading } = useContext(LoginContext);
+        rentPreferences, setRentPreferences, savePreferences } = useContext(LoginContext);
 
     const [editingRentData, setEditingRentData] = useState(false);
     const [editingPersonalData, setEditingPersonalData] = useState(false);
     const [editingFlatData, setEditingFlatData] = useState(false);
     const [editingFlatPriorities, setEditingFlatPriorities] = useState(false);
     const [editingRentPriorities, setEditingRentPriorities] = useState(false);
-
-   /*useEffect(() => {
-        if (user?.id) {
-            loadUserData(user.id);
-        }
-    }, [user, loadUserData]);*/
-
-    /*useEffect(() => {
-        if (user?.id && !isLoading) {
-            loadUserData(user.id);
-        }
-    }, [user?.id, loadUserData]);*/
 
 
     const [errors, setErrors] = useState({});

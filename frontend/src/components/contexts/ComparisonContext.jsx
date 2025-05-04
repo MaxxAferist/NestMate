@@ -8,25 +8,9 @@ export const ComparisonProvider = ({ children }) => {
     const { user} = useContext(LoginContext);
     const [loading, setLoading] = useState(false);
 
-    /*const [comparisonFlats, setComparisonFlats] = useState(() => {
-        const savedFlats = localStorage.getItem('comparisonFlats');
-        return savedFlats ? JSON.parse(savedFlats) : [];
-    });
-*/
+   /* const [comparisonError, setComparisonError] = useState(null);*/
 
-    const [comparisonError, setComparisonError] = useState(null);
-   /* // сохранение в хранилище
-    useEffect(() => {
-        localStorage.setItem('comparisonFlats', JSON.stringify(comparisonFlats));
-    }, [comparisonFlats]);
 
-    // загрузка из хранилищя
-    useEffect(() => {
-        const savedFlats = localStorage.getItem('comparisonFlats');
-        if (savedFlats) {
-            setComparisonFlats(JSON.parse(savedFlats));
-        }
-    }, []); // только при первом рендере*/
 
     const handleComparisonClick = async (flatId, event) => {
         try {
@@ -133,13 +117,6 @@ export const ComparisonProvider = ({ children }) => {
         }
     };
 
-   /* const addToComparison = (flat) => {
-        if (comparisonFlats.length >= 3) return; // не больше 3 квартир
-        if (!comparisonFlats.some(f => f.id === flat.id)) {
-            setComparisonFlats([...comparisonFlats, flat]);
-        }
-    };*/
-
     const removeFromComparison = async (flatId) => {
         if (!user?.id || loading) return;
         setLoading(true);
@@ -168,9 +145,6 @@ export const ComparisonProvider = ({ children }) => {
         }
     };
 
-    /*const removeFromComparison = (flatId) => {
-        setComparisonFlats(comparisonFlats.filter(f => f.id !== flatId));
-    };*/
 
     const clearComparison = async () => {
         if (!user?.id || loading) return;
@@ -191,18 +165,12 @@ export const ComparisonProvider = ({ children }) => {
             }
             await loadComparison(user.id);
         } catch (err) {
-            setComparisonError(err.message);
             console.error("Ошибка при очистки сравнения:", err);
             throw err;
         } finally {
             setLoading(false);
         }
     }
-
-    /*const clearComparison = () => {
-        setComparisonFlats([]);
-        /!*localStorage.removeItem('comparisonFlats');*!/
-    };*/
 
     const isInComparison = (id) => {
         return comparisonFlats.some(f => f === id);

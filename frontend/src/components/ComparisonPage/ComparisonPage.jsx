@@ -87,7 +87,7 @@ const ComparisonTable = () => {
 
             fetchComparison();
         }
-    }, [removeFromComparison]);
+    }, [removeFromComparison, clearComparison]);
 
     // форматирование значения
     const formatValue = (param, value) => {
@@ -158,6 +158,11 @@ const ComparisonTable = () => {
     const isBestValue = (value, bestValue) => {
         return bestValue !== null && value === bestValue;
     };
+
+    const handleClearAllClick = () => {
+        clearComparison();
+        setComparisonFlats([])
+    }
 
     if (comparisonFlats.length === 0) {
         return (
@@ -343,7 +348,7 @@ const ComparisonTable = () => {
 
             <div className={s.clearButtonContainer}>
                 <button
-                    onClick={clearComparison}
+                    onClick={handleClearAllClick}
                     className={s.clearButton}
                 >
                     <FaTrash />

@@ -6,6 +6,7 @@ import {useComparison} from "../contexts/ComparisonContext.jsx";
 import {useFavorites} from "../contexts/FavoritesContext.jsx";
 import YandexMap from "./YandexMap.jsx";
 import {LoginContext} from "../contexts/LoginContext.jsx";
+import parse from 'html-react-parser';
 
 const FlatPage = () => {
     const location = useLocation();
@@ -26,7 +27,7 @@ const FlatPage = () => {
         if(user && user.id && flat_id ) {
             const fetchFlatData = async () => {
                 try {
-                    const response = await fetch(`/api/apartment/${user.id}/${flat_id}`);
+                    const response = await fetch(`/api/apartment/${flat_id}`);
                     const data = await response.json();
                     console.log('data',data.apartments);
                     if (data.status === 'success') {
@@ -72,13 +73,23 @@ const FlatPage = () => {
 
     const nextMiniatures = () => {
         if (photoStartIndex + photosToShow < flatData.photos.length) {
-            setPhotoStartIndex(photoStartIndex + 1);
+            if(photoStartIndex+photosToShow + 5 < flatData.photos.length){
+                setPhotoStartIndex(photoStartIndex + 5);
+            }else{
+                setPhotoStartIndex(photoStartIndex + (flatData.photos.length -photoStartIndex - photosToShow));
+            }
+
         }
     };
 
     const prevMiniatures = () => {
         if (photoStartIndex > 0) {
-            setPhotoStartIndex(photoStartIndex - 1);
+            if(photoStartIndex - 5 > 0){
+                setPhotoStartIndex(photoStartIndex - 5);
+            }else{
+                setPhotoStartIndex(photoStartIndex - 1)
+            }
+
         }
     };
 
@@ -93,6 +104,18 @@ const FlatPage = () => {
         }).format(price);
     };
 
+    const formatRooms = (rooms) => {
+        if(typeof rooms === 'number'){
+            if(rooms === 0){
+                return ' студия, ';
+            }else{
+                return `${rooms}-комнатная квартира, `;
+            }
+        }else{
+            return ' студия, ';
+        }
+    }
+
     if(flatData === null){
         return(
             <div>
@@ -106,8 +129,8 @@ const FlatPage = () => {
             <div className={s.mainContent}>
                 <h1 className={s.title}>
                     {flatData.type === 'sell' ? 'Продаётся' : 'Сдаётся'}
-                    {flatData.rooms === 0 ? ' студия' : ` ${flatData.rooms}-комнатная квартира`},
-                    {flatData.area} м², {flatData.city}
+                    {formatRooms(flatData.rooms)}
+                    {flatData.area} м², {flatData.geo.city}
                 </h1>
 
                 <div className={s.photosSection}>
@@ -158,16 +181,17 @@ const FlatPage = () => {
                 <div className={s.section}>
                     <h2 className={s.sectionTitle}>Расположение</h2>
                     <p>
-                        {flatData.region ? `${flatData.region},` : ''} {flatData.city}
+                        {flatData.geo.address ? flatData.geo.address: '-'}
+                        {/*{flatData.region ? `${flatData.region},` : ''} {flatData.city}
                         {flatData.district && `, ${flatData.district}`}<br />
                         {flatData.street}, {flatData.house}
-                        {flatData.apartment && `, кв. ${flatData.apartment}`}
+                        {flatData.apartment && `, кв. ${flatData.apartment}`}*/}
                     </p>
                 </div>
 
                 <div className={s.section}>
                     <h2 className={s.sectionTitle}>Описание</h2>
-                    <p>{flatData.description}</p>
+                    <div>{parse(flatData.description)}</div>
                 </div>
                 <div className={s.section}>
                     <h2 className={s.sectionTitle}>О квартире</h2>
@@ -209,53 +233,53 @@ const FlatPage = () => {
                             ))}
                     </div>
                 </div>
-                {infrastructure &&
+                {flatData.infrastructure &&
                     <div className={s.section}>
                         <h2 className={s.sectionTitle}>Инфраструктура района</h2>
                         <div className={s.parametersGrid} style={{gridTemplateColumns: "1fr 1fr"}}>
                             <div className={s.parameterColumn}>
-                                <ParameterItem label="Парки">{infrastructure.parks
-                                    ? `Пешком ${infrastructure.parks} минут`
+                                <ParameterItem label="Парки">{flatData.infrastructure.parks
+                                    ? `Пешком ${flatData.infrastructure.parks} минут`
                                     : 'нет данных'}
                                 </ParameterItem>
-                                <ParameterItem label="Больницы">{infrastructure.hospitals
-                                    ?`Пешком ${infrastructure.hospitals} минут`: 'нет данных'}
+                                <ParameterItem label="Больницы">{flatData.infrastructure.hospitals
+                                    ?`Пешком ${flatData.infrastructure.hospitals} минут`: 'нет данных'}
                                 </ParameterItem>
-                                <ParameterItem label="Торговые центры">{infrastructure.shoppingCenters
-                                    ? `Пешком ${infrastructure.shoppingCenters} минут`
+                                <ParameterItem label="Торговые центры">{flatData.infrastructure.shoppingCenters
+                                    ? `Пешком ${flatData.infrastructure.shoppingCenters} минут`
                                     : 'нет данных'}
                                 </ParameterItem>
                             </div>
                             <div className={s.parameterColumn}>
-                                <ParameterItem label="Магазины">{infrastructure.shops
-                                    ? `Пешком ${infrastructure.shops} минут`
+                                <ParameterItem label="Магазины">{flatData.infrastructure.shops
+                                    ? `Пешком ${flatData.infrastructure.shops} минут`
                                     : 'нет данных'}
                                 </ParameterItem>
-                                <ParameterItem label="Школы">{infrastructure.schools
-                                    ? `Пешком ${infrastructure.schools} минут`
+                                <ParameterItem label="Школы">{flatData.infrastructure.schools
+                                    ? `Пешком ${flatData.infrastructure.schools} минут`
                                     : 'нет данных'
                                 }</ParameterItem>
-                                <ParameterItem label="Детские сады">{infrastructure.kindergartens
-                                    ? `Пешком ${infrastructure.kindergartens} минут`
+                                <ParameterItem label="Детские сады">{flatData.infrastructure.kindergartens
+                                    ? `Пешком ${flatData.infrastructure.kindergartens} минут`
                                     : 'нет данных'}
                                 </ParameterItem>
                             </div>
                         </div>
                     </div>
                 }
-                { transportAccessibility &&
+                { flatData.transportAccessibility &&
                     <div>
                         <h2 className={s.sectionTitle}>Транспортная доступность</h2>
                         <div className={s.parametersGrid} style={{gridTemplateColumns: "2fr 3fr"}}>
                             <div className={s.parameterColumn}>
-                                <ParameterItem label="Расстояние до метро">{transportAccessibility.metroDistance
-                                    ? `Пешком ${transportAccessibility.metroDistance} минут`
+                                <ParameterItem label="Расстояние до метро">{flatData.transportAccessibility.metroDistance
+                                    ? `Пешком ${flatData.transportAccessibility.metroDistance} минут`
                                     : 'нет данных'}
                                 </ParameterItem>
                             </div>
                             <div className={s.parameterColumn}>
-                                <ParameterItem label="Остановки общественного транспорта">{transportAccessibility.publicTransportStops
-                                    ? `Пешком ${transportAccessibility.publicTransportStops} минут`
+                                <ParameterItem label="Остановки общественного транспорта">{flatData.transportAccessibility.publicTransportStops
+                                    ? `Пешком ${flatData.transportAccessibility.publicTransportStops} минут`
                                     : 'нет данных'}
                                 </ParameterItem>
                             </div>
@@ -263,11 +287,11 @@ const FlatPage = () => {
                     </div>
                 }
 
-                {coordinates &&
+                {flatData.coordinates &&
                     <div style={{marginBottom: '40px'}}>
                         <h2 className={s.sectionTitle}>На карте</h2>
                         <YandexMap
-                            inputCoordinates={[coordinates.lat, coordinates.lng]} inputZoom={16}
+                            inputCoordinates={[flatData.coordinates.lat, flatData.coordinates.lng]} inputZoom={16}
                         />
                     </div>
                 }
@@ -275,20 +299,20 @@ const FlatPage = () => {
             </div>
             <div className={s.sidebar}>
                 <p className={s.sidebarTitle}>
-                    {flatData.rooms === 0 ? 'Студия' : `${flatData.rooms}-комнатная квартира`},
-                    {` ${flatData.area} м²`}, {flatData.city}
+                    {((flatData.rooms === 'Студия' ||flatData.rooms === 0 ) ? 'Студия' : `${flatData.rooms}-комнатная квартиры`)},
+                    {` ${flatData.area} м²`}, {flatData.geo.city}
                 </p>
                 <div className={s.priceContainer}>
                     {flatData.type === 'sell' && (<h2 className={s.price}>{formatPrice(flatData.price)} ₽</h2>)}
                     {flatData.type === 'rent' && (<>
-                            <h2 className={s.price}>{formatPrice(flatData.price)} ₽</h2>
+                            <h2 className={s.price}>{formatPrice(flatData.price)} ₽ </h2>
                             <span className={s.pricePeriod}>в месяц</span></>)}
                 </div>
 
-                <div className={s.source}>Источник: {flatData.source}</div>
+                {/*<div className={s.source}>Источник: {flatData.source}</div>*/}
 
                 <a
-                    href={flatData.sourceLink}
+                    href={flatData.link}
                     className={s.sourceButton}
                     target="_blank"
                     rel="noopener noreferrer"

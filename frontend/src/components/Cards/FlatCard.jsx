@@ -1,5 +1,7 @@
 import s from './FlatCard.module.css';
-const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison, onFavoriteClick, onComparisonClick }) => {
+const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
+                      onFavoriteClick, onComparisonClick,
+                      showButtonsSection = true }) => {
 
     const getRoomsText = (rooms) => {
         if (rooms === 0 || rooms === "Студия") return 'Студия';
@@ -69,24 +71,26 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison, onFavo
             </div>
 
 
-            <div className={s.buttonsSection}>
-                <button
-                    className={s.favoriteButton}
-                    onClick={ onFavoriteClick }
-                    style={isFavorite ? { backgroundColor: '#ff5e75', color: 'white', borderColor: '#e53e3e'} : null }
-                >
-                    {isFavorite ? 'В избранном' : 'В избранное'}
-                </button>
-                <button className={s.compareButton}
-                        onClick={ onComparisonClick}
-                        style={isInComparison ? { backgroundColor: '#48b5ff', color: 'white', borderColor: '#3182ce' } : null }
-                >
-                    {isInComparison ? 'Уже в сравнении' : 'Добавить в сравнение'}
-                </button>
-                <button className={s.detailsButton} onClick={cardClick}>
-                    Подробнее
-                </button>
-            </div>
+            {showButtonsSection && (
+                <div className={s.buttonsSection}>
+                    <button
+                        className={s.favoriteButton}
+                        onClick={ onFavoriteClick }
+                        style={isFavorite ? { backgroundColor: '#ff5e75', color: 'white', borderColor: '#e53e3e'} : null }
+                    >
+                        {isFavorite ? 'В избранном' : 'В избранное'}
+                    </button>
+                    <button className={s.compareButton}
+                            onClick={ onComparisonClick}
+                            style={isInComparison ? { backgroundColor: '#48b5ff', color: 'white', borderColor: '#3182ce' } : null }
+                    >
+                        {isInComparison ? 'Уже в сравнении' : 'Добавить в сравнение'}
+                    </button>
+                    <button className={s.detailsButton} onClick={cardClick}>
+                        Подробнее
+                    </button>
+                </div>
+            )}
         </div>
     );
 };
