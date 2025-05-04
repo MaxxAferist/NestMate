@@ -1,17 +1,47 @@
-# import os
-# os.environ["db_name"] = "nestmate_db"
-# os.environ["host"] = "127.0.0.1"
-# os.environ["user"] = "postgres"
-# os.environ["password"] = "s5a3b78ebudga"
-# os.environ["port"] = "5433"
+a = """id SERIAL PRIMARY KEY,
+link TEXT,
+type_sdelki SMALLINT,
+type_apartment SMALLINT,
+pictures TEXT[],
+address TEXT,
+coord_lat VARCHAR(50),
+coord_lng VARCHAR(50),
+region VARCHAR(50),
+city VARCHAR(50),
+district VARCHAR(50),
+price INTEGER,
+count_rooms VARCHAR(50),
+balcony VARCHAR(50),
+ceiling_height REAL,
+floor SMALLINT,
+count_floors SMALLINT,
+area SMALLINT,
+material_house VARCHAR(50),
+remont VARCHAR(50),
+additional_amenities TEXT[],
+minuts_for_park SMALLINT,
+minuts_for_hospital SMALLINT,
+minuts_for_mall SMALLINT,
+minuts_for_kindergarten SMALLINT,
+minuts_for_school SMALLINT,
+minuts_for_store SMALLINT,
+minuts_for_busstop SMALLINT,
+minuts_for_subway SMALLINT,
+kids BOOLEAN DEFAULT FALSE,
+animals BOOLEAN DEFAULT FALSE,
+smoking BOOLEAN DEFAULT FALSE,
+sanuzel VARCHAR(50),
+multimedia TEXT[],
+count_of_guests SMALLINT,
+description TEXT,
+year_of_construction SMALLINT,
+count_of_passenger_elevators SMALLINT,
+count_of_freight_elevators SMALLINT,
+furniture TEXT[],
+technique TEXT[]"""
 
-# a = []
-# if a:
-#     print(a)
-# else:
-#     print("adsakdo")
-
-if []:
-    print('y')
-else:
-    print('n')
+i = 0
+for elem in a.split("\n"):
+    var = elem.split()[0]
+    print(f'"{var}": {var},')
+    i += 1
