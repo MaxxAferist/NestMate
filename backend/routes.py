@@ -25,6 +25,7 @@ def init_routes(app):  #: Application):
         finally:
             app.connection_pool.putconn(conn)
 
+
     @app.app.route('/api/signIn', methods=['POST'])
     def signIn():
         data = request.json  # Получаем данные из запроса
@@ -35,9 +36,9 @@ def init_routes(app):  #: Application):
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT email FROM users
-WHERE email = %s""",
-                               (data["email"],))
+        SELECT email FROM users
+        WHERE email = %s""",
+            (data["email"],))
                 email = cursor.fetchone()
                 if email:
                     return jsonify({"status": "error", "message": "Email already exists"}), 400
@@ -45,7 +46,7 @@ WHERE email = %s""",
                 hashed_password = generate_password_hash(data['password'])
 
                 cursor.execute("""
-INSERT INTO users (
+        INSERT INTO users (
                     first_name,
                     email,
                     password,
@@ -56,10 +57,10 @@ INSERT INTO users (
                     favorites,
                     comparison,
                     ids_last_MAI
-                )
-VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-RETURNING id""",
-                               (data["firstName"], data["email"], hashed_password,
+                            )
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        RETURNING id""",
+            (data["firstName"], data["email"], hashed_password,
                                 data.get('lastName', ""), data.get('gender', ""),
                                 json.dumps(data.get('flatPreferences', {})),
                                 json.dumps(data.get('rentPreferences', {})), [], [], []))
@@ -68,6 +69,7 @@ RETURNING id""",
             return jsonify({"status": "success", "message": "User registered", "user_id": user_id}), 200
         finally:
             app.connection_pool.putconn(conn)
+
 
     @app.app.route('/api/logIn', methods=['POST'])
     def logIn():
@@ -78,9 +80,9 @@ RETURNING id""",
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT * FROM users
-WHERE email = %s""",
-                               (data["email"],))
+        SELECT * FROM users
+        WHERE email = %s""",
+            (data["email"],))
                 user = cursor.fetchone()
 
                 if not user:
@@ -97,6 +99,7 @@ WHERE email = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
+
     @app.app.route('/api/savePreferences', methods=['POST'])
     def savePreferences():
         data = request.json
@@ -110,9 +113,9 @@ WHERE email = %s""",
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT * FROM users
-WHERE id = %s""",
-                               (data["user_id"],))
+        SELECT * FROM users
+        WHERE id = %s""",
+            (data["user_id"],))
                 user = cursor.fetchone()
 
                 if not user:
@@ -120,16 +123,16 @@ WHERE id = %s""",
 
                 if 'flatPreferences' in data:
                     cursor.execute("""
-UPDATE users
-SET flat_preferences = %s
-WHERE id = %s""",
-                                   (json.dumps(data['flatPreferences']), user[0]))
+        UPDATE users
+        SET flat_preferences = %s
+        WHERE id = %s""",
+            (json.dumps(data['flatPreferences']), user[0]))
                 if 'rentPreferences' in data:
                     cursor.execute("""
-UPDATE users
-SET rent_preferences = %s
-WHERE id = %s""",
-                                   (json.dumps(data['rentPreferences']), user[0]))
+        UPDATE users
+        SET rent_preferences = %s
+        WHERE id = %s""",
+            (json.dumps(data['rentPreferences']), user[0]))
 
             conn.commit()
             return jsonify({
@@ -139,15 +142,16 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
+
     @app.app.route('/api/getAllUserData/<int:user_id>', methods=['GET'])
     def getAllUserData(user_id):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT * FROM users
-WHERE id = %s""",
-                               (user_id,))
+        SELECT * FROM users
+        WHERE id = %s""",
+            (user_id,))
                 user = cursor.fetchone()
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -179,6 +183,7 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
+
     @app.app.route('/api/saveUserData', methods=['POST'])
     def saveUserData():
         data = request.json
@@ -188,9 +193,9 @@ WHERE id = %s""",
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT * FROM users
-WHERE id = %s""",
-                               (data["id"],))
+        SELECT * FROM users
+        WHERE id = %s""",
+            (data["id"],))
                 user = cursor.fetchone()
 
                 if not user:
@@ -198,34 +203,22 @@ WHERE id = %s""",
 
                 if 'firstName' in data:
                     cursor.execute("""
-UPDATE users
-SET first_name = %s
-WHERE id = %s""",
-                                   (data['firstName'], user[0]))
+        UPDATE users
+        SET first_name = %s
+        WHERE id = %s""",
+            (data['firstName'], user[0]))
                 if 'lastName' in data:
                     cursor.execute("""
-UPDATE users
-SET last_name = %s
-WHERE id = %s""",
-                                   (data['lastName'], user[0]))
-                if 'middleName' in data:
-                    cursor.execute("""
-UPDATE users
-SET middle_name = %s
-WHERE id = %s""",
-                                   (data['middleName'], user[0]))
-                if 'phone' in data:
-                    cursor.execute("""
-UPDATE users
-SET phone = %s
-WHERE id = %s""",
-                                   (data['phone'], user[0]))
+        UPDATE users
+        SET last_name = %s
+        WHERE id = %s""",
+            (data['lastName'], user[0]))
                 if 'gender' in data:
                     cursor.execute("""
-UPDATE users
-SET gender = %s
-WHERE id = %s""",
-                                   (data['gender'], user[0]))
+        UPDATE users
+        SET gender = %s
+        WHERE id = %s""",
+            (data['gender'], user[0]))
 
             conn.commit()
             return jsonify({
@@ -234,6 +227,7 @@ WHERE id = %s""",
             }), 200
         finally:
             app.connection_pool.putconn(conn)
+
 
     @app.app.route('/api/favorites/add', methods=['POST'])
     def add_favorite():
@@ -249,9 +243,9 @@ WHERE id = %s""",
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT favorites FROM users
-WHERE id = %s""",
-                               (data['user_id'],))
+        SELECT favorites FROM users
+        WHERE id = %s""",
+            (data['user_id'],))
                 user = cursor.fetchone()
 
                 if not user:
@@ -270,10 +264,10 @@ WHERE id = %s""",
                 try:
                     current_favorites.append(flat_id)
                     cursor.execute("""
-UPDATE users
-SET favorites = %s
-WHERE id = %s""",
-                                   (current_favorites, data['user_id']))
+        UPDATE users
+        SET favorites = %s
+        WHERE id = %s""",
+            (current_favorites, data['user_id']))
                     app.app.logger.info(f"Updating favorites for user {data['user_id']}: {current_favorites}")
                     conn.commit()
                     return jsonify({'success': True}), 200
@@ -282,6 +276,7 @@ WHERE id = %s""",
                     return jsonify({'success': False, 'message': 'Database error'}), 500
         finally:
             app.connection_pool.putconn(conn)
+
 
     @app.app.route('/api/favorites/remove', methods=['DELETE'])
     def remove_favorite():
@@ -296,9 +291,9 @@ WHERE id = %s""",
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT favorites FROM users
-WHERE id = %s""",
-                               (data['user_id'],))
+        SELECT favorites FROM users
+        WHERE id = %s""",
+            (data['user_id'],))
                 user = cursor.fetchone()
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -308,13 +303,12 @@ WHERE id = %s""",
                 if data['flat_id'] in favorites:
                     new_favorites = [f for f in favorites if f != data['flat_id']]
                     cursor.execute("""
-UPDATE users
-SET favorites = %s
-WHERE id = %s""",
-                                   (new_favorites, data['user_id']))
+        UPDATE users
+        SET favorites = %s
+        WHERE id = %s""",
+            (new_favorites, data['user_id']))
                 else:
                     return jsonify({'success': False, 'message': 'Flat not found in favorites'}), 404
-
             try:
                 conn.commit()
                 return jsonify({'success': True}), 200
@@ -323,15 +317,16 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
+
     @app.app.route('/api/favorites/<int:user_id>', methods=['GET'])
     def get_favorites(user_id):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT favorites, comparison FROM users
-WHERE id = %s""",
-                               (user_id,))
+        SELECT favorites, comparison FROM users
+        WHERE id = %s""",
+            (user_id,))
                 apartments = cursor.fetchone()
                 if not apartments:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -359,15 +354,16 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
+
     @app.app.route('/api/favorites_list/<int:user_id>', methods=['GET'])
     def get_favoritesList(user_id):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT favorites FROM users
-WHERE id = %s""",
-                               (user_id,))
+        SELECT favorites FROM users
+        WHERE id = %s""",
+            (user_id,))
                 favorites = cursor.fetchone()
 
             if not favorites:
@@ -386,32 +382,37 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
-    @app.app.route('/api/comparison_list/<int:user_id>', methods=['GET']) # функция для отправки id квартир для сравнения
-    def get_comparisonList(user_id):
+
+    @app.app.route('/api/favorites/clear', methods=['DELETE'])
+    def clearFavorites():
+        data = request.json
+        if not data or not data.get('user_id'):
+            return jsonify({"status": "error", "message": "Missing user ID"}), 400
+
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-    SELECT comparison FROM users
-    WHERE id = %s""",
-                               (user_id,))
-                comparison = cursor.fetchone()
-
-            if not comparison:
-                return jsonify({"status": "error", "message": "User not found"}), 401
-
-            comparison = comparison[0]
-            if not comparison:
-                comparison = []
-            comparison = list(map(int, comparison))
-            json_comparison = {
-                "comparison_list": comparison
-            }
-            return jsonify({'status': 'success', "comparison": json_comparison}), 200
-        except Exception as e:
-            return jsonify({'status': 'error', "message": f"Error with getting comparison: {e}"}), 500
+        SELECT id FROM users
+        WHERE id = %s""",
+            (data['user_id'],))
+                user = cursor.fetchone()
+                if not user:
+                    return jsonify({"status": "error", "message": "User not found"}), 401
+                
+                cursor.execute("""
+        UPDATE users
+        SET favorites = %s
+        WHERE id = %s""",
+            ([], data['user_id']))
+            try:
+                conn.commit()
+                return jsonify({'success': True})
+            except Exception as e:
+                return jsonify({'success': False, 'message': str(e)}), 500
         finally:
             app.connection_pool.putconn(conn)
+
 
     @app.app.route('/api/comparison/add', methods=['POST'])
     def add_comparison_item():
@@ -427,9 +428,9 @@ WHERE id = %s""",
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT comparison FROM users
-WHERE id = %s""",
-                               (data['user_id'],))
+        SELECT comparison FROM users
+        WHERE id = %s""",
+            (data['user_id'],))
                 user = cursor.fetchone()
 
                 if not user:
@@ -448,10 +449,10 @@ WHERE id = %s""",
                 try:
                     current_comparison.append(flat_id)
                     cursor.execute("""
-UPDATE users
-SET comparison = %s
-WHERE id = %s""",
-                                   (current_comparison, data['user_id']))
+        UPDATE users
+        SET comparison = %s
+        WHERE id = %s""",
+            (current_comparison, data['user_id']))
                     app.app.logger.info(f"Updating comparison for user {data['user_id']}: {current_comparison}")
                     conn.commit()
                     return jsonify({'success': True}), 200
@@ -460,6 +461,7 @@ WHERE id = %s""",
                     return jsonify({'success': False, 'message': 'Database error'}), 500
         finally:
             app.connection_pool.putconn(conn)
+
 
     @app.app.route('/api/comparison/remove', methods=['DELETE'])
     def remove_comparison():
@@ -474,9 +476,9 @@ WHERE id = %s""",
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT comparison FROM users
-WHERE id = %s""",
-                               (data['user_id'],))
+        SELECT comparison FROM users
+        WHERE id = %s""",
+            (data['user_id'],))
                 user = cursor.fetchone()
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -487,10 +489,10 @@ WHERE id = %s""",
                 if data['flat_id'] in comparison:
                     new_favorites = [f for f in comparison if f != data['flat_id']]
                     cursor.execute("""
-UPDATE users
-SET comparison = %s
-WHERE id = %s""",
-                                   (new_favorites, data['user_id']))
+        UPDATE users
+        SET comparison = %s
+        WHERE id = %s""",
+            (new_favorites, data['user_id']))
                 else:
                     return jsonify({'success': False, 'message': 'Flat not found in comparison'}), 404
             try:
@@ -501,15 +503,16 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
+
     @app.app.route('/api/comparison/<int:user_id>', methods=['GET'])
     def get_comparison(user_id):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT comparison, favorites FROM users
-WHERE id = %s""",
-                               (user_id,))
+        SELECT comparison, favorites FROM users
+        WHERE id = %s""",
+            (user_id,))
                 apartments = cursor.fetchone()
                 if not apartments:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -537,15 +540,75 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
+
+    @app.app.route('/api/comparison_list/<int:user_id>', methods=['GET']) # функция для отправки id квартир для сравнения
+    def get_comparisonList(user_id):
+        conn = app.connection_pool.getconn()
+        try:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+        SELECT comparison FROM users
+        WHERE id = %s""",
+            (user_id,))
+                comparison = cursor.fetchone()
+
+            if not comparison:
+                return jsonify({"status": "error", "message": "User not found"}), 401
+
+            comparison = comparison[0]
+            if not comparison:
+                comparison = []
+            comparison = list(map(int, comparison))
+            json_comparison = {
+                "comparison_list": comparison
+            }
+            return jsonify({'status': 'success', "comparison": json_comparison}), 200
+        except Exception as e:
+            return jsonify({'status': 'error', "message": f"Error with getting comparison: {e}"}), 500
+        finally:
+            app.connection_pool.putconn(conn)
+
+
+    @app.app.route('/api/comparison/clear', methods=['DELETE'])
+    def clearComparison():
+        data = request.json
+        if not data or not data.get('user_id'):
+            return jsonify({"status": "error", "message": "Missing user ID"}), 400
+
+        conn = app.connection_pool.getconn()
+        try:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+        SELECT id FROM users
+        WHERE id = %s""",
+            (data['user_id'],))
+                user = cursor.fetchone()
+                if not user:
+                    return jsonify({"status": "error", "message": "User not found"}), 401
+                
+                cursor.execute("""
+        UPDATE users
+        SET comparison = %s
+        WHERE id = %s""",
+            ([], data['user_id']))
+            try:
+                conn.commit()
+                return jsonify({'success': True})
+            except Exception as e:
+                return jsonify({'success': False, 'message': str(e)}), 500
+        finally:
+            app.connection_pool.putconn(conn)
+
+
     @app.app.route('/api/mainIndex/<int:user_id>/<int:page>', methods=['GET'])
     def getApartmentsForMainIndex(user_id, page):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-SELECT ids_last_MAI, favorites, comparison FROM users
-WHERE id = %s""",
-                               (user_id,))
+        SELECT ids_last_MAI, favorites, comparison FROM users
+        WHERE id = %s""",
+            (user_id,))
                 apartments = cursor.fetchone()
                 if not apartments:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -584,6 +647,7 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
+
     @app.app.route('/api/sorted_mai/<int:user_id>/<int:type_sdelki>', methods=['POST'])
     def sortedApartmentsByMAI(user_id, type_sdelki):
         conn = app.connection_pool.getconn()
@@ -591,14 +655,14 @@ WHERE id = %s""",
             with conn.cursor() as cursor:
                 if type_sdelki == 0:
                     cursor.execute("""
-    SELECT flat_preferences FROM users
-    WHERE id = %s""",
-                                   (user_id,))
+            SELECT flat_preferences FROM users
+            WHERE id = %s""",
+                (user_id,))
                 else:
                     cursor.execute("""
-    SELECT rent_preferences FROM users
-    WHERE id = %s""",
-                                   (user_id,))
+            SELECT rent_preferences FROM users
+            WHERE id = %s""",
+                (user_id,))
                 preferences = cursor.fetchone()
                 if not preferences:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -620,9 +684,202 @@ WHERE id = %s""",
         finally:
             app.connection_pool.putconn(conn)
 
+
+    @app.app.route("/api/apartment/<int:user_id>/<int:flat_id>", methods=["GET"])
+    def getApartmentCard(user_id, flat_id):
+        conn = app.connection_pool.getconn()
+        try:
+            with conn.cursor() as cursor:
+                cursor.execute("""
+        SELECT * FROM apartment_data
+        WHERE id = %s""",
+            (flat_id,))
+                apartment = cursor.fetchone()
+                if not apartment:
+                    return jsonify({"status": "error", "message": "Flat not found"}), 401
+                cursor.execute("""
+        SELECT favorites, comparison FROM users
+        WHERE id = %s""",
+            (user_id,))
+                info = cursor.fetchone()
+            if not info:
+                return jsonify({"status": "error", "message": "User not found"}), 401
+
+            is_favorite = False
+            is_comparison = False
+            if flat_id in info[0]:
+                is_favorite = True
+            if flat_id in info[1]:
+                is_comparison = True
+
+            link = apartment[1]
+
+            if apartment[2] == 0:
+                type_sdelki = "sell"
+            else:
+                type_sdelki = "rent"
+
+            type_apartment = apartment[3]
+            pictures = apartment[4]
+            address = apartment[5]
+            coord_lat = apartment[6]
+            coord_lng = apartment[7]
+            region = apartment[8]
+            city = apartment[9]
+            district = apartment[10]
+            price = apartment[11]
+            count_rooms = apartment[12]
+            balcony = apartment[13]
+            ceiling_height = apartment[14]
+            floor = apartment[15]
+            count_floors = apartment[16]
+            area = apartment[17]
+            material_house = apartment[18]
+            remont = apartment[19]
+            additional_amenities = apartment[20]
+            minuts_for_park = apartment[21]
+            minuts_for_hospital = apartment[22]
+            minuts_for_mall = apartment[23]
+            minuts_for_kindergarten = apartment[24]
+            minuts_for_school = apartment[25]
+            minuts_for_store = apartment[26]
+            minuts_for_busstop = apartment[27]
+            minuts_for_subway = apartment[28]
+            kids = apartment[29]
+            animals = apartment[30]
+            smoking = apartment[31]
+            sanuzel = apartment[32]
+            multimedia = apartment[33]
+            count_of_guests = apartment[34]
+            description = apartment[35]
+            year_of_construction = apartment[36]
+            count_of_passenger_elevators = apartment[37]
+            count_of_freight_elevators = apartment[38]
+            furniture = apartment[39]
+            technique = apartment[40]
+
+            if apartment[2] == 0:
+                json_apartment = {
+                    "id": flat_id,
+                    "link": link,
+                    "type": type_sdelki,
+                    "type_apartment": type_apartment,
+                    "pictures": pictures,
+                    "coords": {
+                        "coord_lat": coord_lat,
+                        "coord_lng": coord_lng
+                    },
+                    "geo": {
+                        "region": region,
+                        "city": city,
+                        "district": district,
+                        "address": address
+                    },
+                    "price": price,
+                    "rooms": count_rooms,
+                    "balconyType": balcony,
+                    "ceilingHeight": ceiling_height,
+                    "floor": floor,
+                    "buildingFloors": count_floors,
+                    "buildingYear": year_of_construction,
+                    "buildingMaterial": material_house,
+                    "area": area,
+                    "renovationCondition": remont,
+                    "amenties": {
+                        "additional_amenities": additional_amenities,
+                        "furniture": furniture,
+                        "technique": technique
+                    },
+                    "infrastructure": {
+                        "parks": minuts_for_park,
+                        "hospitals": minuts_for_hospital,
+                        "shoppingCenters": minuts_for_mall,
+                        "shops": minuts_for_store,
+                        "schools": minuts_for_school,
+                        "kindergartens": minuts_for_kindergarten
+                    },
+                    "transportAccessibility": {
+                        "publicTransportStops": minuts_for_busstop,
+                        "metroDistance": minuts_for_subway
+                    },
+                    "flags": {
+                        "kids": kids,
+                        "animals": animals,
+                        "smoking": smoking
+                    },
+                    "sanuzel": sanuzel,
+                    "multimedia": multimedia,
+                    "count_of_guests": count_of_guests,
+                    "description": description,
+                    "count_of_passenger_elevators": count_of_passenger_elevators,
+                    "count_of_freight_elevators": count_of_freight_elevators,
+                    "is_favorite": is_favorite,
+                    "is_comparison": is_comparison
+                }
+            elif apartment[2] == 1:
+                json_apartment = {
+                    "id": flat_id,
+                    "link": link,
+                    "type": type_sdelki,
+                    "type_apartment": type_apartment,
+                    "pictures": pictures,
+                    "coords": {
+                        "coord_lat": coord_lat,
+                        "coord_lng": coord_lng
+                    },
+                    "geo": {
+                        "region": region,
+                        "city": city,
+                        "district": district,
+                        "address": address
+                    },
+                    "price": price,
+                    "rooms": count_rooms,
+                    "balconyType": balcony,
+                    "ceilingHeight": ceiling_height,
+                    "floor": floor,
+                    "buildingFloors": count_floors,
+                    "buildingYear": year_of_construction,
+                    "buildingMaterial": material_house,
+                    "area": area,
+                    "renovationCondition": remont,
+                    "amenties": {
+                        "additional_amenities": additional_amenities,
+                        "furniture": furniture,
+                        "technique": technique
+                    },
+                    "infrastructure": {
+                        "parks": minuts_for_park,
+                        "hospitals": minuts_for_hospital,
+                        "shoppingCenters": minuts_for_mall,
+                        "shops": minuts_for_store,
+                        "schools": minuts_for_school,
+                        "kindergartens": minuts_for_kindergarten
+                    },
+                    "transportAccessibility": {
+                        "publicTransportStops": minuts_for_busstop,
+                        "metroDistance": minuts_for_subway
+                    },
+                    "sanuzel": sanuzel,
+                    "multimedia": multimedia,
+                    "count_of_guests": count_of_guests,
+                    "description": description,
+                    "count_of_passenger_elevators": count_of_passenger_elevators,
+                    "count_of_freight_elevators": count_of_freight_elevators,
+                    "is_favorite": is_favorite,
+                    "is_comparison": is_comparison
+                }
+            return jsonify({'status': 'success', "apartments": json_apartment}), 200
+        except Exception as e:
+            return jsonify({'status': 'error', "message": f"Error with getting apartment: {e}"}), 500
+        finally:
+            app.connection_pool.putconn(conn)
+
+
     @app.app.route('/api')
     def index():
         return 'index'
+
 
     @app.app.route('/api/shutdown', methods=['POST'])
     def shutdown():
