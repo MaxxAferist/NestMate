@@ -706,7 +706,7 @@ def init_routes(app):  #: Application):
                 type_sdelki = "rent"
 
             type_apartment = apartment[3]
-            pictures = apartment[4]
+            pictures = apartment[4][0].split(", ")
             address = apartment[5]
             coord_lat = apartment[6]
             coord_lng = apartment[7]
@@ -744,16 +744,18 @@ def init_routes(app):  #: Application):
             furniture = apartment[39]
             technique = apartment[40]
 
+            amenities = additional_amenities + furniture + technique #
+
             if apartment[2] == 0:
                 json_apartment = {
                     "id": flat_id,
                     "link": link,
                     "type": type_sdelki,
                     "type_apartment": type_apartment,
-                    "pictures": pictures,
-                    "coords": {
-                        "coord_lat": coord_lat,
-                        "coord_lng": coord_lng
+                    "photos": pictures, #
+                    "coordinates": { #
+                        "lat": coord_lat,
+                        "lng": coord_lng
                     },
                     "geo": {
                         "region": region,
@@ -771,11 +773,7 @@ def init_routes(app):  #: Application):
                     "buildingMaterial": material_house,
                     "area": area,
                     "renovationCondition": remont,
-                    "amenties": {
-                        "additional_amenities": additional_amenities,
-                        "furniture": furniture,
-                        "technique": technique
-                    },
+                    "amenities": amenities, #
                     "infrastructure": {
                         "parks": minuts_for_park,
                         "hospitals": minuts_for_hospital,
@@ -806,10 +804,10 @@ def init_routes(app):  #: Application):
                     "link": link,
                     "type": type_sdelki,
                     "type_apartment": type_apartment,
-                    "pictures": pictures,
-                    "coords": {
-                        "coord_lat": coord_lat,
-                        "coord_lng": coord_lng
+                    "photos": pictures, #
+                    "coordinates": { #
+                        "lat": coord_lat,
+                        "lng": coord_lng
                     },
                     "geo": {
                         "region": region,
@@ -827,11 +825,7 @@ def init_routes(app):  #: Application):
                     "buildingMaterial": material_house,
                     "area": area,
                     "renovationCondition": remont,
-                    "amenties": {
-                        "additional_amenities": additional_amenities,
-                        "furniture": furniture,
-                        "technique": technique
-                    },
+                    "amenities": amenities, #
                     "infrastructure": {
                         "parks": minuts_for_park,
                         "hospitals": minuts_for_hospital,
