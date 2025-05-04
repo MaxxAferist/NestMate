@@ -99,6 +99,33 @@ export const FavoritesProvider = ({ children }) => {
         }
     };
 
+    const clearFavorites = async () => {
+        if (!user?.id || loading) return;
+        setLoading(true);
+        try {
+            const response = await fetch('/api/favorites/clear', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при очистки избранного');
+            }
+            await loadFavorites(user.id);
+        } catch (err) {
+            setFavoritesError(err.message);
+            console.error("Ошибка при очистки избранного:", err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }
+
     const isFavorite = (flatId) => {
         return favorites.some(f => f === flatId);
     };
@@ -123,7 +150,8 @@ export const FavoritesProvider = ({ children }) => {
             addFavorite,
             removeFavorite,
             isFavorite,
-            handleFavoriteClick
+            handleFavoriteClick,
+            clearFavorites
             /*loadFavorites*/
         }}
         >

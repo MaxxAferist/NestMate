@@ -172,10 +172,37 @@ export const ComparisonProvider = ({ children }) => {
         setComparisonFlats(comparisonFlats.filter(f => f.id !== flatId));
     };*/
 
-    const clearComparison = () => {
+    const clearComparison = async () => {
+        if (!user?.id || loading) return;
+        setLoading(true);
+        try {
+            const response = await fetch('/api/comparison/clear', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при очистки сравнения');
+            }
+            await loadComparison(user.id);
+        } catch (err) {
+            setComparisonError(err.message);
+            console.error("Ошибка при очистки сравнения:", err);
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    /*const clearComparison = () => {
         setComparisonFlats([]);
-        /*localStorage.removeItem('comparisonFlats');*/
-    };
+        /!*localStorage.removeItem('comparisonFlats');*!/
+    };*/
 
     const isInComparison = (id) => {
         return comparisonFlats.some(f => f === id);

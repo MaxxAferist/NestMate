@@ -1,26 +1,50 @@
-import { useState } from 'react';
+import {useEffect, useState, useContext} from 'react';
 import s from './FlatPage.module.css';
 import { useLocation } from 'react-router-dom';
 import { ParameterItem } from "./FlatPageComponents.jsx";
 import {useComparison} from "../contexts/ComparisonContext.jsx";
 import {useFavorites} from "../contexts/FavoritesContext.jsx";
 import YandexMap from "./YandexMap.jsx";
+import {LoginContext} from "../contexts/LoginContext.jsx";
 
 const FlatPage = () => {
     const location = useLocation();
-    const { flatData } = location.state || {};
-    const infrastructure = flatData?.infrastructure || {};
-    const coordinates = flatData?.coords || {};
-    const transportAccessibility = flatData?.transportAccessibility || {};
-
+    const { flat_id } = location.state || {};
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
     const [photoStartIndex, setPhotoStartIndex] = useState(0);
+    const [loading, setLoading] = useState(null);
+    const [error, setError] = useState(null);
+    const[flatData, setFlatData] = useState(null);
     const photosToShow = 10;
+
+    const {user} = useContext(LoginContext);
 
     const {handleFavoriteClick, isFavorite} = useFavorites();
 
     const { handleComparisonClick, isInComparison} = useComparison();
+    useEffect(() => {
+        if(user && user.id && flat_id ) {
+            const fetchFlatData = async () => {
+                try {
+                    const response = await fetch(`/api/apartment/${user.id}/${flat_id}`);
+                    const data = await response.json();
+                    console.log('data',data.apartments);
+                    if (data.status === 'success') {
+                        setFlatData(data.apartments);
+                    } else {
+                        setError(data.message || 'Ошибка загрузки квартиры');
+                    }
+                } catch (err) {
+                    setError(err.message);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchFlatData();
+        }
+    }, [user, flat_id]);
 
+    /*console.log(flatData);*/
    /* const handleFavoriteClick = async () => {
         try {
             if (isFavorite(flatData.id)) {
@@ -69,7 +93,13 @@ const FlatPage = () => {
         }).format(price);
     };
 
-
+    if(flatData === null){
+        return(
+            <div>
+                Загрузка.....
+            </div>
+        )
+    }
 
     return (
         <div className={s.pageContainer}>

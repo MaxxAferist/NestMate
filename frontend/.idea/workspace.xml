@@ -6,6 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="d9c70930-1c4a-4f15-8630-7970b0670b5b" name="Changes" comment="Доделал страницу квартиры">
       <change beforePath="$PROJECT_DIR$/../backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/flat_preferences.json" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/flat_preferences.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/contexts/ComparisonContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/ComparisonContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/contexts/FavoritesContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/FavoritesContext.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,28 +66,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Node.js.FlatCard.jsx.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Merging main",
-    "last_opened_file_path": "C:/Users/artem/WebStormProjects/React+Flask/NestMate/frontend",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
-    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Node.js.FlatCard.jsx.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/artem/WebStormProjects/React+Flask/NestMate/frontend&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "ChangesTree.GroupingKeys": [
-      "directory"
+  &quot;keyToStringList&quot;: {
+    &quot;ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\artem\WebStormProjects\React+Flask\NestMate\frontend\src\components\ComparsionMatrix" />
@@ -183,7 +192,8 @@
       <workItem from="1746277408638" duration="9088000" />
       <workItem from="1746286676212" duration="4530000" />
       <workItem from="1746347138198" duration="11194000" />
-      <workItem from="1746359839435" duration="1141000" />
+      <workItem from="1746359839435" duration="1465000" />
+      <workItem from="1746364036144" duration="3303000" />
     </task>
     <task id="LOCAL-00001" summary="Доделал страницу квартиры">
       <option name="closed" value="true" />

@@ -507,7 +507,7 @@ export default function HomePage() {
                                   isInComparison={isInComparison(item.id)}
                                   onFavoriteClick={() => handleFavoriteClick(item.id)}
                                   onComparisonClick={(e) => handleComparisonClick(item.id, e)}
-                                  cardClick={() => navigate(`/FlatPage/${item.id}`, { state: { flatData: item } })}
+                                  cardClick={() => navigate(`/FlatPage/${item.id}`, { state: { flat_id: item.id } })}
                         />
                     ))}
                 <div className={s.cardsContainerFooter}>

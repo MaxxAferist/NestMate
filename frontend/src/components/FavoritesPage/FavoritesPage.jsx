@@ -14,7 +14,7 @@ const FavoritesPage = ({ userId }) => {
     const [error, setError] = useState(null);
     const [filterType, setFilterType] = useState('all');
     const {user} = useContext(LoginContext);
-    const { isFavorite, handleFavoriteClick } = useFavorites();
+    const { isFavorite, handleFavoriteClick, clearFavorites } = useFavorites();
     const navigate = useNavigate();
     const {isInComparison, handleComparisonClick} = useComparison();
 
@@ -67,9 +67,10 @@ const FavoritesPage = ({ userId }) => {
         setCurrentStartIndex(0);
     };
 
-    const clearFavorites = () => {
+    const handleClearFavorites = () => {
         setFlats([]);
         setFilteredFlats([]);
+        clearFavorites();
         setCurrentStartIndex(0);
         // Здесь логика очистки на сервере
     };
@@ -144,7 +145,7 @@ const FavoritesPage = ({ userId }) => {
                         <span className={s.radioLabel}>Покупка</span>
                     </label>
                 </div>
-                <button className={s.clearButton} onClick={clearFavorites}>
+                <button className={s.clearButton} onClick={handleClearFavorites}>
                     <FaTrash /> Очистить избранное
                 </button>
             </div>
