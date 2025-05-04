@@ -10,6 +10,404 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/*панель фильтров*/
+.filterPanel {
+    width: 68%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+    padding: 20px;
+    background: linear-gradient(135deg, #dce6fb 0%, #e7daff 100%);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.searchPanel {
+    display: flex;
+    align-items: stretch;
+    margin-bottom: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 670px;
+    overflow: hidden;
+    background: #f0f0f0;
+}
+
+.filterSection {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    background: #d8d5ff;
+    padding: 5px 15px;
+    flex-grow: 1;
+}
+
+.filterOptions {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.filterTitle {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.filterLabel {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    border: 1px solid #bccbdd;
+    background-color: #f0f6fd;
+    color: #51739a;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.filterLabel:hover {
+    background-color: #93bcfb;
+    color: #ffffff;
+}
+
+.filterLabel.checked {
+    border: 1px solid #9fc4ea;
+    background-color: #cae1fa;
+    color: #1463b5;
+    font-weight: 600;
+}
+
+.radioButton {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.searchButtonSection {
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    background: #d8d5ff;
+    border-left: 1px solid #beb9ff;
+}
+
+.searchButton {
+    padding: 8px 20px;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #4a6bdf 0%, #3a56c4 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(74, 107, 223, 0.3);
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.searchButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(74, 107, 223, 0.4);
+}
+
+
+
+.divider {
+     width: 1px;
+     height: 40px;
+     background-color: #e2e8f0;
+     margin: 0 10px;
+ }
+
+.secondaryControls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    justify-content: space-between;
+}
+
+.secondaryButton {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 8px rgba(111, 66, 193, 0.3);
+    font-weight: 500;
+}
+
+.secondaryButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(111, 66, 193, 0.4);
+}
+
+.messagesContainer {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/*.warningMessage {
+    display: block;
+    color: #dc3545;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+}*/
+
+/*
+.recommendationMessage {
+    display: block;
+    color: #28a745;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+*/
+
+.radioLabel {
+    padding-left: 0;
+}
+ /*предупреждения и предложения*/
+.warning {
+    color: #4a5568;
+    background-color: #fffaf0;
+    padding: 12px 16px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.warningIcon {
+    margin-right: 8px;
+    font-size: 16px;
+    color: #ffa735;
+}
+
+.Recommendations {
+    border: 1px solid #bee3f8;
+    background-color: #ebf8ff;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 15px;
+}
+
+.Recommendations h5 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #2b6cb0;
+    font-weight: 600;
+}
+
+.Recommendations ul {
+    margin: 8px 0 0 0;
+    padding-left: 20px;
+}
+
+.Recommendations ul li {
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+.radioLabel {
+    padding-left: 0;
+}
+
+/*.filterPanel {
+    width: 65%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.filterMainBlock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 12px;
+    border-left: 5px solid #4a6bdf;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.filterSection {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.filterTitle {
+    font-size: 1rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.filterOptions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filterLabel {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    border: 1px solid #cbd5e1;
+    background-color: #ffffff;
+    color: #475569;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.filterLabel:hover {
+    background-color: #f1f5f9;
+}
+
+.filterLabel.checked {
+    border: 1px solid #93c5fd;
+    background-color: #dbeafe;
+    color: #1e40af;
+    font-weight: 600;
+}
+
+.divider {
+    width: 1px;
+    height: 40px;
+    background-color: #e2e8f0;
+    margin: 0 10px;
+}
+
+.actionButton {
+    padding: 8px 20px;
+    font-size: 1rem;
+    background: linear-gradient(135deg, #4a6bdf 0%, #3a56c4 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(74, 107, 223, 0.2);
+    font-weight: 500;
+}
+
+.actionButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(74, 107, 223, 0.3);
+}
+
+.mapButton {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+    font-weight: 500;
+}
+
+.mapButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+.profileButton {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px rgba(124, 58, 237, 0.2);
+    font-weight: 500;
+    align-self: flex-start;
+    margin-bottom: 15px;
+}
+
+.profileButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(124, 58, 237, 0.3);
+}
+
+.messagesContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.saveError {
+    color: #c53030;
+    background-color: #fff5f5;
+    padding: 12px 16px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 500;
+    border-left: 4px solid #e53e3e;
+}
+
+.errorIcon {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.CRRecommendations {
+    border: 1px solid #bee3f8;
+    background-color: #ebf8ff;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 15px;
+}
+
+.CRRecommendations h5 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    color: #2b6cb0;
+    font-weight: 600;
+}
+
+.CRRecommendations ul {
+    margin: 8px 0 0 0;
+    padding-left: 20px;
+}
+
+.CRRecommendations ul li {
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+.radioLabel {
+    padding-left: 0;
+}
+*/
+
+
+/*поле карточек*/
 .cardsContainerHeader {
     background: rgb(191, 255, 209);
     border-bottom: 2px solid #c6f6d5;
@@ -30,7 +428,7 @@
 
 
 .cardsContainer {
-    width: 65%;
+    width: 70%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -91,5 +489,23 @@
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+}
+
+@media (max-width: 768px) {
+    .searchPanel {
+        flex-direction: column;
+    }
+
+    .filterSection {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .searchButtonSection {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+    }
 }
 

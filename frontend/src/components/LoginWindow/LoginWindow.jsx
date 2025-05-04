@@ -2,10 +2,12 @@ import { useState, useContext } from 'react'
 import s from './LoginWindow.module.css'
 import { LoginContext }  from '../contexts/LoginContext.jsx'
 import { useNavigate } from 'react-router-dom'
+import {FaEye, FaEyeSlash} from "react-icons/fa";
 
 export default function LoginWindow(){
   const navigate = useNavigate();
   const { login } = useContext( LoginContext );
+  const [showPassword, setShowPassword] = useState(false);
 
   const [userData, setUserData] = useState({
     email: '',
@@ -109,15 +111,30 @@ export default function LoginWindow(){
           </div>
 
           <div className={s.inputGroup}>
-            <input
-                className={`${s.input} ${errors.password ? s.inputError : ''}`}
-                name="password"
-                type="password"
-                placeholder="Пароль"
-                value={userData.password}
-                onChange={handleOnChange}
-                required
-            />
+            <div className={s.passwordInputContainer}>
+              <input
+                  className={`${s.input} ${errors.password ? s.inputError : ''}`}
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Пароль"
+                  value={userData.password}
+                  onChange={handleOnChange}
+                  required
+              />
+              <button
+                  type="button"
+                  className={s.showPasswordChange}
+                  onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ?
+                    (
+                        <FaEyeSlash />
+                    ) : (
+                        <FaEye />
+                    )}
+              </button>
+            </div>
+
             {errors.password && <span className={s.errorText}>{errors.password}</span>}
           </div>
 

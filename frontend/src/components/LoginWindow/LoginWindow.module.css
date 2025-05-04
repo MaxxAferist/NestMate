@@ -36,10 +36,6 @@
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
     text-align: center;
-    /*padding: 30px;
-    display: flex;*/
-    /*flex-direction: column;
-    justify-content: center;*/
     border-left: 1px solid #e2e8f0;
 }
 .closeButton {
@@ -74,20 +70,6 @@
     font-weight: 600;
     font-style: italic;
 }
-/*.title{
-    font-size: 25px;
-    margin-bottom: 5px;
-    text-align: center;
-    height: 40px;
-}
-.siteName{
-    height: 30px;
-    text-align: center;
-    margin-bottom: 5px;
-    color: #6A6A6AFF;
-    font-style: italic;
-    font-size: 35px;
-}*/
 
 .input {
     min-height: 40px;
@@ -107,16 +89,6 @@
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
     background-color: #fff;
 }
-
-/*.input{
-    min-height: 40px;
-    width: 91%;
-    padding: 5px;
-    margin-bottom: 6px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-}*/
 
 .loginButton {
     width: 93%;
@@ -147,19 +119,6 @@
     background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
 }
 
-
-/*.loginButton{
-    width: 93%;
-    min-height: 50px;
-    padding: 10px;
-    background-color: rgba(137, 193, 255, 0.85);
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-bottom: 6px;
-    font-size: 20px;
-}*/
 .registerButton {
     min-height: 50px;
     width: 93%;
@@ -201,9 +160,24 @@
     font-weight: 500;
 }
 
-/*.errorText {
-    color: red;
-    font-size: 14px;
-    margin-top: 3px;
-    display: block;
-}*/
+.passwordInputContainer {
+    position: relative;
+    width: 100%;
+}
+
+.showPasswordChange {
+    position: absolute;
+    right: 17px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 25px;
+    padding: 0;
+}
+
+.showPasswordChange:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

@@ -5,6 +5,7 @@ import {useFavorites} from '../contexts/FavoritesContext.jsx'
 //import {LoginContext} from "../contexts/LoginContext.jsx";
 import {useComparison} from "../contexts/ComparisonContext.jsx";
 import s from './HomePage.module.css'
+import {FaTrash} from "react-icons/fa";
 
 const flatData1 = {
     id: 12,
@@ -369,6 +370,24 @@ export default function HomePage() {
     //const {user} = useContext(LoginContext);
     const {isInComparison, handleComparisonClick} = useComparison();
 
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [filterType, setFilterType] = useState('sell');
+
+
+   /* useEffect(() => {
+        if (filterType === 'all') {
+
+        } else {
+
+        }
+    }, [filterType, flats]);*/
+
+    const handleFilterChange = (type) => {
+        setFilterType(type);
+        /*setCurrentStartIndex(0);*/
+    };
+
 
     const handleOnNextButtonClicked = ()=>{
         if(currentStartIndex <= 75 && (flatMap.length - currentStartIndex - 25 > 0)){
@@ -386,6 +405,95 @@ export default function HomePage() {
 */
     return (
         <div className={s.mainContainer}>
+            <div className={s.filterPanel}>
+                <div className={s.searchPanel}>
+                    <div className={s.filterSection}>
+                        <span className={s.filterTitle}>Сортировать квартиры для:</span>
+                        <div className={s.filterOptions}>
+                            <label className={`${s.filterLabel} ${filterType === 'sell' ? s.checked : ''}`}>
+                                <input
+                                    className={s.radioButton}
+                                    type="radio"
+                                    name="filter"
+                                    checked={filterType === 'sell'}
+                                    onChange={() => handleFilterChange('sell')}
+                                />
+                                <span className={s.radioLabel}>Покупки</span>
+                            </label>
+
+                            <label className={`${s.filterLabel} ${filterType === 'rent' ? s.checked : ''}`}>
+                                <input
+                                    className={s.radioButton}
+                                    type="radio"
+                                    name="filter"
+                                    checked={filterType === 'rent'}
+                                    onChange={() => handleFilterChange('rent')}
+                                />
+                                <span className={s.radioLabel}>Аренды</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div className={s.searchButtonSection}>
+                        <button className={s.searchButton}>
+                            Подобрать квартиры
+                        </button>
+                    </div>
+                </div>
+                {/*<div className={s.filterOptions}>
+                        <span className={s.filterTitle}>Сортировать квартиры для:</span>
+                        <label className={`${s.filterLabel} ${filterType === 'sell' ? s.checked : ''}`}>
+                            <input
+                                className={s.radioButton}
+                                type="radio"
+                                name="filter"
+                                checked={filterType === 'sell'}
+                                onChange={() => handleFilterChange('sell')}
+                            />
+                            <span className={s.radioLabel}>Покупки</span>
+                        </label>
+
+                        <label className={`${s.filterLabel} ${filterType === 'rent' ? s.checked : ''}`}>
+                            <input
+                                className={s.radioButton}
+                                type="radio"
+                                name="filter"
+                                checked={filterType === 'rent'}
+                                onChange={() => handleFilterChange('rent')}
+                            />
+                            <span className={s.radioLabel}>Аренды</span>
+                        </label>
+
+                        <button className={s.actionButton}>
+                            Подобрать квартиры
+                        </button>
+                    </div>*/}
+
+
+                <div className={s.secondaryControls}>
+                    <button className={s.secondaryButton}>
+                        Изменить параметры подбора в профиле
+                    </button>
+                    <button className={s.secondaryButton}>
+                        Показать квартиры на карте
+                    </button>
+                </div>
+
+                {/*<div className={s.messagesContainer}>
+                    <div className={s.warning}>
+                        <span className={s.warningIcon}>⚠</span>
+                        Поле для вывода предупреждений
+                    </div>
+
+                    <div className={s.Recommendations}>
+                        <h5>Рекомендации:</h5>
+                        <ul>
+                            <li>Поле для предложений 1</li>
+                        </ul>
+                    </div>
+                </div>*/}
+            </div>
+
+
             <div className={s.cardsContainer}>
                 <div className={s.cardsContainerHeader}>
                     <h2>

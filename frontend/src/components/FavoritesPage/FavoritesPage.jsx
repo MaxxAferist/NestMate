@@ -14,7 +14,7 @@ const FavoritesPage = ({ userId }) => {
     const [error, setError] = useState(null);
     const [filterType, setFilterType] = useState('all');
     const {user} = useContext(LoginContext);
-    const { isFavorite, addFavorite, removeFavorite } = useFavorites();
+    const { isFavorite, handleFavoriteClick } = useFavorites();
     const navigate = useNavigate();
     const {isInComparison, handleComparisonClick} = useComparison();
 
@@ -53,17 +53,6 @@ const FavoritesPage = ({ userId }) => {
         }
     }, []);
 
-    const handleFavoriteClick = async (flatId) => {
-        try {
-            if (isFavorite(flatId)) {
-                await removeFavorite(flatId);
-            } else {
-                await addFavorite(flatId);
-            }
-        } catch (error) {
-            console.error("Ошибка при изменении избранного:", error);
-        }
-    };
 
     useEffect(() => {
         if (filterType === 'all') {

@@ -163,7 +163,7 @@ export const ComparisonMatrix = ({ parameters, parametersNames, currentPreferenc
                                     [A, C]
                                 ],
                                 // тексты ошибок
-                                chain: `"${parametersNames[A]}" важнее "${parametersNames[B]}" в ${AB} ${(AB>=2 && AB<=4) ? 'раза' : 'раз' }, 
+                                text: `"${parametersNames[A]}" важнее "${parametersNames[B]}" в ${AB} ${(AB>=2 && AB<=4) ? 'раза' : 'раз' }, 
                                 "${parametersNames[B]}" важнее "${parametersNames[C]}" в ${BC} ${(BC>=2 && BC<=4) ? 'раза' : 'раз' }, 
                                 но "${parametersNames[A]}" менее важен чем "${parametersNames[C]}" в ${AC} ${(AC>=2 && AC<=4) ? 'раза' : 'раз' }`,
                                 // исправление
@@ -451,8 +451,8 @@ export const ComparisonMatrix = ({ parameters, parametersNames, currentPreferenc
                         <div className={s.errorList}>
                             {consistentErrors.map((item, index) => (
                                 <div key={index} className={s.errorItem}>
-                                    <div className={s.errorChain}>
-                                        <span className={s.errorIcon}>⚠</span> {item.chain}
+                                    <div className={s.errorText}>
+                                        <span className={s.errorIcon}>⚠</span> {item.text}
                                     </div>
 
                                     <div className={s.errorSuggestion}>{item.suggestion}</div>
@@ -473,7 +473,7 @@ export const ComparisonMatrix = ({ parameters, parametersNames, currentPreferenc
                             {saveError}
                         </div>
                         {saveError.includes("превышает") && (
-                            <div className={s.CRIndexErrorRecommendations}>
+                            <div className={s.CRRecommendations}>
                                 <h5>Как улучшить согласованность:</h5>
                                 <ul>
                                     <li>Замените крайние значения (9, 7) на более умеренные (5, 3).</li>
@@ -483,7 +483,6 @@ export const ComparisonMatrix = ({ parameters, parametersNames, currentPreferenc
                             </div>
                         )}
                     </div>
-
                 )}
             </div>
 

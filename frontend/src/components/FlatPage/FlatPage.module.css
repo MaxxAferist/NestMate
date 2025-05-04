@@ -216,11 +216,6 @@
     color: #9b2c2c;
 }
 
-/*.favoriteButton[style*="background-color:#ff5d74"] {
-    background-color: #ff5e75 !important;
-    color: white;
-    border-color: #e53e3e;
-}*/
 
 .compareButton {
     background-color: #abe3fd;
@@ -233,11 +228,6 @@
     color: #2c5282;
 }
 
-/*.compareButton[style*="background-color:#5dbcff"] {
-    background-color: #48b5ff !important;
-    color: white;
-    border-color: #3182ce;
-}*/
 
 /* иконки */
 .favoriteButton::before {
