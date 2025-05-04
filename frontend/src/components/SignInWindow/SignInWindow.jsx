@@ -2,6 +2,8 @@ import { useState, useContext } from 'react'
 import s from './SignInWindow.module.css'
 import { LoginContext } from '../contexts/LoginContext.jsx'
 import { useNavigate, Link } from 'react-router-dom'
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 
 export default function SignInWindow(){
     const navigate = useNavigate();
@@ -16,6 +18,8 @@ export default function SignInWindow(){
     const [message, setMessage] = useState('');
     const [errors, setErrors] = useState({});
     const [isRegistered, setIsRegistered] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const validateFields = () => {
         const newErrors = {}
@@ -138,27 +142,57 @@ export default function SignInWindow(){
                 </div>
 
                 <div className={s.inputGroup}>
-                    <input
-                        className={`${s.input} ${errors.password ? s.inputError : ''}`}
-                        name="password"
-                        type="password"
-                        placeholder="Пароль"
-                        value={userData.password}
-                        onChange={handleChange}
-                        disabled={isRegistered}
-                    />
+                    <div className={s.passwordInputContainer}>
+                        <input
+                            className={`${s.input} ${errors.password ? s.inputError : ''}`}
+                            name="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Пароль"
+                            value={userData.password}
+                            onChange={handleChange}
+                            disabled={isRegistered}
+                        />
+                        <button
+                            type="button"
+                            className={s.showPasswordChange}
+                            onClick={() => setShowPassword(!showPassword)}
+                            disabled={isRegistered}
+                        >
+                            {showPassword ?
+                                (
+                                    <FaEyeSlash />
+                                ) : (
+                                    <FaEye />
+                                )}
+                        </button>
+                    </div>
                     {errors.password && <span className={s.errorText}>{errors.password}</span>}
                 </div>
 
                 <div className={s.inputGroup}>
-                    <input
-                        className={`${s.input} ${errors.confirmPassword ? s.inputError : ''}`}
-                        type="password"
-                        placeholder="Подтверждение пароля"
-                        value={confirmPassword}
-                        disabled={isRegistered}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    />
+                    <div className={s.passwordInputContainer}>
+                        <input
+                            className={`${s.input} ${errors.confirmPassword ? s.inputError : ''}`}
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder="Подтверждение пароля"
+                            value={confirmPassword}
+                            disabled={isRegistered}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        />
+                        <button
+                            type="button"
+                            className={s.showPasswordChange}
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            disabled={isRegistered}
+                        >
+                            {showConfirmPassword ?
+                                (
+                                    <FaEyeSlash />
+                                ) : (
+                                    <FaEye />
+                                )}
+                        </button>
+                    </div>
                     {errors.confirmPassword && <span className={s.errorText}>{errors.confirmPassword}</span>}
                 </div>
                 <button

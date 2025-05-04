@@ -6,20 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d9c70930-1c4a-4f15-8630-7970b0670b5b" name="Changes" comment="Доделал страницу квартиры">
       <change beforePath="$PROJECT_DIR$/../backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/flat_preferences.json" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/flat_preferences.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/routes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ComparsionMatrix/ComparisonMatrix.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ComparsionMatrix/ComparisonMatrix.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.module.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/contexts/ComparisonContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/ComparisonContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/contexts/FavoritesContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/FavoritesContext.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,8 +41,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/MaxxAferist/NestMate.git&quot;,
-    &quot;accountId&quot;: &quot;89f1cc55-ec43-4a5f-8028-15df4648044a&quot;
+    &quot;url&quot;: &quot;https://github.com/MaxxAferist/NestMate&quot;,
+    &quot;accountId&quot;: &quot;cf05ac5a-00ec-49ae-a239-0e4247f55ef8&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -71,23 +57,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Node.js.FlatCard.jsx.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/artem/WebStormProjects/React+Flask/NestMate/frontend&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propVCSSupport.DirectoryMappings&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Node.js.FlatCard.jsx.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Merging main",
+    "last_opened_file_path": "C:/Users/artem/WebStormProjects/React+Flask/NestMate/frontend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.3.5\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "ChangesTree.GroupingKeys": [
+      "directory"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\artem\WebStormProjects\React+Flask\NestMate\frontend\src\components\ComparsionMatrix" />
@@ -190,7 +181,9 @@
       <workItem from="1746124565823" duration="7360000" />
       <workItem from="1746259811274" duration="7217000" />
       <workItem from="1746277408638" duration="9088000" />
-      <workItem from="1746286676212" duration="3119000" />
+      <workItem from="1746286676212" duration="4530000" />
+      <workItem from="1746347138198" duration="11194000" />
+      <workItem from="1746359839435" duration="1141000" />
     </task>
     <task id="LOCAL-00001" summary="Доделал страницу квартиры">
       <option name="closed" value="true" />
@@ -200,18 +193,21 @@
       <option name="project" value="LOCAL" />
       <updated>1744102674555</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Доделал страницу квартиры">
+      <option name="closed" value="true" />
+      <created>1746360031576</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1746360031576</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="d2755a90-3b4e-4be4-aeb2-6d5202cd97a8" value="TOOL_WINDOW" />
-      </map>
-    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
@@ -229,11 +225,6 @@
                 </map>
               </option>
             </State>
-          </value>
-        </entry>
-        <entry key="d2755a90-3b4e-4be4-aeb2-6d5202cd97a8">
-          <value>
-            <State />
           </value>
         </entry>
       </map>
