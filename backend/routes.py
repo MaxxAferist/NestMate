@@ -685,8 +685,8 @@ def init_routes(app):  #: Application):
             app.connection_pool.putconn(conn)
 
 
-    @app.app.route("/api/apartment/<int:user_id>/<int:flat_id>", methods=["GET"])
-    def getApartmentCard(user_id, flat_id):
+    @app.app.route("/api/apartment/<int:flat_id>", methods=["GET"])
+    def getApartmentCard(flat_id):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
@@ -697,20 +697,6 @@ def init_routes(app):  #: Application):
                 apartment = cursor.fetchone()
                 if not apartment:
                     return jsonify({"status": "error", "message": "Flat not found"}), 401
-                cursor.execute("""
-        SELECT favorites, comparison FROM users
-        WHERE id = %s""",
-            (user_id,))
-                info = cursor.fetchone()
-            if not info:
-                return jsonify({"status": "error", "message": "User not found"}), 401
-
-            is_favorite = False
-            is_comparison = False
-            if flat_id in info[0]:
-                is_favorite = True
-            if flat_id in info[1]:
-                is_comparison = True
 
             link = apartment[1]
 
@@ -812,9 +798,7 @@ def init_routes(app):  #: Application):
                     "count_of_guests": count_of_guests,
                     "description": description,
                     "count_of_passenger_elevators": count_of_passenger_elevators,
-                    "count_of_freight_elevators": count_of_freight_elevators,
-                    "is_favorite": is_favorite,
-                    "is_comparison": is_comparison
+                    "count_of_freight_elevators": count_of_freight_elevators
                 }
             elif apartment[2] == 1:
                 json_apartment = {
@@ -865,9 +849,7 @@ def init_routes(app):  #: Application):
                     "count_of_guests": count_of_guests,
                     "description": description,
                     "count_of_passenger_elevators": count_of_passenger_elevators,
-                    "count_of_freight_elevators": count_of_freight_elevators,
-                    "is_favorite": is_favorite,
-                    "is_comparison": is_comparison
+                    "count_of_freight_elevators": count_of_freight_elevators
                 }
             return jsonify({'status': 'success', "apartments": json_apartment}), 200
         except Exception as e:
