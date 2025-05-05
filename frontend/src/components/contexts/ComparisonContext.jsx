@@ -106,8 +106,10 @@ export const ComparisonProvider = ({ children }) => {
             });
             if (!response.ok) {
                 throw new Error('Ошибка при добавлении в сравнение');
+            }else{
+                setComparisonFlats([...comparisonFlats, flatId]);
             }
-            await loadComparison(user.id);
+            /*await loadComparison(user.id);*/
         } catch (err) {
             console.error("Ошибка при добавлении в сравнение:", err);
             throw err;
@@ -134,8 +136,10 @@ export const ComparisonProvider = ({ children }) => {
 
             if (!response.ok) {
                 throw new Error('Ошибка при удалении из сравнения');
+            }else{
+                setComparisonFlats(comparisonFlats.filter(f => f !== flatId));
             }
-            await loadComparison(user.id);
+            /*await loadComparison(user.id);*/
         } catch (err) {
             console.error("Ошибка при удалении из сравнения:", err);
             throw err;

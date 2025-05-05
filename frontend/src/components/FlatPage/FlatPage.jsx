@@ -7,6 +7,7 @@ import {useFavorites} from "../contexts/FavoritesContext.jsx";
 import YandexMap from "./YandexMap.jsx";
 import {LoginContext} from "../contexts/LoginContext.jsx";
 import parse from 'html-react-parser';
+import { FavoriteButton, ComparisonButton, DetailsButton} from "../commonElements/buttons.jsx";
 
 const FlatPage = () => {
     const location = useLocation();
@@ -25,6 +26,7 @@ const FlatPage = () => {
     const { handleComparisonClick, isInComparison} = useComparison();
     useEffect(() => {
         if(user && user.id && flat_id ) {
+            setLoading(true);
             const fetchFlatData = async () => {
                 try {
                     const response = await fetch(`/api/apartment/${flat_id}`);
@@ -44,19 +46,6 @@ const FlatPage = () => {
             fetchFlatData();
         }
     }, [user, flat_id]);
-
-    /*console.log(flatData);*/
-   /* const handleFavoriteClick = async () => {
-        try {
-            if (isFavorite(flatData.id)) {
-                await removeFavorite(flatData.id);
-            } else {
-                await addFavorite(flatData.id);
-            }
-        } catch (error) {
-            console.error("Ошибка при изменении избранного:", error);
-        }
-    };*/
 
 
     const nextPhoto = () => {
@@ -116,10 +105,17 @@ const FlatPage = () => {
         }
     }
 
-    if(flatData === null){
+    /*if(loading){
         return(
+            <div className={s.pageContainer}>
+                 <div className={s.empty}>Загрузка...</div>
+            </div>
+        )
+    }*/
+    if(flatData === null){
+        return (
             <div>
-                Загрузка.....
+                нет даных о квартире
             </div>
         )
     }
@@ -311,16 +307,26 @@ const FlatPage = () => {
 
                 {/*<div className={s.source}>Источник: {flatData.source}</div>*/}
 
-                <a
-                    href={flatData.link}
-                    className={s.sourceButton}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Перейти к источнику
-                </a>
+                <div className={s.buttonsContainer}>
+                    <a
+                        href={flatData.link}
+                        className={s.sourceButton}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        🔗 Перейти к источнику
+                    </a>
 
-                <button className={s.compareButton}
+                    <ComparisonButton onComparisonClick={(e) => handleComparisonClick(flatData.id, e)}
+                                      isInComparison={isInComparison(flatData.id)}
+                    />
+
+                    <FavoriteButton onFavoriteClick={() => handleFavoriteClick(flatData.id)} isFavorite={isFavorite(flatData.id)} />
+                </div>
+
+
+
+                {/*<button className={s.compareButton}
                         onClick={ (e) => handleComparisonClick(flatData.id, e)}
                         style={isInComparison(flatData.id) ? { backgroundColor: '#48b5ff', color: 'white', borderColor: '#3182ce' } : null }
                 >
@@ -333,7 +339,7 @@ const FlatPage = () => {
                     style={isFavorite(flatData.id) ? { backgroundColor: '#ff5e75', color: 'white', borderColor: '#e53e3e'} : null }
                 >
                    {isFavorite(flatData.id) ? 'В избранном' : 'В избранное'}
-                </button>
+                </button>*/}
             </div>
         </div>
     );

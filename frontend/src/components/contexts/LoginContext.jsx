@@ -94,11 +94,21 @@ export const LoginProvider = ({ children }) => {
 
         try {
             const response = await fetch(`/api/getAllUserData/${userId}`); // апи запрос
+            const data = await response.json();
+
             if (!response.ok) {
-                throw new Error('Ошибка загрузки данных пользователя');
+                if(data.message  === 'User not found'){
+                    logout();
+                    throw {
+                        message: data.message || 'Ошибка загрузки данных',
+                        status: response.status
+                    };
+                }else{
+                    throw new Error('Ошибка загрузки данных пользователя: '+data.message);
+                }
+
             }
 
-            const data = await response.json();
             if (data.user) {
                 setUser(data.user);
                 localStorage.setItem("user", JSON.stringify(data.user));
@@ -112,7 +122,7 @@ export const LoginProvider = ({ children }) => {
                 setRentPreferences(data.rentPreferences);
             }
         } catch (err) {
-            console.error("Ошибка загрузки данных пользователя:", err);
+            console.error("Ошибка загрузки данных пользователя:", err.message);
             throw new Error(err.message);
         } finally {
             setIsLoading(false);

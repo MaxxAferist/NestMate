@@ -10,8 +10,10 @@
     transition: all 0.3s ease;
     background-color: #ffffff;
     min-height: 160px;
+    max-height: 200px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    width: 97%;
 }
 
 .card:hover {
@@ -77,14 +79,6 @@
     background-color: #f8fafc;
 }
 
-/*.contentBlock span {
-    padding: 6px 10px;
-    border-bottom: 1px solid #edf2f7;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-}*/
-
 .markBlock {
     padding: 6px 10px;
     border-bottom: 1px solid #b4bac3;
@@ -125,7 +119,7 @@
 }
 
 .buttonsSection {
-    width: 200px;
+    /*min-width: 200px;*/
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -134,72 +128,17 @@
     border-left: 1px solid #e2e8f0;
 }
 
-.favoriteButton,
-.compareButton,
-.detailsButton {
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    font-size: 14px;
-    font-weight: 500;
+
+.empty {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-}
-
-.favoriteButton {
-    background-color: #fbc3c3;
-    color: #c53030;
-    border: 1px solid #fb9d9d;
-}
-
-.favoriteButton:hover {
-    background-color: #ff9b9b;
-    color: #9b2c2c;
-}
-
-
-.compareButton {
-    background-color: #abe3fd;
-    color: #2b6cb0;
-    border: 1px solid #7ac6fa;
-}
-
-.compareButton:hover {
-    background-color: #71d9ff;
-    color: #2c5282;
-}
-
-
-
-.detailsButton {
-    background-color: #c5ffd6;
-    color: #276749;
-    border: 1px solid #9dffbc;
-}
-
-.detailsButton:hover {
-    background-color: #73ff9d;
-    color: #22543d;
-}
-
-/* иконки */
-.favoriteButton::before {
-    content: "♥";
-    font-size: 16px;
-}
-
-.compareButton::before {
-    content: "⇄";
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.detailsButton::before {
-    content: "→";
-    font-size: 16px;
-    font-weight: bold;
+    text-align: center;
+    padding: 50px;
+    font-size: 30px;
+    background: #e4f1ff;
+    border: 1px solid #afc7e1;
+    color: #374968;
+    border-radius: 10px;
+    width: 50%;
 }

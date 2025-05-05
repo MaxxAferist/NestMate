@@ -6,6 +6,7 @@ import {useComparison} from "../contexts/ComparisonContext.jsx";
 import s from './FavoritesPage.module.css';
 import {useFavorites} from "../contexts/FavoritesContext.jsx";
 import {FaTrash} from "react-icons/fa";
+import {LoadingText, ErrorText, EmptyText} from "../commonElements/fields.jsx";
 
 const FavoritesPage = ({ userId }) => {
     const [flats, setFlats] = useState([]);
@@ -26,6 +27,7 @@ const FavoritesPage = ({ userId }) => {
     useEffect(() => {
         if(user && user.id) {
             const fetchFavorites = async () => {
+                setLoading(true);
                 try {
                     const response = await fetch(`/api/favorites/${user.id}`);
                     const data = await response.json();
@@ -86,29 +88,34 @@ const FavoritesPage = ({ userId }) => {
         }
     }
 
-    if (loading) {
-        return (
-            <div className={s.mainContainer}>
-                <div className={s.loading}>Загрузка...</div>
-            </div>
-            );
+    if(!user){
+        return(
+            <EmptyText>
+                Чтобы добавлять квартиры в избранной войдите в аккаунт.
+            </EmptyText>
+        );
     }
 
-    if (error) {
-        return (
-            <div className={s.mainContainer}>
-                <div className={s.error}>Ошибка: {error}</div>
-            </div>
-            );
+    if (loading) {
+        return (<LoadingText/>);
     }
 
     if (flats.length === 0) {
         return (
-            <div className={s.mainContainer}>
-                <div className={s.empty}>В списке ещё нет избранных квартир.</div>
-            </div>
+            <EmptyText>
+                В списке ещё нет избранных квартир.
+            </EmptyText>
         );
     }
+
+    if (error) {
+        return (
+            <ErrorText>
+                Ошибка: {error}
+            </ErrorText>
+        );
+    }
+
 
     return (
         <div className={s.mainContainer}>

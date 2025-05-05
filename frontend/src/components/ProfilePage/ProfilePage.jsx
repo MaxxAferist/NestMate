@@ -12,6 +12,7 @@ import {ProfileParameterRow,
     InlineCheckboxField,
 } from './ProfilePageComponents.jsx';
 import {ComparisonMatrix} from '../ComparsionMatrix/ComparisonMatrix.jsx'
+import {EmptyText} from "../commonElements/fields.jsx";
 
 const ProfilePage = () => {
     const navigate = useNavigate();
@@ -394,27 +395,6 @@ const ProfilePage = () => {
         }
     };
 
-    /*const handleSaveFlatPriorities = async (matrix, weights) => {
-        try {
-            /!*...prev,
-                comparisonMatrix: matrix,
-                priorities: weights*!/
-            console.log('Матрица', matrix.matrix, matrix.columnsOrder, weights);
-            setFlatPreferences(prev => ({
-                ...prev,
-                comparisonMatrix: matrix,
-                priorities: weights
-            }));
-
-            await savePreferences();
-            console.log('Приоритеты и матрица сравнений успешно сохранены!');
-            setEditingFlatPriorities(false);
-        } catch (err) {
-            console.error('Ошибка при сохранении приоритетов:', err);
-        }
-    };
-*/
-
     const handleSaveRentPriorities = async (matrix, weights) => {
         try {
 
@@ -464,7 +444,7 @@ const ProfilePage = () => {
     };
 
     if (!user) {
-        return <p>Загрузка данных пользователя...</p>;
+        return <EmptyText>Пользователь не найден.</EmptyText>;
     }
 
     return (
@@ -483,16 +463,6 @@ const ProfilePage = () => {
                             value={userData.lastName}
                             onChange={handleUserDataChange}
                         />
-                       {/* <FormInputField name="middleName"
-                            label="Отчество:"
-                            value={userData.middleName}
-                            onChange={handleUserDataChange}
-                        />*/}
-                        {/*<FormInputField name="phone"
-                            label="Номер телефона:"
-                            value={userData.phone}
-                            onChange={handleUserDataChange}
-                        />*/}
                         <FormInputField name="gender"
                             label="Пол:"
                             value={userData.gender}

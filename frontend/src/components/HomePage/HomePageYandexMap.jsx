@@ -81,6 +81,7 @@ const HomePageYandexMap = ({ flats, onClose }) => {
                         onFavoriteClick={() => handleFavoriteClick(selectedFlat.id)}
                         onComparisonClick={(e) => handleComparisonClick(selectedFlat.id, e)}
                         showButtonsSection={true}
+                        isFixed={false}
                         cardClick={() => navigate(`/FlatPage/${selectedFlat.id}`, { state: { flat_id: selectedFlat.id } })}
                     />
                     <button

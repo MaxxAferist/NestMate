@@ -57,6 +57,10 @@
     height: 150px;
     border-radius: 4px;
     margin-bottom: 10px;
+    cursor: pointer;
+}
+.flatImage:hover {
+    transform: scale(1.04);
 }
 
 .flatTitle {
@@ -154,22 +158,4 @@
 
 .clearButton:hover {
     background-color: #c53030;
-}
-
-.empty{
-    text-align: center;
-    margin-bottom: 30px;
-    font-weight: 600;
-    align-items: center;
-    justify-content: center;
-    padding: 50px;
-    font-size: 30px;
-    background: #e4f1ff;
-    border: 1px solid #afc7e1;
-    color: #374968;
-    border-radius: 10px;
-}
-
-.error {
-    color: #e53e3e;
 }
