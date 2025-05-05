@@ -280,15 +280,6 @@ def getMatrixAndSummaByRoomCount(app, room_count): # Составление ма
         app.connection_pool.putconn(conn)
 
 
-def getWeightByRoomCount(count_i, count_j):
-    if count_i == count_j: return [1, 1]
-    difference = count_j - count_i
-    if difference < 2: return [2, 1 / 2]
-    elif difference < 3: return [3, 1 / 3]
-    elif difference < 4: return [4, 1 / 4]
-    elif difference < 5: return [5, 1 / 5]
-    else: return [6, 1 / 6]
-
 
 def getMatrixAndSummaByApartmentType(app, apartment_type): # Составление матрицы весов для критерия "Вторичка/"
     conn = app.connection_pool.getconn()
@@ -640,7 +631,7 @@ def getMatrixAndSummaByAmenities(app, amenities): # Составление ма�
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT (additional_amenities, furniture, technique) FROM apartment_data WHERE type_sdelki = 0")
+            cursor.execute("SELECT additional_amenities, furniture, technique FROM apartment_data WHERE type_sdelki = 0")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
@@ -653,17 +644,21 @@ def getMatrixAndSummaByAmenities(app, amenities): # Составление ма�
             for j in range(i, N):
                 if i == j:
                     continue
-                amenties_i = apartments[i][0]
-                amenties_j = apartments[j][0]
+                amenties_i = apartments[i]
+                amenties_i[0] = amenties_i[0].split(", ")
+                amenties_j = apartments[j]
+                amenties_j[0] = amenties_j[0].split(", ")
 
-                amenties_i[0].extend(amenties_i[1])
-                amenties_i[0].extend(amenties_i[2])
+                amenties_i[0].extend(amenties_i[1].split(", "))
+                amenties_i[0].extend(amenties_i[2].split(", "))
                 amenties_i = amenties_i[0]
                 set_amen_i = set(amenties_i)
-                amenties_j[0].extend(amenties_j[1])
-                amenties_j[0].extend(amenties_j[2])
+
+                amenties_j[0].extend(amenties_j[1].split(", "))
+                amenties_j[0].extend(amenties_j[2].split(", "))
                 amenties_j = amenties_j[0]
                 set_amen_j = set(amenties_j)
+
                 count_i = sum([1 for x in amenities if x not in set_amen_i])
                 count_j = sum([1 for x in amenities if x not in set_amen_j])
 

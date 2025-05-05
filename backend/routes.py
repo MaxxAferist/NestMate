@@ -333,7 +333,7 @@ def init_routes(app):  #: Application):
 
                 favorites = apartments[0]
                 if not favorites:
-                    return jsonify({"status": "succes", "message": "User do not have favorites apartments"}), 201
+                    return jsonify({"status": "success", "message": "User do not have favorites apartments"}), 201
                 favorites = list(map(int, favorites))
 
                 comparison = apartments[1]
@@ -519,7 +519,7 @@ def init_routes(app):  #: Application):
 
                 comparison = apartments[0]
                 if not comparison:
-                    return jsonify({"status": "succes", "message": "User do not have comparison apartments"}), 201
+                    return jsonify({"status": "success", "message": "User do not have comparison apartments"}), 201
                 comparison = list(map(int, comparison))
 
                 favorites = apartments[1]
@@ -706,7 +706,7 @@ def init_routes(app):  #: Application):
                 type_sdelki = "rent"
 
             type_apartment = apartment[3]
-            pictures = apartment[4]
+            pictures = apartment[4][0].split(", ")
             address = apartment[5]
             coord_lat = apartment[6]
             coord_lng = apartment[7]
