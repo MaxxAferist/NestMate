@@ -11,8 +11,8 @@
 
 .closeButton {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 5px;
+    right: 10px;
     z-index: 1001;
     padding: 10px 15px;
     background: #fff;

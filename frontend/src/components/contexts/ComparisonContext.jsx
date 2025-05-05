@@ -91,7 +91,6 @@ export const ComparisonProvider = ({ children }) => {
             error.isComparisonLimitError = true;
             throw error;
         }
-        setComparisonError(null);
         setLoading(true);
 
         try {

@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
-import { YMaps, Map, Placemark, FullscreenControl } from '@pbe/react-yandex-maps';
+import { useState,useRef} from 'react';
+import { YMaps, Map, Placemark, TypeSelector, ZoomControl, RulerControl} from '@pbe/react-yandex-maps';
 import FlatCard from '../Cards/FlatCard.jsx'
-import s from './HomePageYandexMap.module.css'; // Импортируем стили
+import s from './HomePageYandexMap.module.css';
+import {useFavorites} from '../contexts/FavoritesContext.jsx'
+import {useComparison} from "../contexts/ComparisonContext.jsx";
+import { useNavigate } from 'react-router-dom'
 
 const HomePageYandexMap = ({ flats, onClose }) => {
     const [selectedFlat, setSelectedFlat] = useState(null);
+    const { isFavorite, handleFavoriteClick} = useFavorites();
+    const {isInComparison, handleComparisonClick} = useComparison();
+    const navigate = useNavigate();
+
+    const API_KEY = '7eee86e8-2b3d-4992-a7ec-b866b3fb9cc3';
+
 
     return (
         <div className={s.mapContainer}>
@@ -15,41 +24,50 @@ const HomePageYandexMap = ({ flats, onClose }) => {
                 Закрыть карту
             </button>
 
-            <YMaps>
+            <YMaps
+                query={{ apikey: API_KEY }}
+                options={{
+                    copyrightLink: 'https://yandex.ru/dev/commercial/doc/ru/',
+                }}
+            >
                 <Map
                     width="100%"
                     height="100%"
                     defaultState={{
-                        center: [59.93, 30.31], // Центр СПб
-                        zoom: 11
+                        center: [59.93, 30.31],
+                        zoom: 11,
+                        controls: [],
                     }}
                 >
-                    <FullscreenControl />
-
                     {Object.entries(flats).map(([id, flat]) => (
                         <Placemark
                             key={id}
                             geometry={[flat.coords.lat, flat.coords.lng]}
                             properties={{
-                                balloonContentHeader: `Квартира №${flat.apartment}`,
-                                balloonContentBody: `
-                  <div>
-                    <p><strong>Цена:</strong> ${flat.price.toLocaleString()} ₽</p>
-                    <p><strong>Площадь:</strong> ${flat.area} м²</p>
-                    <p><strong>Комнат:</strong> ${flat.rooms}</p>
-                    <p><strong>Этаж:</strong> ${flat.floor}/${flat.buildingFloors}</p>
-                  </div>
-                `,
-                                balloonContentFooter: `<button onclick="document.getElementById('select-flat-${id}').click()">Подробнее</button>`,
-                                hintContent: `Квартира за ${flat.price.toLocaleString()} ₽`
+                                iconContent: `${id}`,
+                                iconCaption: `${flat.price} ₽`,
                             }}
                             options={{
-                                preset: 'islands#blueHomeIcon',
-                                iconColor: flat.type === 'sell' ? '#00b0ff' : '#4caf50'
+                                iconColor: flat.type === 'sell' ? '#00b0ff' : '#4caf50',
+                                iconContentColor: 'blue'
                             }}
                             onClick={() => setSelectedFlat(flat)}
                         />
+
                     ))}
+                    <TypeSelector
+                        mapTypes={['yandex#map', 'yandex#satellite', 'yandex#hybrid']}
+                        options={{
+                            position: { right: 140, top: 10 },
+                            panoramasItemMode: "off"
+                        }}
+                    />
+                    <ZoomControl options={{
+                        position: { right: 10, top: 80 }
+                    }} />
+                    <RulerControl options={{
+                        position: { right: 10, bottom: 30 }
+                    }} />
                 </Map>
             </YMaps>
 
@@ -57,13 +75,13 @@ const HomePageYandexMap = ({ flats, onClose }) => {
                 <div className={s.flatCardContainer}>
                     <FlatCard
                         flatData={selectedFlat}
-                        mark={Object.keys(flats).find(id => flats[id].id === selectedFlat.id)}
-                        isFavorite={false}
-                        isInComparison={false}
-                        onFavoriteClick={() => {}}
-                        onComparisonClick={() => {}}
-                        showButtonsSection={false}
-                        cardClick={() => {}}
+                        mark={null}
+                        isFavorite={isFavorite(selectedFlat.id)}
+                        isInComparison={isInComparison(selectedFlat.id)}
+                        onFavoriteClick={() => handleFavoriteClick(selectedFlat.id)}
+                        onComparisonClick={(e) => handleComparisonClick(selectedFlat.id, e)}
+                        showButtonsSection={true}
+                        cardClick={() => navigate(`/FlatPage/${selectedFlat.id}`, { state: { flat_id: selectedFlat.id } })}
                     />
                     <button
                         onClick={() => setSelectedFlat(null)}
