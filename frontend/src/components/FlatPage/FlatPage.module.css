@@ -149,6 +149,9 @@
 
 .priceContainer {
     margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .price {
@@ -159,8 +162,10 @@
 }
 
 .pricePeriod {
-    font-size: 16px;
-    color: #718096;
+    font-size: 22px;
+    font-weight: 500;
+    color: #324a71;
+    margin: 10px;
 }
 
 .source {
