@@ -1,102 +1,103 @@
 {
     "amenities": [
-        "Лифт",
-        "Электричество",
-        "Стиральная машина",
-        "Видеонаблюдение",
-        "Двор закрытого типа",
-        "Грузовой лифт",
-        "Домофон"
+        "РњРёРєСЂРѕРІРѕР»РЅРѕРІР°СЏ РїРµС‡СЊ",
+        "Р”РѕРјРѕС„РѕРЅ",
+        "РћС…СЂР°РЅР°",
+        "РџРѕР¶Р°СЂРЅР°СЏ СЃРёРіРЅР°Р»РёР·Р°С†РёСЏ",
+        "РЎС‚РёСЂР°Р»СЊРЅР°СЏ РјР°С€РёРЅР°",
+        "Р’РѕРґРѕСЃРЅР°Р±Р¶РµРЅРёРµ",
+        "РњРµР±РµР»СЊ",
+        "Р“СЂСѓР·РѕРІРѕР№ Р»РёС„С‚"
     ],
-    "apartmentType": "вторичка",
-    "areaMax": "66",
-    "areaMin": "45",
-    "balconyType": "балкон",
-    "budgetMax": "5600",
-    "budgetMin": "3600",
+    "apartmentType": "РЅРѕРІРѕСЃС‚СЂРѕР№РєР°",
+    "areaMax": "40",
+    "areaMin": "30",
+    "balconyType": "Р±Р°Р»РєРѕРЅ",
+    "budgetMax": "50000",
+    "budgetMin": "40000",
     "ceilingHeight": "3",
-    "city": "Санкт-Петербург",
+    "city": "РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі",
     "comparisonMatrix": {
-        "columnsOrder": [
-            "floor",
-            "amenities",
-            "infrastructure",
-            "transportAccessibility",
-            "renovationCondition"
-        ],
         "matrix": {
             "amenities": {
                 "amenities": 1,
-                "floor": 0.5,
                 "infrastructure": 1,
-                "renovationCondition": 1,
-                "transportAccessibility": 1
-            },
-            "floor": {
-                "amenities": 2,
-                "floor": 1,
-                "infrastructure": 3,
-                "renovationCondition": 5,
-                "transportAccessibility": 4
+                "transportAccessibility": 1,
+                "budget": 1,
+                "area": 1
             },
             "infrastructure": {
                 "amenities": 1,
-                "floor": 0.333,
                 "infrastructure": 1,
-                "renovationCondition": 1,
-                "transportAccessibility": 1
-            },
-            "renovationCondition": {
-                "amenities": 1,
-                "floor": 0.2,
-                "infrastructure": 1,
-                "renovationCondition": 1,
-                "transportAccessibility": 1
+                "transportAccessibility": 1,
+                "budget": 1,
+                "area": 1
             },
             "transportAccessibility": {
                 "amenities": 1,
-                "floor": 0.25,
                 "infrastructure": 1,
-                "renovationCondition": 1,
-                "transportAccessibility": 1
+                "transportAccessibility": 1,
+                "budget": 1,
+                "area": 1
+            },
+            "budget": {
+                "amenities": 1,
+                "infrastructure": 1,
+                "transportAccessibility": 1,
+                "budget": 1,
+                "area": 1
+            },
+            "area": {
+                "amenities": 1,
+                "infrastructure": 1,
+                "transportAccessibility": 1,
+                "budget": 1,
+                "area": 1
             }
-        }
+        },
+        "columnsOrder": [
+            "amenities",
+            "infrastructure",
+            "transportAccessibility",
+            "budget",
+            "area"
+        ]
     },
-    "district": "Московский",
-    "floorsInBuildingMax": "7",
-    "floorsInBuildingMin": "4",
+    "district": "РђРґРјРёСЂР°Р»С‚РµР№СЃРєРёР№",
+    "floorsInBuildingMax": "15",
+    "floorsInBuildingMin": "10",
     "houseMaterial": [
-        "кирпич",
-        "панельный",
-        "блочный"
+        "РїР°РЅРµР»СЊРЅС‹Р№",
+        "Р±Р»РѕС‡РЅС‹Р№",
+        "РјРѕРЅРѕР»РёС‚РЅРѕ-РєРёСЂРїРёС‡РЅС‹Р№"
     ],
     "infrastructure": {
-        "hospitals": "6",
-        "kindergartens": "10",
+        "hospitals": "5",
+        "kindergartens": "5",
         "parks": "5",
-        "schools": "9",
-        "shoppingCenters": "7",
-        "shops": "8"
+        "schools": "5",
+        "shoppingCenters": "5",
+        "shops": "5"
     },
-    "kitchenStove": "неважно",
-    "maxFloor": "6",
-    "minFloor": "4",
+    "kitchenStove": "РЅРµРІР°Р¶РЅРѕ",
+    "maxFloor": "8",
+    "minFloor": "5",
     "priorities": {
-        "amenities": 0.15111257556462984,
-        "floor": 0.45221280531318914,
-        "infrastructure": 0.13931422187817388,
-        "renovationCondition": 0.1258092594650905,
-        "transportAccessibility": 0.13155113777891664
+        "amenities": 0.2,
+        "infrastructure": 0.2,
+        "transportAccessibility": 0.2,
+        "budget": 0.2,
+        "area": 0.2
     },
-    "region": "Санкт-Петербург",
-    "renovationCondition": "требует ремонта",
+    "region": "РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі",
+    "renovationCondition": "РЅРѕРІС‹Р№",
     "roomCount": [
-        "0",
         "1",
-        "2"
+        "2",
+        "4"
     ],
     "transportAccessibility": {
-        "metroDistance": "34",
-        "publicTransportStops": "32"
+        "metroDistance": "15",
+        "publicTransportStops": "15"
     }
 }

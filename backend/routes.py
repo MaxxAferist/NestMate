@@ -638,11 +638,12 @@ def init_routes(app):  #: Application):
                     except Exception as e:
                         print(f"[ERROR] error get json: {e}")
                 else:
-                    ids = list(map(int, ids))
+                    ids = list(map(lambda x: x[0], ids))
                     apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
                 json_apartments["apartments"] = apartments_info
             return jsonify({'status': 'success', "apartments": json_apartments}), 200
         except Exception as e:
+            print(f"[ERROR]: {e}")
             return jsonify({'status': 'error', "message": f"Error with getting apartments: {e}"}), 500
         finally:
             app.connection_pool.putconn(conn)
@@ -655,14 +656,14 @@ def init_routes(app):  #: Application):
             with conn.cursor() as cursor:
                 if type_sdelki == 0:
                     cursor.execute("""
-            SELECT flat_preferences FROM users
-            WHERE id = %s""",
-                (user_id,))
+        SELECT flat_preferences FROM users
+        WHERE id = %s""",
+            (user_id,))
                 else:
                     cursor.execute("""
-            SELECT rent_preferences FROM users
-            WHERE id = %s""",
-                (user_id,))
+        SELECT rent_preferences FROM users
+        WHERE id = %s""",
+            (user_id,))
                 preferences = cursor.fetchone()
                 if not preferences:
                     return jsonify({"status": "error", "message": "User not found"}), 401
@@ -672,13 +673,17 @@ def init_routes(app):  #: Application):
                     return jsonify({"status": "success", "message": "Preferences dos not exist"}), 201
                 try:
                     ids_and_weights = MAI.getSortedApartments(app, preferences, type_sdelki)
+                    cursor.execute("""
+        UPDATE users
+        SET ids_last_MAI = %s
+        WHERE id = %s""",
+            (ids_and_weights, user_id))
+                    conn.commit()
                 except Exception as e:
                     print(f"[ERROR]: {e}")
-                for elem in ids_and_weights:
-                    print(elem)
-                    # apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
-                # json_apartments["apartments"] = apartments_info
-            return jsonify({'status': 'success', "apartments": {}}), 200
+                    return jsonify({'status': 'error', "message": f"Error with getting apartments: {e}"}), 500
+                    
+            return jsonify({'status': 'success', "message": "MAI finished with code 200"}), 200
         except Exception as e:
             return jsonify({'status': 'error', "message": f"Error with getting apartments: {e}"}), 500
         finally:
