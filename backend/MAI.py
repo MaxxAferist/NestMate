@@ -3,7 +3,7 @@ import numpy as np
 import math
 
 
-def getSortedApartments(app, flat_preferences: dict, type_sdelki: int):
+def getSortedApartments(app, flat_preferences: dict, rent_preferences, type_sdelki: int):
     matrix_priorities = []
     priorities = flat_preferences.get("priorities")
     vector_priorities = []
@@ -15,68 +15,81 @@ def getSortedApartments(app, flat_preferences: dict, type_sdelki: int):
                 budget_max = flat_preferences.get("budgetMax")
                 budget_min = int(budget_min) if budget_min.isdigit() else -1
                 budget_max = int(budget_max) if budget_max.isdigit() else -1
-                matrix, summa = getMatrixAndSummaByBudget(app, budget_min, budget_max)
+                matrix, summa = getMatrixAndSummaByBudget(app, budget_min, budget_max, type_sdelki)
             elif priority == "area":
                 area_min = flat_preferences.get("areaMin")
                 area_max = flat_preferences.get("areaMax")
                 area_min = int(area_min) if area_min.isdigit() else -1
                 area_max = int(area_max) if area_max.isdigit() else -1
-                matrix, summa = getMatrixAndSummaByArea(app, area_min, area_max)
+                matrix, summa = getMatrixAndSummaByArea(app, area_min, area_max, type_sdelki)
             elif priority == "roomCount":
                 room_count = flat_preferences.get("roomCount")
-                matrix, summa = getMatrixAndSummaByRoomCount(app, room_count)
+                matrix, summa = getMatrixAndSummaByRoomCount(app, room_count, type_sdelki)
             elif priority == "apartmentType":
                 apartment_type = flat_preferences.get("apartmentType")
-                matrix, summa = getMatrixAndSummaByApartmentType(app, apartment_type)
+                matrix, summa = getMatrixAndSummaByApartmentType(app, apartment_type, type_sdelki)
             elif priority == "balconyType":
                 balcony_type = flat_preferences.get("balconyType")
-                matrix, summa = getMatrixAndSummaByBalconyType(app, balcony_type)
+                matrix, summa = getMatrixAndSummaByBalconyType(app, balcony_type, type_sdelki)
             elif priority == "ceilingHeight":
                 height = flat_preferences.get("ceilingHeight")
-                matrix, summa = getMatrixAndSummaByCeilingHeight(app, height)
+                matrix, summa = getMatrixAndSummaByCeilingHeight(app, height, type_sdelki)
             elif priority == "floor":
                 floor_min = flat_preferences.get("minFloor")
                 floor_max = flat_preferences.get("maxFloor")
                 floor_min = int(floor_min) if floor_min.isdigit() else -1
                 floor_max = int(floor_max) if floor_max.isdigit() else -1
-                matrix, summa = getMatrixAndSummaByFloor(app, floor_min, floor_max)
+                matrix, summa = getMatrixAndSummaByFloor(app, floor_min, floor_max, type_sdelki)
             elif priority == "floorsInBuilding":
                 floor_count_min = flat_preferences.get("floorsInBuildingMin")
                 floor_count_max = flat_preferences.get("floorsInBuildingMax")
                 floor_count_min = int(floor_count_min) if floor_count_min.isdigit() else -1
                 floor_count_max = int(floor_count_max) if floor_count_max.isdigit() else -1
-                matrix, summa = getMatrixAndSummaByFloorCount(app, floor_count_min, floor_count_max)
+                matrix, summa = getMatrixAndSummaByFloorCount(app, floor_count_min, floor_count_max, type_sdelki)
             elif priority == "houseMaterial":
                 material = flat_preferences.get("houseMaterial")
-                matrix, summa = getMatrixAndSummaByHouseMaterial(app, material)
+                matrix, summa = getMatrixAndSummaByHouseMaterial(app, material, type_sdelki)
             elif priority == "renovationCondition":
                 renovation_condition = flat_preferences.get("renovationCondition")
-                matrix, summa = getMatrixAndSummaByRenovationCondition(app, renovation_condition)
+                matrix, summa = getMatrixAndSummaByRenovationCondition(app, renovation_condition, type_sdelki)
             elif priority == "amenities":
                 amenities = flat_preferences.get("amenities")
-                matrix, summa = getMatrixAndSummaByAmenities(app, amenities)
+                matrix, summa = getMatrixAndSummaByAmenities(app, amenities, type_sdelki)
             elif priority == "infrastructure":
                 infrastructure = flat_preferences.get("infrastructure")
-                matrix, summa = getMatrixAndSummaByInfrastructure(app, infrastructure)
+                matrix, summa = getMatrixAndSummaByInfrastructure(app, infrastructure, type_sdelki)
             elif priority == "transportAccessibility":
                 transport = flat_preferences.get("transportAccessibility")
-                matrix, summa = getMatrixAndSummaByTransport(app, transport)
+                matrix, summa = getMatrixAndSummaByTransport(app, transport, type_sdelki)
+            elif priority == "rentPayment":
+                budget_min = rent_preferences.get("rentPayment").get("rentPriceMin")
+                budget_max = rent_preferences.get("rentPayment").get("rentPriceMax")
+                budget_min = int(budget_min) if budget_min.isdigit() else -1
+                budget_max = int(budget_max) if budget_max.isdigit() else -1
+                matrix, summa = getMatrixAndSummaByBudget(app, budget_min, budget_max, type_sdelki)
+            elif priority == "rentalTerms":
+                rental_terms = rent_preferences.get("rentalTerms")
+                matrix, summa = getMatrixAndSummaByRentalTerms(app, rental_terms, type_sdelki)
+            elif priority == "numberOfBeds":
+                number_of_beds = rent_preferences.get("numberOfBeds", "")
+                number_of_beds = int(number_of_beds) if number_of_beds.isdigit() else -1
+                matrix, summa = getMatrixAndSummaByNumberOfBeds(app, number_of_beds, type_sdelki)
             else:
                 print(f"[ERROR] unexpected = {priority}")
             
             matrix = np.array(matrix) / np.array(summa)
             vector = matrix.mean(axis = 1)
-            if priority == "transportAccessibility":
+            if priority == "numberOfBeds":
                 conn = app.connection_pool.getconn()
                 with conn.cursor() as cursor:
-                    cursor.execute("SELECT id, minuts_for_busstop, minuts_for_subway FROM apartment_data WHERE type_sdelki = 1")
+                    cursor.execute("SELECT id, count_of_guests FROM apartment_data WHERE type_sdelki = 1")
                     apartments = cursor.fetchall()
                 a = []
                 for i in range(len(apartments)):
-                    a.append([apartments[i][0], apartments[i][1], apartments[i][2], vector[i]])
-                a.sort(key=lambda x: x[3], reverse=True)
+                    a.append([apartments[i][0], apartments[i][1], vector[i]])
+                a.sort(key=lambda x: x[2], reverse=True)
                 for elem in a:
-                    print(f"{elem[0]}\t{elem[1]}\t{elem[2]}\t{elem[3]}")
+                    print(f"{elem[0]}\t{elem[1]}\t{elem[2]}")
             matrix_priorities.append(vector)
         except Exception as e:
             print(f"[MAI ERROR] Error: {e}")
@@ -84,7 +97,7 @@ def getSortedApartments(app, flat_preferences: dict, type_sdelki: int):
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT id FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT id FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         result_priorities = np.dot(np.array(matrix_priorities).T, np.array(vector_priorities))
         for i in range(len(result_priorities)):
@@ -97,11 +110,11 @@ def getSortedApartments(app, flat_preferences: dict, type_sdelki: int):
         app.connection_pool.putconn(conn)
 
 
-def getMatrixAndSummaByBudget(app, budget_min, budget_max): # Составление матрицы весов для критерия "Бюджет"
+def getMatrixAndSummaByBudget(app, budget_min, budget_max, type_sdelki): # Составление матрицы весов для критерия "Бюджет"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT price FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT price FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for j in range(N)] for i in range(N)]
@@ -112,10 +125,7 @@ def getMatrixAndSummaByBudget(app, budget_min, budget_max): # Составлен
         summa = [1 for i in range(N)]
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
-
+            for j in range(i + 1, N):
                 price_i = apartments[i][0]
                 price_j = apartments[j][0]
                 weight = getWeightByBudget(price_i, price_j, budget_min, budget_max)
@@ -132,29 +142,33 @@ def getMatrixAndSummaByBudget(app, budget_min, budget_max): # Составлен
 def getWeightByBudget(price_i, price_j, budget_min, budget_max):
     try:
         if price_i == price_j: return [1, 1]
+        if budget_max == budget_min:
+            budget_min -= 1000
+            budget_max += 1000
+        if budget_min < 0: budget_min = 0
         if price_i < budget_min:
-            koef_i = 0.5 * price_i / budget_min
+            koef_i = 0.5 * price_i / (budget_min + 0.001)
         elif price_i > budget_max:
-            koef_i = 0.5 * budget_max / price_i
+            koef_i = 0.5 * budget_max / (price_i + 0.001)
         else:
-            koef_i = 0.5 + 0.5 * (1 - (price_i - budget_min) / (budget_max - budget_min))
+            koef_i = 0.5 + 0.5 * (1 - (price_i - budget_min) / (budget_max - budget_min + 0.001))
         if price_j < budget_min:
-            koef_j = 0.5 * price_j / budget_min
+            koef_j = 0.5 * price_j / (budget_min + 0.001)
         elif price_j > budget_max:
-            koef_j = 0.5 * budget_max / price_j
+            koef_j = 0.5 * budget_max / (price_j + 0.0001)
         else:
-            koef_j = 0.5 + 0.5 * (1 - (price_j - budget_min) / (budget_max - budget_min))
-        return to_saaty_weight(koef_i / koef_j, koef_j / koef_i)
+            koef_j = 0.5 + 0.5 * (1 - (price_j - budget_min) / (budget_max - budget_min + 0.001))
+        return to_saaty_weight(koef_i / (koef_j + 0.001), koef_j / (koef_i + 0.001))
     except Exception as e:
         print(f"[ERROR] Calculating Budget: {e}")
         return [1, 1]
 
 
-def getMatrixAndSummaByArea(app, area_min, area_max): # Составление матрицы весов для критерия "Площадь"
+def getMatrixAndSummaByArea(app, area_min, area_max, type_sdelki): # Составление матрицы весов для критерия "Площадь"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT area FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT area FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for j in range(N)] for i in range(N)]
@@ -165,10 +179,7 @@ def getMatrixAndSummaByArea(app, area_min, area_max): # Составление �
         summa = [1 for i in range(N)]
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
-
+            for j in range(i + 1, N):
                 area_i = apartments[i][0]
                 area_j = apartments[j][0]
                 weight = getWeightByArea(area_i, area_j, area_min, area_max)
@@ -185,30 +196,29 @@ def getMatrixAndSummaByArea(app, area_min, area_max): # Составление �
 def getWeightByArea(area_i, area_j, area_min, area_max):
     try:
         if area_i == area_j: return [1, 1]
-        if area_i == area_j: return [1, 1]
         if area_i < area_min:
-            koef_i = 0.5 * area_i / area_min
+            koef_i = 0.5 * area_i / (area_min + 0.001)
         elif area_i > area_max:
-            koef_i = 0.5 * area_max / area_i
+            koef_i = 0.5 * area_max / (area_i + 0.001)
         else:
-            koef_i = 0.5 + 0.5 * (1 - (area_i - area_min) / (area_max - area_min))
+            koef_i = 0.5 + 0.5 * (1 - (area_i - area_min) / (area_max - area_min + 0.001))
         if area_j < area_min:
-            koef_j = 0.5 * area_j / area_min
+            koef_j = 0.5 * area_j / (area_min + 0.001)
         elif area_j > area_max:
-            koef_j = 0.5 * area_max / area_j
+            koef_j = 0.5 * area_max / (area_j + 0.001)
         else:
-            koef_j = 0.5 + 0.5 * (1 - (area_j - area_min) / (area_max - area_min))
-        return to_saaty_weight(koef_i / koef_j, koef_j / koef_i)
+            koef_j = 0.5 + 0.5 * (1 - (area_j - area_min) / (area_max - area_min + 0.001))
+        return to_saaty_weight(koef_i / (koef_j + 0.001), koef_j / (koef_i + 0.001))
     except Exception as e:
         print(f"[ERROR] Calculating Area: {e}")
         return [1, 1]
         
 
-def getMatrixAndSummaByRoomCount(app, room_count): # Составление матрицы весов для критерия "Кол-во комнат"
+def getMatrixAndSummaByRoomCount(app, room_count, type_sdelki): # Составление матрицы весов для критерия "Кол-во комнат"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT count_rooms FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT count_rooms FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
@@ -218,9 +228,7 @@ def getMatrixAndSummaByRoomCount(app, room_count): # Составление ма
         summa = [1 for _ in range(N)]
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
+            for j in range(i + 1, N):
                 count_i = apartments[i][0]
                 count_j = apartments[j][0]
 
@@ -246,11 +254,11 @@ def getMatrixAndSummaByRoomCount(app, room_count): # Составление ма
         app.connection_pool.putconn(conn)
 
 
-def getMatrixAndSummaByApartmentType(app, apartment_type): # Составление матрицы весов для критерия "Вторичка/"
+def getMatrixAndSummaByApartmentType(app, apartment_type, type_sdelki): # Составление матрицы весов для критерия "Вторичка/"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT type_apartment FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT type_apartment FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
@@ -265,9 +273,7 @@ def getMatrixAndSummaByApartmentType(app, apartment_type): # Составлен�
             apartment_type = 1
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
+            for j in range(i + 1, N):
                 apartment_type_i = apartments[i][0]
                 apartment_type_j = apartments[j][0]
 
@@ -290,11 +296,11 @@ def getMatrixAndSummaByApartmentType(app, apartment_type): # Составлен�
         app.connection_pool.putconn(conn)
 
 
-def getMatrixAndSummaByBalconyType(app, balcony_type): # Составление матрицы весов для критерия "Балкон/Лоджия"
+def getMatrixAndSummaByBalconyType(app, balcony_type, type_sdelki): # Составление матрицы весов для критерия "Балкон/Лоджия"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT balcony FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT balcony FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
@@ -305,9 +311,7 @@ def getMatrixAndSummaByBalconyType(app, balcony_type): # Составление 
         balcony_type = balcony_type.capitalize()
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
+            for j in range(i + 1, N):
                 balcony_type_i = apartments[i][0]
                 balcony_type_j = apartments[j][0]
 
@@ -333,11 +337,11 @@ def getMatrixAndSummaByBalconyType(app, balcony_type): # Составление 
         app.connection_pool.putconn(conn)
 
 
-def getMatrixAndSummaByCeilingHeight(app, height): # Составление матрицы весов для критерия "Высота потолков"
+def getMatrixAndSummaByCeilingHeight(app, height, type_sdelki): # Составление матрицы весов для критерия "Высота потолков"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT ceiling_height FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT ceiling_height FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
@@ -348,9 +352,7 @@ def getMatrixAndSummaByCeilingHeight(app, height): # Составление ма
         height = float(height)
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
+            for j in range(i + 1, N):
                 height_i = apartments[i][0]
                 height_j = apartments[j][0]
 
@@ -376,11 +378,11 @@ def getMatrixAndSummaByCeilingHeight(app, height): # Составление ма
         app.connection_pool.putconn(conn)
 
 
-def getMatrixAndSummaByFloor(app, floor_min, floor_max): # Составление матрицы весов для критерия "Этаж"
+def getMatrixAndSummaByFloor(app, floor_min, floor_max, type_sdelki): # Составление матрицы весов для критерия "Этаж"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT floor FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT floor FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for j in range(N)] for i in range(N)]
@@ -391,10 +393,7 @@ def getMatrixAndSummaByFloor(app, floor_min, floor_max): # Составлени�
         summa = [1 for i in range(N)]
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
-
+            for j in range(i + 1, N):
                 floor_i = apartments[i][0]
                 floor_j = apartments[j][0]
 
@@ -413,43 +412,40 @@ def getWeightByFloor(floor_i, floor_j, floor_min, floor_max):
     try:
         if floor_i == floor_j: return [1, 1]
         if floor_i < floor_min:
-            koef_i = floor_i / floor_min
+            koef_i = floor_i / (floor_min + 0.001)
         elif floor_i > floor_max:
-            koef_i = floor_max / floor_i
+            koef_i = floor_max / (floor_i + 0.001)
         else:
             koef_i = 1
         if floor_j < floor_min:
-            koef_j = floor_j / floor_min
+            koef_j = floor_j / (floor_min + 0.001)
         elif floor_j > floor_max:
-            koef_j = floor_max / floor_j
+            koef_j = floor_max / (floor_j + 0.001)
         else:
             koef_j = 1
         
-        return to_saaty_weight(koef_i / koef_j, koef_j / koef_i)
+        return to_saaty_weight(koef_i / (koef_j + 0.001), koef_j / (koef_i + 0.001))
     except Exception as e:
         print(f"[ERROR] Calculating Floor: {e}")
         return [1, 1]
 
 
-def getMatrixAndSummaByFloorCount(app, floor_count_min, floor_count_max): # Составление матрицы весов для критерия "Кол-во этажей"
+def getMatrixAndSummaByFloorCount(app, floor_count_min, floor_count_max, type_sdelki): # Составление матрицы весов для критерия "Кол-во этажей"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT count_floors FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT count_floors FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
-        matrix = [[1 for j in range(N)] for i in range(N)]
+        matrix = [[1 for _ in range(N)] for _ in range(N)]
         
         if floor_count_min == floor_count_max == -1:
-            summa = [N for i in range(N)]
+            summa = [N for _ in range(N)]
             return matrix, summa
-        summa = [1 for i in range(N)]
+        summa = [1 for _ in range(N)]
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
-
+            for j in range(i + 1, N):
                 floor_count_i = apartments[i][0]
                 floor_count_j = apartments[j][0]
 
@@ -468,29 +464,29 @@ def getWeightByFloorCount(floor_count_i, floor_count_j, floor_count_min, floor_c
     try:
         if floor_count_i == floor_count_j: return [1, 1]
         if floor_count_i < floor_count_min:
-            koef_i = floor_count_i / floor_count_min
+            koef_i = floor_count_i / (floor_count_min + 0.001)
         elif floor_count_i > floor_count_max:
-            koef_i = floor_count_max / floor_count_i
+            koef_i = floor_count_max / (floor_count_i + 0.001)
         else:
             koef_i = 1
         if floor_count_j < floor_count_min:
-            koef_j = floor_count_j / floor_count_min
+            koef_j = floor_count_j / (floor_count_min + 0.001)
         elif floor_count_j > floor_count_max:
-            koef_j = floor_count_max / floor_count_j
+            koef_j = floor_count_max / (floor_count_j + 0.001)
         else:
             koef_j = 1
         
-        return to_saaty_weight(koef_i / koef_j, koef_j / koef_i)
+        return to_saaty_weight(koef_i / (koef_j + 0.001), koef_j / (koef_i + 0.001))
     except Exception as e:
         print(f"[ERROR] Calculating Floor Count: {e}")
         return [1, 1]
     
 
-def getMatrixAndSummaByHouseMaterial(app, material): # Составление матрицы весов для критерия "Материал дома"
+def getMatrixAndSummaByHouseMaterial(app, material, type_sdelki): # Составление матрицы весов для критерия "Материал дома"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT material_house FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT material_house FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
@@ -500,9 +496,7 @@ def getMatrixAndSummaByHouseMaterial(app, material): # Составление м
         summa = [1 for _ in range(N)]
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
+            for j in range(i + 1, N):
                 material_i = apartments[i][0]
                 material_j = apartments[j][0]
 
@@ -528,11 +522,11 @@ def getMatrixAndSummaByHouseMaterial(app, material): # Составление м
         app.connection_pool.putconn(conn)
 
 
-def getMatrixAndSummaByRenovationCondition(app, renovation_condition): # Составление матрицы весов для критерия "Ремонт"
+def getMatrixAndSummaByRenovationCondition(app, renovation_condition, type_sdelki): # Составление матрицы весов для критерия "Ремонт"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT remont FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT remont FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
@@ -542,9 +536,7 @@ def getMatrixAndSummaByRenovationCondition(app, renovation_condition): # Сос�
         summa = [1 for _ in range(N)]
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
+            for j in range(i + 1, N):
                 renovation_condition_i = apartments[i][0]
                 if renovation_condition_i == "":
                     renovation_condition_i = "требует ремонта"
@@ -578,11 +570,11 @@ def getMatrixAndSummaByRenovationCondition(app, renovation_condition): # Сос�
         app.connection_pool.putconn(conn)
 
 
-def getMatrixAndSummaByAmenities(app, amenities): # Составление матрицы весов для критерия "Дополнения"
+def getMatrixAndSummaByAmenities(app, amenities, type_sdelki): # Составление матрицы весов для критерия "Дополнения"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT additional_amenities, furniture, technique FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT additional_amenities, furniture, technique FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
@@ -595,9 +587,7 @@ def getMatrixAndSummaByAmenities(app, amenities): # Составление ма�
         if ind != -1:
             amenities[ind] = "микроволновка"
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
+            for j in range(i + 1, N):
                 amenities_i = list(apartments[i])
                 amenities_i[0] = amenities_i[0][0].split(", ")
                 amenities_j = list(apartments[j])
@@ -626,11 +616,11 @@ def getMatrixAndSummaByAmenities(app, amenities): # Составление ма�
         app.connection_pool.putconn(conn)
 
 
-def getMatrixAndSummaByInfrastructure(app, infrastructure): # Составление матрицы весов для критерия "Инфраструктура"
+def getMatrixAndSummaByInfrastructure(app, infrastructure, type_sdelki): # Составление матрицы весов для критерия "Инфраструктура"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT minuts_for_park, minuts_for_hospital, minuts_for_mall, minuts_for_store, minuts_for_school, minuts_for_kindergarten FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT minuts_for_park, minuts_for_hospital, minuts_for_mall, minuts_for_store, minuts_for_school, minuts_for_kindergarten FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
@@ -647,9 +637,7 @@ def getMatrixAndSummaByInfrastructure(app, infrastructure): # Составлен
             "shops": 3
         }
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
+            for j in range(i + 1, N):
                 infrastructure_i = apartments[i]
                 infrastructure_j = apartments[j]
 
@@ -675,24 +663,24 @@ def getWeightByInfrastructure(count_i, count_j, sum_minuts):
     try:
         if count_i == count_j: return [1, 1]
         if count_i < sum_minuts:
-            koef_i = 1 - 0.5 * (count_i / sum_minuts)
+            koef_i = 1 - 0.5 * (count_i / (sum_minuts + 0.001))
         else:
-            koef_i = 0.5 * (sum_minuts / count_i)
+            koef_i = 0.5 * (sum_minuts / (count_i + 0.001))
         if count_j < sum_minuts:
-            koef_j = 1 - 0.5 * (count_j / sum_minuts)  # Вес от 0.5 до 1
+            koef_j = 1 - 0.5 * (count_j / (sum_minuts + 0.001))  # Вес от 0.5 до 1
         else:
-            koef_j = 0.5 * (sum_minuts / count_j)
-        return to_saaty_weight(koef_i / koef_j, koef_j / koef_i)
+            koef_j = 0.5 * (sum_minuts / (count_j + 0.001))
+        return to_saaty_weight(koef_i / (koef_j + 0.001), koef_j / (koef_i + 0.001))
     except Exception as e:
         print(f"[ERROR] Calculating infrastructure: {e}")
         return [1, 1]
     
 
-def getMatrixAndSummaByTransport(app, transport): # Составление матрицы весов для критерия "Транспортная доступность"
+def getMatrixAndSummaByTransport(app, transport, type_sdelki): # Составление матрицы весов для критерия "Транспортная доступность"
     conn = app.connection_pool.getconn()
     try:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT minuts_for_busstop, minuts_for_subway FROM apartment_data WHERE type_sdelki = 1")
+            cursor.execute(f"SELECT minuts_for_busstop, minuts_for_subway FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
@@ -706,9 +694,7 @@ def getMatrixAndSummaByTransport(app, transport): # Составление ма�
         }
 
         for i in range(N):
-            for j in range(i, N):
-                if i == j:
-                    continue
+            for j in range(i + 1, N):
                 transport_i = apartments[i]
                 transport_j = apartments[j]
 
@@ -736,25 +722,133 @@ def getWeightByTransport(count_i, count_j, sum_minuts):
     try:
         if count_i == count_j: return [1, 1]
         if count_i < sum_minuts:
-            koef_i = 1 - 0.5 * (count_i / sum_minuts)
+            koef_i = 1 - 0.5 * (count_i / (sum_minuts + 0.001))
         else:
-            koef_i = 0.5 * (sum_minuts / count_i)
+            koef_i = 0.5 * (sum_minuts / (count_i + 0.001))
         if count_j < sum_minuts:
-            koef_j = 1 - 0.5 * (count_j / sum_minuts)  # Вес от 0.5 до 1
+            koef_j = 1 - 0.5 * (count_j / (sum_minuts + 0.001))  # Вес от 0.5 до 1
         else:
-            koef_j = 0.5 * (sum_minuts / count_j)
-        return to_saaty_weight(koef_i / koef_j, koef_j / koef_i)
+            koef_j = 0.5 * (sum_minuts / (count_j + 0.001))
+        return to_saaty_weight(koef_i / (koef_j + 0.001), koef_j / (koef_i + 0.001))
     except Exception as e:
         print(f"[ERROR] Calculating infrastructure: {e}")
         return [1, 1]
 
 
-def to_saaty_weight(x, y):
-    if x == y:
+def getMatrixAndSummaByRentalTerms(app, rental_terms, type_sdelki):
+    conn = app.connection_pool.getconn()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(f"SELECT kids, animals, smoking FROM apartment_data WHERE type_sdelki = {type_sdelki}")
+            apartments = cursor.fetchall()
+        N = len(apartments)
+        matrix = [[1 for _ in range(N)] for _ in range(N)]
+        summa = [1 for _ in range(N)]
+        name_flags = {
+            "childrenAllowed": 0,
+            "petsAllowed": 1,
+            "smokingAllowed": 2
+        }
+
+        for i in range(N):
+            for j in range(i + 1, N):
+                flags_i = apartments[i]
+                flags_j = apartments[j]
+
+                count_i = 0
+                count_j = 0
+                for key in rental_terms:
+                    count_i += 1 if flags_i[name_flags[key]] == rental_terms[key] else 0
+                    count_j += 1 if flags_j[name_flags[key]] == rental_terms[key] else 0
+                
+                res = count_i - count_j
+                weight = getWeightByRentalTerms(res)
+                matrix[i][j] = weight[0]
+                matrix[j][i] = weight[1]
+                summa[j] += weight[0]
+                summa[i] += weight[1]
+        return matrix, summa
+    except Exception as e:
+        print(f"[ERROR] Calculating rental terms: {e}")
+    finally:
+        app.connection_pool.putconn(conn)
+
+
+def getWeightByRentalTerms(res):
+    if res == -3:
+        return [1 / 7, 7]
+    elif res == -2:
+        return [1 / 5, 5]
+    elif res == -1:
+        return [1 / 3, 3]
+    elif res == 0:
         return [1, 1]
-    if x > y:
-        x = min(9, math.ceil(x))
-        return [x, 1 / x]
-    else:
-        y = min(9, math.ceil(y))
-        return [1 / y, y]
+    elif res == 1:
+        return [3, 1 / 3]
+    elif res == 2:
+        return [5, 1 / 5]
+    elif res == 3:
+        return [7, 1 / 7]
+
+
+def getMatrixAndSummaByNumberOfBeds(app, number_of_beds, type_sdelki): # Составление матрицы весов для критерия "Кол-во гостей"
+    conn = app.connection_pool.getconn()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(f"SELECT count_of_guests FROM apartment_data WHERE type_sdelki = {type_sdelki}")
+            apartments = cursor.fetchall()
+        N = len(apartments)
+        matrix = [[1 for _ in range(N)] for _ in range(N)]
+        apartments = [0 if apartment[0] == -1 else apartment[0] for apartment in apartments]
+        if number_of_beds == -1:
+            summa = [N for i in range(N)]
+            return matrix, summa
+        summa = [1 for _ in range(N)]
+        for i in range(N):
+            for j in range(i + 1, N):
+                count_i = apartments[i]
+                count_j = apartments[j]
+
+                weight = getWeightByCountOfGuest(count_i, count_j, number_of_beds)
+                matrix[i][j] = weight[0]
+                matrix[j][i] = weight[1]
+                summa[j] += weight[0]
+                summa[i] += weight[1]
+        return matrix, summa
+    except Exception as e:
+        print(f"[ERROR] Calculating infrastructure: {e}")
+    finally:
+        app.connection_pool.putconn(conn)
+
+
+def getWeightByCountOfGuest(count_i, count_j, number_of_beds):
+    try:
+        if number_of_beds < 0:
+            raise f"numbres_of_beds is {number_of_beds}"
+        if count_i == count_j: return [1, 1]
+        if count_i < number_of_beds:
+            koef_i = 0.5 * (count_i / (number_of_beds + 0.001))
+        else:
+            koef_i = 0.5 + 0.1 * min((count_i - number_of_beds) / (number_of_beds + 0.001), 1)
+        if count_j < number_of_beds:
+            koef_j = 0.5 * (count_j / (number_of_beds + 0.001))  # Вес от 0.5 до 1
+        else:
+            koef_j = 0.5 + 0.1 * min((count_j - number_of_beds) / (number_of_beds + 0.001), 1)
+        return to_saaty_weight(koef_i / (koef_j + 0.001), koef_j / (koef_i + 0.001))
+    except Exception as e:
+        print(f"[ERROR] Calculating count of guests: {e}")
+        return [1, 1]
+    
+
+def to_saaty_weight(x, y):
+    try:
+        if x == y:
+            return [1, 1]
+        if x > y:
+            x = min(9, math.ceil(x))
+            return [x, 1 / x]
+        else:
+            y = min(9, math.ceil(y))
+            return [1 / y, y]
+    except Exception as e:
+        print(f"[ERROR] Calculating saaty: {e}, {x}, {y}")

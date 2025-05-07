@@ -156,8 +156,8 @@ def init_routes(app):  #: Application):
                 if not user:
                     return jsonify({"status": "error", "message": "User not found"}), 401
 
-            with open("flat_preferences.json", "w") as file:
-                json.dump(user[7], file, ensure_ascii=False, indent=4)
+            # with open("flat_preferences.json", "w") as file:
+            #     json.dump(user[8], file, ensure_ascii=False, indent=4)
 
             if user[7]:
                 priorities = user[7].get("priorities")
@@ -654,25 +654,23 @@ def init_routes(app):  #: Application):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
-                if type_sdelki == 0:
-                    cursor.execute("""
-        SELECT flat_preferences FROM users
-        WHERE id = %s""",
-            (user_id,))
-                else:
-                    cursor.execute("""
-        SELECT rent_preferences FROM users
+                cursor.execute("""
+        SELECT flat_preferences, rent_preferences FROM users
         WHERE id = %s""",
             (user_id,))
                 preferences = cursor.fetchone()
                 if not preferences:
                     return jsonify({"status": "error", "message": "User not found"}), 401
 
-                preferences = preferences[0]
-                if not preferences:
+                flat_preferences = preferences[0]
+                rent_preferences = preferences[1]
+                if not flat_preferences:
+                    return jsonify({"status": "success", "message": "Preferences dos not exist"}), 201
+                if not rent_preferences and type_sdelki == 1:
                     return jsonify({"status": "success", "message": "Preferences dos not exist"}), 201
                 try:
-                    ids_and_weights = MAI.getSortedApartments(app, preferences, type_sdelki)
+                    ids_and_weights = MAI.getSortedApartments(app, flat_preferences, rent_preferences, type_sdelki)
+                    ids = list(map(lambda x: x[0], ids_and_weights))
                     cursor.execute("""
         UPDATE users
         SET ids_last_MAI = %s

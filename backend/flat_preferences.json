@@ -1,103 +1,66 @@
 {
-    "amenities": [
-        "Микроволновая печь",
-        "Домофон",
-        "Охрана",
-        "Пожарная сигнализация",
-        "Стиральная машина",
-        "Водоснабжение",
-        "Мебель",
-        "Грузовой лифт"
-    ],
-    "apartmentType": "новостройка",
-    "areaMax": "40",
-    "areaMin": "30",
-    "balconyType": "балкон",
-    "budgetMax": "50000",
-    "budgetMin": "40000",
-    "ceilingHeight": "3",
-    "city": "Санкт-Петербург",
     "comparisonMatrix": {
-        "matrix": {
-            "amenities": {
-                "amenities": 1,
-                "infrastructure": 1,
-                "transportAccessibility": 1,
-                "budget": 1,
-                "area": 1
-            },
-            "infrastructure": {
-                "amenities": 1,
-                "infrastructure": 1,
-                "transportAccessibility": 1,
-                "budget": 1,
-                "area": 1
-            },
-            "transportAccessibility": {
-                "amenities": 1,
-                "infrastructure": 1,
-                "transportAccessibility": 1,
-                "budget": 1,
-                "area": 1
-            },
-            "budget": {
-                "amenities": 1,
-                "infrastructure": 1,
-                "transportAccessibility": 1,
-                "budget": 1,
-                "area": 1
-            },
-            "area": {
-                "amenities": 1,
-                "infrastructure": 1,
-                "transportAccessibility": 1,
-                "budget": 1,
-                "area": 1
-            }
-        },
         "columnsOrder": [
-            "amenities",
-            "infrastructure",
-            "transportAccessibility",
-            "budget",
-            "area"
-        ]
+            "rentPayment",
+            "rentalTerms",
+            "numberOfBeds",
+            "area",
+            "roomCount"
+        ],
+        "matrix": {
+            "area": {
+                "area": 1,
+                "numberOfBeds": 1,
+                "rentPayment": 1,
+                "rentalTerms": 1,
+                "roomCount": 1
+            },
+            "numberOfBeds": {
+                "area": 1,
+                "numberOfBeds": 1,
+                "rentPayment": 4,
+                "rentalTerms": 1,
+                "roomCount": 1
+            },
+            "rentPayment": {
+                "area": 1,
+                "numberOfBeds": 0.25,
+                "rentPayment": 1,
+                "rentalTerms": 1,
+                "roomCount": 1
+            },
+            "rentalTerms": {
+                "area": 1,
+                "numberOfBeds": 1,
+                "rentPayment": 1,
+                "rentalTerms": 1,
+                "roomCount": 1
+            },
+            "roomCount": {
+                "area": 1,
+                "numberOfBeds": 1,
+                "rentPayment": 1,
+                "rentalTerms": 1,
+                "roomCount": 1
+            }
+        }
     },
-    "district": "Адмиралтейский",
-    "floorsInBuildingMax": "15",
-    "floorsInBuildingMin": "10",
-    "houseMaterial": [
-        "панельный",
-        "блочный",
-        "монолитно-кирпичный"
-    ],
-    "infrastructure": {
-        "hospitals": "5",
-        "kindergartens": "5",
-        "parks": "5",
-        "schools": "5",
-        "shoppingCenters": "5",
-        "shops": "5"
-    },
-    "kitchenStove": "неважно",
-    "maxFloor": "8",
-    "minFloor": "5",
+    "numberOfBeds": "5",
     "priorities": {
-        "amenities": 0.2,
-        "infrastructure": 0.2,
-        "transportAccessibility": 0.2,
-        "budget": 0.2,
-        "area": 0.2
+        "area": 0.19695250682847776,
+        "numberOfBeds": 0.25988039080672887,
+        "rentPayment": 0.149262088707838,
+        "rentalTerms": 0.19695250682847776,
+        "roomCount": 0.19695250682847776
     },
-    "region": "Санкт-Петербург",
-    "renovationCondition": "новый",
-    "roomCount": [
-        "1",
-        "2",
-        "4"
-    ],
-    "transportAccessibility": {
-        "metroDistance": "15",
-        "publicTransportStops": "15"
+    "rentPayment": {
+        "rentPeriod": "неважно",
+        "rentPriceMax": "30000",
+        "rentPriceMin": "20000"
+    },
+    "rentalTerms": {
+        "childrenAllowed": true,
+        "petsAllowed": true,
+        "smokingAllowed": true
     }
 }
