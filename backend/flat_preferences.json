@@ -46,7 +46,13 @@
         }
     },
     "numberOfBeds": "5",
-    "priorities": {},
+    "priorities": {
+        "area": 0.19695250682847776,
+        "numberOfBeds": 0.25988039080672887,
+        "rentPayment": 0.149262088707838,
+        "rentalTerms": 0.19695250682847776,
+        "roomCount": 0.19695250682847776
+    },
     "rentPayment": {
         "rentPeriod": "неважно",
         "rentPriceMax": "30000",

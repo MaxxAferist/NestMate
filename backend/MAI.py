@@ -9,7 +9,9 @@ def getSortedApartments(app, flat_preferences: dict, rent_preferences, type_sdel
         priorities = flat_preferences.get("priorities")
     else:
         priorities = rent_preferences.get("priorities")
-
+    if not priorities:
+        print(f"priorities: {priorities}")
+        return []
     vector_priorities = []
     for priority in priorities.keys():
         try:
