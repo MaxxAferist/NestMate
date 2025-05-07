@@ -1,11 +1,14 @@
 import s from './FlatCard.module.css';
+import { FavoriteButton, ComparisonButton, DetailsButton} from "../commonElements/buttons.jsx";
+
 const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
                       onFavoriteClick, onComparisonClick,
-                      showButtonsSection = true }) => {
+                      showButtonsSection = true,
+                      isFixed = true,
+                  }) => {
 
     const getRoomsText = (rooms) => {
         if (rooms === 0 || rooms === "Студия") return 'Студия';
-        if (rooms === 1) return '1-комнатная';
         return `${rooms}-комнатная`;
     };
 
@@ -41,7 +44,7 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
                 <div className={s.contentBlock}>
                     <h3>О квартире</h3>
                     <div className={s.price}>
-                        {Intl.NumberFormat('ru-RU').format(flatData.price)} ₽
+                        {Intl.NumberFormat('ru-RU').format(flatData.price)} ₽ {/*русский формат вывода*/}
                     </div>
                     <span>{getRoomsText(flatData.rooms)}, {flatData.area} м²</span>
                     <span>Тип сделки: {flatData.type === 'sell' ? 'покупка' : 'аренда' }</span>
@@ -72,29 +75,14 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
 
 
             {showButtonsSection && (
-                <div className={s.buttonsSection}>
-                    <button
-                        className={s.favoriteButton}
-                        onClick={ onFavoriteClick }
-                        style={isFavorite ? { backgroundColor: '#ff5e75', color: 'white', borderColor: '#e53e3e'} : null }
-                    >
-                        {isFavorite ? 'В избранном' : 'В избранное'}
-                    </button>
-                    <button className={s.compareButton}
-                            onClick={ onComparisonClick}
-                            style={isInComparison ? { backgroundColor: '#48b5ff', color: 'white', borderColor: '#3182ce' } : null }
-                    >
-                        {isInComparison ? 'Уже в сравнении' : 'Добавить в сравнение'}
-                    </button>
-                    <button className={s.detailsButton} onClick={cardClick}>
-                        Подробнее
-                    </button>
+                <div className={s.buttonsSection} style={isFixed ? {minWidth: "200px"} : {minWidth: '100px', maxWidth: '200px'} }>
+                    <FavoriteButton onFavoriteClick={ onFavoriteClick } isFavorite={isFavorite} />
+                    <ComparisonButton onComparisonClick={onComparisonClick} isInComparison={isInComparison} />
+                    <DetailsButton cardClick={cardClick} />
                 </div>
             )}
         </div>
     );
 };
-/*{flatData.city}, {flatData.district} район
-                        , ул. {flatData.street}, д. {flatData.house}, кв. {flatData.apartment} */
 
 export default FlatCard;

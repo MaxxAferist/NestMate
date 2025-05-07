@@ -1,35 +1,36 @@
-/* FlatCard.module.css */
 .card {
-    position: relative;
+    /*position: relative;*/
     display: flex;
     border: 1px solid #b4bac3;
     border-radius: 10px;
-    overflow: hidden;
+    overflow: hidden; /*чтобы картинка не торчала*/
     margin: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease; /*для анимаций*/
     background-color: #ffffff;
     min-height: 160px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-height: 200px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /*тень только снизу*/
+    font-family: 'Segoe UI', Tahoma, sans-serif; /*работает первый*/
+    width: 97%;
 }
 
 .card:hover {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px);
+    transform: translateY(-2px); /*смещение вниз*/
 }
 
 .imageContainer {
     width: 260px;
     height: 200px;
-    flex-shrink: 0;
-    position: relative;
+    flex-shrink: 0; /*не сжимает картинки чтобы они были одного размера*/
+    /*position: relative;*/
 }
 
 .image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover;/*для правильного маштабирования*/
     transition: transform 0.3s ease;
 }
 
@@ -38,9 +39,8 @@
 }
 
 .contentContainer {
-    display: grid;
-    /*grid-template-columns: 1fr 1fr 1fr;*/
-    flex-grow: 1;
+    display: grid; /*для строк*/
+    flex-grow: 1;  /*всё пространство*/
 }
 
 .price {
@@ -60,7 +60,6 @@
     color: #2d3748;
     border-right: 1px solid #b4bac3;
     background-color: #ffffff;
-    transition: background-color 0.2s ease;
 }
 
 .contentBlock:hover {
@@ -77,27 +76,19 @@
     background-color: #f8fafc;
 }
 
-/*.contentBlock span {
-    padding: 6px 10px;
-    border-bottom: 1px solid #edf2f7;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-}*/
-
 .markBlock {
     padding: 6px 10px;
     border-bottom: 1px solid #b4bac3;
     display: block;
-    min-height: unset;
 }
+
 .contentBlock span {
     padding: 6px 10px;
     border-bottom: 1px solid #b4bac3;
     display: flex;
     align-items: center;
     min-height: 32px;
-    box-sizing: border-box;
+    box-sizing: border-box; /*для корректных размеров*/
 }
 
 .markScale {
@@ -125,81 +116,10 @@
 }
 
 .buttonsSection {
-    width: 200px;
     display: flex;
     flex-direction: column;
     padding: 10px;
     gap: 8px;
     background-color: #f8fafc;
     border-left: 1px solid #e2e8f0;
-}
-
-.favoriteButton,
-.compareButton,
-.detailsButton {
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.favoriteButton {
-    background-color: #fbc3c3;
-    color: #c53030;
-    border: 1px solid #fb9d9d;
-}
-
-.favoriteButton:hover {
-    background-color: #ff9b9b;
-    color: #9b2c2c;
-}
-
-
-.compareButton {
-    background-color: #abe3fd;
-    color: #2b6cb0;
-    border: 1px solid #7ac6fa;
-}
-
-.compareButton:hover {
-    background-color: #71d9ff;
-    color: #2c5282;
-}
-
-
-
-.detailsButton {
-    background-color: #c5ffd6;
-    color: #276749;
-    border: 1px solid #9dffbc;
-}
-
-.detailsButton:hover {
-    background-color: #73ff9d;
-    color: #22543d;
-}
-
-/* иконки */
-.favoriteButton::before {
-    content: "♥";
-    font-size: 16px;
-}
-
-.compareButton::before {
-    content: "⇄";
-    font-size: 16px;
-    font-weight: bold;
-}
-
-.detailsButton::before {
-    content: "→";
-    font-size: 16px;
-    font-weight: bold;
 }

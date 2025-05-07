@@ -3,7 +3,7 @@ import { YMaps, Map, Placemark, TypeSelector, ZoomControl, RulerControl } from '
 
 export const YandexMap = ({ inputCoordinates = [55, 57],inputZoom = 16, mapStyle }) => {
     const API_KEY = '7eee86e8-2b3d-4992-a7ec-b866b3fb9cc3';
-    const mapRef = useRef(null);
+    const mapRef = useRef(null); // для родительского элемента
 
     useEffect(() => {
         if (mapRef.current) {

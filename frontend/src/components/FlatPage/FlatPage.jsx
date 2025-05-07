@@ -7,6 +7,8 @@ import {useFavorites} from "../contexts/FavoritesContext.jsx";
 import YandexMap from "./YandexMap.jsx";
 import {LoginContext} from "../contexts/LoginContext.jsx";
 import parse from 'html-react-parser';
+import { FavoriteButton, ComparisonButton} from "../commonElements/buttons.jsx";
+import {ErrorText, EmptyText, LoadingText} from "../commonElements/fields.jsx";
 
 const FlatPage = () => {
     const location = useLocation();
@@ -25,6 +27,7 @@ const FlatPage = () => {
     const { handleComparisonClick, isInComparison} = useComparison();
     useEffect(() => {
         if(user && user.id && flat_id ) {
+            setLoading(true);
             const fetchFlatData = async () => {
                 try {
                     const response = await fetch(`/api/apartment/${flat_id}`);
@@ -44,19 +47,6 @@ const FlatPage = () => {
             fetchFlatData();
         }
     }, [user, flat_id]);
-
-    /*console.log(flatData);*/
-   /* const handleFavoriteClick = async () => {
-        try {
-            if (isFavorite(flatData.id)) {
-                await removeFavorite(flatData.id);
-            } else {
-                await addFavorite(flatData.id);
-            }
-        } catch (error) {
-            console.error("Ошибка при изменении избранного:", error);
-        }
-    };*/
 
 
     const nextPhoto = () => {
@@ -116,12 +106,18 @@ const FlatPage = () => {
         }
     }
 
+    if(loading){
+        return <LoadingText />;
+    }
     if(flatData === null){
-        return(
-            <div>
-                Загрузка.....
-            </div>
+        return (
+            <EmptyText>
+                Нет данных о квартире.
+            </EmptyText>
         )
+    }
+    if(error){
+        return <ErrorText>{error}</ErrorText>;
     }
 
     return (
@@ -222,17 +218,21 @@ const FlatPage = () => {
                         </div>
                     </div>
                 </div>
-                <div className={s.section}>
-                    <h2 className={s.sectionTitle}>Удобства</h2>
-                    <div className={s.parametersGrid} style={{gridTemplateColumns: "1fr 1fr 1fr"}}>
-                        {flatData.amenities.map((item, index) => (
-                            <div className={s.parameterItem} key={index}>
-                                <span className={s.parameterName}></span>
-                                <span className={s.parameterValue}>{item}</span>
-                            </div>
+                {flatData.amenities.length!==0 &&
+                    <div className={s.section}>
+                        <h2 className={s.sectionTitle}>Удобства</h2>
+                        <div className={s.parametersGrid} style={{gridTemplateColumns: "1fr 1fr 1fr"}}>
+                            {flatData.amenities.map((item, index) => (
+                                item !== '' &&
+                                (<div className={s.parameterItem} key={index}>
+                                    <span className={s.parameterName}></span>
+                                    <span className={s.parameterValue}>{item}</span>
+                                 </div>)
                             ))}
+                        </div>
                     </div>
-                </div>
+                }
+
                 {flatData.infrastructure &&
                     <div className={s.section}>
                         <h2 className={s.sectionTitle}>Инфраструктура района</h2>
@@ -309,31 +309,22 @@ const FlatPage = () => {
                             <span className={s.pricePeriod}>в месяц</span></>)}
                 </div>
 
-                {/*<div className={s.source}>Источник: {flatData.source}</div>*/}
+                <div className={s.buttonsContainer}>
+                    <a
+                        href={flatData.link}
+                        className={s.sourceButton}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        🔗 Перейти к источнику
+                    </a>
 
-                <a
-                    href={flatData.link}
-                    className={s.sourceButton}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Перейти к источнику
-                </a>
+                    <ComparisonButton onComparisonClick={(e) => handleComparisonClick(flatData.id, e)}
+                                      isInComparison={isInComparison(flatData.id)}
+                    />
 
-                <button className={s.compareButton}
-                        onClick={ (e) => handleComparisonClick(flatData.id, e)}
-                        style={isInComparison(flatData.id) ? { backgroundColor: '#48b5ff', color: 'white', borderColor: '#3182ce' } : null }
-                >
-                    {isInComparison(flatData.id) ? 'Уже в сравнении' : 'Добавить в сравнение'}
-                </button>
-
-               <button
-                    className={s.favoriteButton}
-                    onClick={ () => handleFavoriteClick(flatData.id) }
-                    style={isFavorite(flatData.id) ? { backgroundColor: '#ff5e75', color: 'white', borderColor: '#e53e3e'} : null }
-                >
-                   {isFavorite(flatData.id) ? 'В избранном' : 'В избранное'}
-                </button>
+                    <FavoriteButton onFavoriteClick={() => handleFavoriteClick(flatData.id)} isFavorite={isFavorite(flatData.id)} />
+                </div>
             </div>
         </div>
     );

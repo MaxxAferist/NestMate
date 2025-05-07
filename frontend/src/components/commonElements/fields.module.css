@@ -1,0 +1,27 @@
+.mainContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 20px;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.loading, .error, .empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 50px;
+    font-size: 30px;
+    background: #e4f1ff;
+    border: 1px solid #afc7e1;
+    color: #374968;
+    border-radius: 10px;
+    width: 50%;
+}
+
+.error {
+    color: #e53e3e;
+}

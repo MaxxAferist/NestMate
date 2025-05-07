@@ -152,7 +152,6 @@ export const FavoritesProvider = ({ children }) => {
             isFavorite,
             handleFavoriteClick,
             clearFavorites
-            /*loadFavorites*/
         }}
         >
             { children }

@@ -8,10 +8,6 @@ export const ComparisonProvider = ({ children }) => {
     const { user} = useContext(LoginContext);
     const [loading, setLoading] = useState(false);
 
-   /* const [comparisonError, setComparisonError] = useState(null);*/
-
-
-
     const handleComparisonClick = async (flatId, event) => {
         try {
             if(isInComparison(flatId)) {
@@ -91,7 +87,6 @@ export const ComparisonProvider = ({ children }) => {
             error.isComparisonLimitError = true;
             throw error;
         }
-        setComparisonError(null);
         setLoading(true);
 
         try {
@@ -107,8 +102,10 @@ export const ComparisonProvider = ({ children }) => {
             });
             if (!response.ok) {
                 throw new Error('Ошибка при добавлении в сравнение');
+            }else{
+                setComparisonFlats([...comparisonFlats, flatId]);
             }
-            await loadComparison(user.id);
+            /*await loadComparison(user.id);*/
         } catch (err) {
             console.error("Ошибка при добавлении в сравнение:", err);
             throw err;
@@ -135,8 +132,10 @@ export const ComparisonProvider = ({ children }) => {
 
             if (!response.ok) {
                 throw new Error('Ошибка при удалении из сравнения');
+            }else{
+                setComparisonFlats(comparisonFlats.filter(f => f !== flatId));
             }
-            await loadComparison(user.id);
+            /*await loadComparison(user.id);*/
         } catch (err) {
             console.error("Ошибка при удалении из сравнения:", err);
             throw err;

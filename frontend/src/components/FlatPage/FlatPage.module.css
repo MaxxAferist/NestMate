@@ -181,7 +181,6 @@
     text-align: center;
     text-decoration: none;
     border-radius: 4px;
-    margin-bottom: 15px;
     font-weight: 600;
     background: linear-gradient(135deg, #69b36b 0%, #3bac40 100%);
     display: flex;
@@ -193,64 +192,6 @@
 .sourceButton:hover {
     background: linear-gradient(135deg, #20d52b 0%, #25c62e 100%);
 }
-
-.favoriteButton,
-.compareButton {
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    margin-bottom: 12px;
-}
-.favoriteButton {
-    background-color: #fbc3c3;
-    color: #c53030;
-    border: 1px solid #fb9d9d;
-}
-
-.favoriteButton:hover {
-    background-color: #ff9b9b;
-    color: #9b2c2c;
-}
-
-
-.compareButton {
-    background-color: #abe3fd;
-    color: #2b6cb0;
-    border: 1px solid #7ac6fa;
-}
-
-.compareButton:hover {
-    background-color: #71d9ff;
-    color: #2c5282;
-}
-
-
-/* иконки */
-.favoriteButton::before {
-    content: "♥";
-
-}
-
-.compareButton::before {
-    content: "⇄";
-    font-weight: bold;
-}
-
-
-/* иконки */
-.sourceButton::before {
-    content: "🔗";
-}
-
 
 .parametersGrid {
     display: grid;
@@ -289,4 +230,11 @@
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     overflow: hidden;
+}
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 8px;
 }
