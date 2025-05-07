@@ -5,9 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d9c70930-1c4a-4f15-8630-7970b0670b5b" name="Changes" comment="Доделал страницу квартиры">
-      <change afterPath="$PROJECT_DIR$/src/components/commonElements/buttons.module.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/commonElements/fields.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/commonElements/fields.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/MAI.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/MAI.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/config.py" afterDir="false" />
@@ -22,14 +19,21 @@
       <change beforePath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Header/Header.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Header/Header.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePageYandexMap.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePageYandexMap.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePageYandexMap.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePageYandexMap.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/assets/icons/EyeClosed.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/assets/icons/EyeOpened.svg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/commonElements/buttons.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/commonElements/buttons.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/commonElements/buttons.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/commonElements/buttons.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/commonElements/fields.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/commonElements/fields.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/contexts/ComparisonContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/ComparisonContext.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/contexts/LoginContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/LoginContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/contexts/FavoritesContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/FavoritesContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/vite.config.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +91,7 @@
     &quot;Node.js.HomePage.jsx.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;currentСhangesFrontend&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/artem/WebStormProjects/React+Flask/NestMate/frontend&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -211,7 +215,10 @@
       <workItem from="1746359839435" duration="1465000" />
       <workItem from="1746364036144" duration="11989000" />
       <workItem from="1746377481291" duration="1643000" />
-      <workItem from="1746437608050" duration="20363000" />
+      <workItem from="1746437608050" duration="20747000" />
+      <workItem from="1746527621921" duration="5048000" />
+      <workItem from="1746541676287" duration="4108000" />
+      <workItem from="1746628502980" duration="8884000" />
     </task>
     <task id="LOCAL-00001" summary="Доделал страницу квартиры">
       <option name="closed" value="true" />

@@ -5,8 +5,7 @@
     flex-direction: column;
     margin: 20px;
     padding: 20px;
-    /*max-width: 1200px;*/
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
 .loading, .error, .empty {

@@ -7,8 +7,9 @@ import s from './FavoritesPage.module.css';
 import {useFavorites} from "../contexts/FavoritesContext.jsx";
 import {FaTrash} from "react-icons/fa";
 import {LoadingText, ErrorText, EmptyText} from "../commonElements/fields.jsx";
+import { NextPrevButton } from "../commonElements/buttons.jsx";
 
-const FavoritesPage = ({ userId }) => {
+const FavoritesPage = () => {
     const [flats, setFlats] = useState([]);
     const [filteredFlats, setFilteredFlats] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -31,6 +32,7 @@ const FavoritesPage = ({ userId }) => {
                 try {
                     const response = await fetch(`/api/favorites/${user.id}`);
                     const data = await response.json();
+                    console.log(data);
                     if (data.status === 'success') {
                         if(data.message === 'User do not have favorites apartments') {
                             setFlats([]);
@@ -74,7 +76,6 @@ const FavoritesPage = ({ userId }) => {
         setFilteredFlats([]);
         clearFavorites();
         setCurrentStartIndex(0);
-        // Здесь логика очистки на сервере
     };
 
     const handleOnNextButtonClicked = ()=>{
@@ -163,7 +164,7 @@ const FavoritesPage = ({ userId }) => {
                             Избранные квартиры:
                         </h2>
                     </div>
-                    {filteredFlats.slice(currentStartIndex, ((filteredFlats.length - currentStartIndex-25) > 0)?(currentStartIndex+25) : filteredFlats.length-currentStartIndex).map((flatData) => (
+                    {filteredFlats.slice(currentStartIndex, ((filteredFlats.length - currentStartIndex-25) > 0)?(currentStartIndex+25) : (filteredFlats.length)).map((flatData) => (
                         <FlatCard
                             key={flatData.id}
                             mark={null}
@@ -172,23 +173,25 @@ const FavoritesPage = ({ userId }) => {
                             onFavoriteClick={() => handleFavoriteClick(flatData.id)}
                             isInComparison={isInComparison(flatData.id)}
                             onComparisonClick={(e) => handleComparisonClick(flatData.id, e)}
-                            cardClick={() => navigate(`/FlatPage/${flatData.id}`, { state: { flatData: flatData } })}
+                            cardClick={() => navigate(`/FlatPage/${flatData.id}`, { state: { flat_id: flatData.id } })}
                         />
 
                     ))}
                     <div className={s.cardsContainerFooter}>
                         <div className={s.nextPrevButtonsSection}>
-                            <button className={s.nextPrevButtons} onClick={handleOnPrevButtonClicked} disabled={currentStartIndex === 0}>
-                                ← Предыдущие квартиры
-                            </button>
-                            <button className={s.nextPrevButtons} onClick={handleOnNextButtonClicked} disabled={(filteredFlats.length - currentStartIndex - 25) <= 0 }>
-                                Следующие квартиры →
-                            </button>
+                            <NextPrevButton handleOnButtonClicked={handleOnPrevButtonClicked}
+                                            disable={currentStartIndex === 0} isNext={false}
+                            />
+                            <NextPrevButton handleOnButtonClicked={handleOnNextButtonClicked}
+                                            disable={(filteredFlats.length - currentStartIndex - 25) <= 0} isNext={true}
+                            />
                         </div>
                     </div>
                 </div>
             ):(
-                <div className={s.empty}>Нет избранных квартир</div>
+                <EmptyText>
+                   Нет избранных квартир.
+                </EmptyText>
             )}
 
         </div>

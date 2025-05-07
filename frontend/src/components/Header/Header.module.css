@@ -21,10 +21,8 @@ header{
 .favoritesButton, .comparisonButton, .mainButton, .signInButton{
     padding: 8px 16px;
     font-size: 16px;
-
     background-color: #ffffff;
     cursor: pointer;
-    /*transition: background-color 0.2s;*/
     border: 1px solid #7c7c7c;
     border-radius: 10px;
     color: #000000;

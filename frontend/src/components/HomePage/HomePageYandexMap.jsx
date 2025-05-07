@@ -1,4 +1,4 @@
-import { useState,useRef} from 'react';
+import { useState} from 'react';
 import { YMaps, Map, Placemark, TypeSelector, ZoomControl, RulerControl} from '@pbe/react-yandex-maps';
 import FlatCard from '../Cards/FlatCard.jsx'
 import s from './HomePageYandexMap.module.css';
@@ -39,19 +39,19 @@ const HomePageYandexMap = ({ flats, onClose }) => {
                         controls: [],
                     }}
                 >
-                    {Object.entries(flats).map(([id, flat]) => (
+                    {Object.entries(flats).map(([id, flatData]) => (
                         <Placemark
                             key={id}
-                            geometry={[flat.coords.lat, flat.coords.lng]}
+                            geometry={[flatData.coords.lat, flatData.coords.lng]}
                             properties={{
                                 iconContent: `${id}`,
-                                iconCaption: `${flat.price} ₽`,
+                                iconCaption: `${Intl.NumberFormat('ru-RU').format(flatData.price)} ₽`,
                             }}
                             options={{
-                                iconColor: flat.type === 'sell' ? '#00b0ff' : '#4caf50',
+                                iconColor: flatData.type === 'sell' ? '#00b0ff' : '#4caf50',
                                 iconContentColor: 'blue'
                             }}
-                            onClick={() => setSelectedFlat(flat)}
+                            onClick={() => setSelectedFlat(flatData)}
                         />
 
                     ))}

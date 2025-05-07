@@ -94,7 +94,7 @@ const ComparisonTable = () => {
 
     // форматирование значения
     const formatValue = (param, value) => {
-        if (value === undefined || value === null) return '-';
+        if (value === undefined || value === null || value === '') return '-';
 
         if (Array.isArray(value)) {
             return (
@@ -115,7 +115,7 @@ const ComparisonTable = () => {
         }
 
         if(param === 'buildingYear') {
-            if(value <= 0){
+            if(value <= 0 || value === '' || value === null){
                 return '-';
             }else{
                 return value;
@@ -124,20 +124,25 @@ const ComparisonTable = () => {
 
         // форматирование чисел
         if (typeof value === 'number') {
-            const formattedNumber = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-            return `${PARAM_INTRODUCTION[param] ? ` ${PARAM_INTRODUCTION[param]}` : ''}${formattedNumber}${PARAM_UNITS[param] ? ` ${PARAM_UNITS[param]}` : ''}`;
+            const formatNumber = Intl.NumberFormat('ru-RU').format(value.toString())
+            return `${PARAM_INTRODUCTION[param] ? ` ${PARAM_INTRODUCTION[param]}` : ''}${formatNumber}${PARAM_UNITS[param] ? ` ${PARAM_UNITS[param]}` : ''}`;
         }
 
         // для строк
         return value;
     };
 
+   /* comparisonFlatDetails: ['price', 'rooms', 'area', 'floor','ceilingHeight'],
+        restFlatDetails: ['type','balconyType', 'renovationCondition', 'features'],
+        comparisonBuildingDetails: ['buildingYear'],
+        restBuildingDetails: ['buildingFloors', 'buildingMaterial'],
+        infrastructure: ['parks', 'hospitals', 'shoppingCenters', 'shops', 'schools', 'kindergartens'],
+        transport: ['publicTransportStops', 'metroDistance']*/
+
     // получение лучшего значения
     const getBestValue = (param) => {
-        if (!PARAM_GROUPS.comparisonFlatDetails.includes(param) &&
-            !PARAM_GROUPS.comparisonBuildingDetails.includes(param) &&
-            !PARAM_GROUPS.infrastructure.includes(param) &&
-            !PARAM_GROUPS.transport.includes(param)) {
+        if (PARAM_GROUPS.restFlatDetails.includes(param) &&
+            PARAM_GROUPS.restBuildingDetails.includes(param)) {
             return null;
         }
 

@@ -584,24 +584,6 @@ const ProfilePage = () => {
                                 ))}
                             </div>
                         </div>
-                        {/*<div className={s.formGroup}>
-                            <label>Количество комнат:</label>
-                            <div className={s.checkboxGroup}>
-                                {['студия', '1 комната', '2 комнаты', '3 комнаты', '4 комнаты', '5 комнат', '6 и более комнат'].map(room => (
-                                    <label key={room} className={s.checkboxLabel}>
-                                        <input
-                                            type="checkbox"
-                                            name="roomCount"
-                                            value={room}
-                                            checked={flatPreferences.roomCount.includes(room)}
-                                            onChange={handleRoomCountChange}
-                                            className={s.checkboxInput}
-                                        />
-                                        {room}
-                                    </label>
-                                ))}
-                            </div>
-                        </div>*/}
 
                         <FormInputField
                             name="apartmentType"
@@ -715,8 +697,6 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-
-
                         <div className={s.formInlineGroup}>
                             <label className={s.formInlineGroupMainLabel}>Инфраструктура района:</label>
                             <InlineFromField className={s.inlineFormGroup}
@@ -823,8 +803,6 @@ const ProfilePage = () => {
                             <FlatParameterRow name="Город" value={flatPreferences.city}/>
                             <FlatParameterRow name="Район" value={flatPreferences.district}/>
 
-                            {/*<FlatParameterRow name="Бюджет" isRange priority={flatPreferences.priorities.budget}>*/}
-
                             <FlatParameterRow name="Бюджет" isRange priority={flatPreferences.priorities.budget}>
                                 {flatPreferences.budgetMin ? `от ${flatPreferences.budgetMin} руб.` : ''}
                                 {flatPreferences.budgetMin && flatPreferences.budgetMax ? ' ' : ''}
@@ -898,8 +876,6 @@ const ProfilePage = () => {
                                 rentPriority={rentPreferences.priorities.amenities}
                             />
 
-
-                            {/*<span className={s.flatPriority}>{flatPreferences.priorities.infrastructure ? `вес при подборе: ${(flatPreferences.priorities.infrastructure * 100).toFixed(1)}%`` : ''}</span>*/}
                             <div className={s.parameterBlock}>
                                 <div className={s.parameterRow} style={{border: 'none'}}>
                                     <strong className={s.groupParameterName}>Инфраструктура района</strong>
@@ -937,14 +913,14 @@ const ProfilePage = () => {
                         </button>
                         <button
                             onClick={() => setEditingFlatPriorities(true)} className={s.buttonChangePriorities}>
-                            Редактировать приоритеты (МАИ)
+                            Попарное сравнение параметров (МАИ)
                         </button>
                     </div>
                 }
             </div>
 
             <div className={s.rentDataForm} style={editingRentPriorities ? { width: '100%' } : {}}>
-                <h2 className={s.parametersText}>Параметры для аренды</h2>
+                <h2 className={s.parametersText}>Дополнительные параметры для аренды</h2>
                 { editingRentData &&
                     <form onSubmit={handleRentPreferencesSubmit}>
                         <div className={s.formGroup}>
@@ -1083,7 +1059,7 @@ const ProfilePage = () => {
                             Редактировать параметры аренды
                         </button>
                         <button onClick={() => setEditingRentPriorities(true)} className={s.buttonChangePriorities}>
-                            Расставить приоритеты параметров
+                            Попарное сравнение параметров (МАИ)
                         </button>
                     </div>
                 }

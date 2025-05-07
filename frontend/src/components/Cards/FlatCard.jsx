@@ -9,7 +9,6 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
 
     const getRoomsText = (rooms) => {
         if (rooms === 0 || rooms === "Студия") return 'Студия';
-        if (rooms === 1) return '1-комнатная';
         return `${rooms}-комнатная`;
     };
 
@@ -45,7 +44,7 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
                 <div className={s.contentBlock}>
                     <h3>О квартире</h3>
                     <div className={s.price}>
-                        {Intl.NumberFormat('ru-RU').format(flatData.price)} ₽
+                        {Intl.NumberFormat('ru-RU').format(flatData.price)} ₽ {/*русский формат вывода*/}
                     </div>
                     <span>{getRoomsText(flatData.rooms)}, {flatData.area} м²</span>
                     <span>Тип сделки: {flatData.type === 'sell' ? 'покупка' : 'аренда' }</span>
@@ -85,7 +84,5 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
         </div>
     );
 };
-/*{flatData.city}, {flatData.district} район
-                        , ул. {flatData.street}, д. {flatData.house}, кв. {flatData.apartment} */
 
 export default FlatCard;

@@ -51,14 +51,33 @@
     color: #22543d;
 }
 
-/* иконки */
-.favoriteButton::before {
-    content: "♥";
-    font-size: 16px;
+.nextPrevButtons {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(66, 153, 225, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.compareButton::before {
-    content: "⇄";
-    font-size: 16px;
-    font-weight: bold;
+.nextPrevButtons:hover {
+    background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(66, 153, 225, 0.3);
+}
+
+.nextPrevButtons:disabled {
+    background: #a0aec0;
+    color: #e2e8f0;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }

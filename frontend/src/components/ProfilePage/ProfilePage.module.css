@@ -1,3 +1,4 @@
+
 /*основной контейнер со всеми компонентами страницы*/
 .container {
     display: flex;
@@ -62,6 +63,7 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     caret-color: #000;
 }
+
 /*поля ввода*/
 .input,
 .textarea {
@@ -75,7 +77,6 @@
     cursor: text;
     caret-color: #000;
 }
-
 
 .input:focus,
 .textarea:focus {
@@ -357,7 +358,6 @@
     margin-top: 5px;
     font-weight: 500;
 }
-
 
 /*адаптация страницы*/
 @media (max-width: 768px) {

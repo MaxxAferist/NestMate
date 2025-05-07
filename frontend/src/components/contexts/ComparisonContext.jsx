@@ -8,10 +8,6 @@ export const ComparisonProvider = ({ children }) => {
     const { user} = useContext(LoginContext);
     const [loading, setLoading] = useState(false);
 
-   /* const [comparisonError, setComparisonError] = useState(null);*/
-
-
-
     const handleComparisonClick = async (flatId, event) => {
         try {
             if(isInComparison(flatId)) {

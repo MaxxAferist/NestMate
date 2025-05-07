@@ -6,9 +6,10 @@ import {LoginContext} from "../contexts/LoginContext.jsx";
 import {useComparison} from "../contexts/ComparisonContext.jsx";
 import HomePageYandexMap from "./HomePageYandexMap.jsx";
 import s from './HomePage.module.css'
-import {ErrorText, LoadingText, EmptyText} from "../commonElements/fields.jsx";
+import {ErrorText, LoadingText} from "../commonElements/fields.jsx";
+import { NextPrevButton } from "../commonElements/buttons.jsx";
 
-const flatData1 = {
+/*const flatData1 = {
     id: 12,
     type: 'sell', // или 'rent'
     rooms: 2,
@@ -362,11 +363,11 @@ const flatMap2 = {
     32: flatData5,
     43: flatData6,
     54: flatData7
-}
+}*/
 
 export default function HomePage() {
     const navigate = useNavigate();
-    const [currentStartIndex, setCurrentStartIndex] = useState(0);
+    /*const [currentStartIndex, setCurrentStartIndex] = useState(0);*/
     const [currentPageNumber, setCurrentPageNumber] = useState(1);
     const { isFavorite, handleFavoriteClick} = useFavorites();
     const {user, flatPreferences, rentPreferences} = useContext(LoginContext);
@@ -405,7 +406,9 @@ export default function HomePage() {
     };
 
     const handleOnSearchClick = async () => {
-        if (user && user.id && !loading && (filterType === 0 ? flatPreferences.priorities.length !== 0 : rentPreferences.priorities.length !== 0)) {
+        if (user && user.id && !loading && ((filterType === 0 ? Object.keys(flatPreferences.priorities).length : Object.keys(rentPreferences.priorities).length) !== 0)) {
+            setPrioritiesError(null);
+            setPrioritiesErrorSuggestion(null);
             setLoading(true);
             setError(null);
             try {
@@ -415,28 +418,58 @@ export default function HomePage() {
                         'Content-Type': 'application/json',
                     },
                 });
+                const sortData = await sortResponse.json();
 
                 if (!sortResponse.ok) {
-                    throw new Error('Ошибка сортировки квартир!');
+                    throw new Error('Произошла ошибка во время сортировки квартир: '+ sortData.message);
                 }
 
-                const sortData = await sortResponse.json();
+
                 if (sortData.status !== 'success') {
-                    throw new Error(sortData.message || 'Ошибка при сортировке');
+                    throw new Error(sortData.message || 'Произошла ошибка при сортировке');
                 }
 
                 // запрос квартир
                 await fetchApartments(1);
                 localStorage.setItem('pageNumber', '1');
-                setCurrentStartIndex(1);
+                setCurrentPageNumber(1);
 
             } catch (err) {
-                setError(`Ошибка: ${err.message}`);
+                setError(`${err.message}`);
             } finally {
                 setLoading(false);
             }
-        }else if(filterType === 0 && flatPreferences.priorities.length === 0){
-            setPrioritiesError("Сортировка невозможна. Для сортировки необходимо попарно сравнить параметры в профиле.");
+        }else if(filterType === 0 && Object.keys(flatPreferences.priorities).length === 0){
+            setPrioritiesError("Сортировка для покупки невозможна. Для сортировки необходимо попарно сравнить параметры в профиле.");
+            setPrioritiesErrorSuggestion([{
+                    text: 'Перейдите в профиль, нажав на кнопку ',
+                    button: 'Изменить параметры подбора в профиле'
+                }, {
+                    text: 'Заполните параметры подбора квартиры, нажав на кнопку ',
+                    button: 'Редактировать параметры квартиры'
+                }, {
+                    text: 'Попарно сравните необходимые параметры подбора, нажав на кнопку ',
+                    button: 'Попарное сравнение параметров (МАИ)'
+                }, {
+                    text: 'Сохраните парные сравнения параметров нажав на кнопку ',
+                    button: 'Сохранить сравнения'
+                }]);
+
+        }else if(filterType === 1 && Object.keys(rentPreferences.priorities).length === 0){
+            setPrioritiesError("Сортировка для аренды невозможна. Для сортировки необходимо попарно сравнить параметры в профиле.");
+            setPrioritiesErrorSuggestion([ {
+                text: 'Перейдите в профиль, нажав на кнопку ',
+                button: 'Изменить параметры подбора в профиле'
+            }, {
+                text: 'Заполните дополнительные параметры для аренды, нажав на кнопку ',
+                button: 'Редактировать параметры аренды'
+            }, {
+                text: 'Попарно сравните необходимые параметры аренды, нажав на кнопку ',
+                button: 'Попарное сравнение параметров (МАИ)'
+            }, {
+                text: 'Сохраните парные сравнения параметров нажав на кнопку ',
+                button: 'Сохранить сравнения'
+            }]);
         }
     };
 
@@ -479,7 +512,7 @@ export default function HomePage() {
         setCurrentPageNumber(currentPageNumber + 1);
     }
     const handleOnPrevButtonClicked = ()=>{
-        if(currentPageNumber-1 != 0){
+        if((currentPageNumber - 1) !== 0){
             localStorage.setItem('pageNumber', `${currentPageNumber - 1}`);
             fetchApartments(currentPageNumber -1 );
             setCurrentPageNumber(currentPageNumber - 1);
@@ -538,35 +571,6 @@ export default function HomePage() {
                         </button>
                     </div>
                 </div>
-                {/*<div className={s.filterOptions}>
-                        <span className={s.filterTitle}>Сортировать квартиры для:</span>
-                        <label className={`${s.filterLabel} ${filterType === 'sell' ? s.checked : ''}`}>
-                            <input
-                                className={s.radioButton}
-                                type="radio"
-                                name="filter"
-                                checked={filterType === 'sell'}
-                                onChange={() => handleFilterChange('sell')}
-                            />
-                            <span className={s.radioLabel}>Покупки</span>
-                        </label>
-
-                        <label className={`${s.filterLabel} ${filterType === 'rent' ? s.checked : ''}`}>
-                            <input
-                                className={s.radioButton}
-                                type="radio"
-                                name="filter"
-                                checked={filterType === 'rent'}
-                                onChange={() => handleFilterChange('rent')}
-                            />
-                            <span className={s.radioLabel}>Аренды</span>
-                        </label>
-
-                        <button className={s.actionButton}>
-                            Подобрать квартиры
-                        </button>
-                    </div>*/}
-
 
                 <div className={s.secondaryControls}>
                     <button className={s.secondaryButton} onClick={() => navigate('/Profile')}>
@@ -578,19 +582,25 @@ export default function HomePage() {
                     {showYMap && <HomePageYandexMap flats={flatMap} onClose={() => setShowYMap(false)} />}
                 </div>
 
-                {/*<div className={s.messagesContainer}>
-                    <div className={s.warning}>
-                        <span className={s.warningIcon}>⚠</span>
-                        Поле для вывода предупреждений
-                    </div>
+                {prioritiesError &&
+                    <div className={s.messagesContainer}>
+                        <div className={s.warning}>
+                            <span className={s.warningIcon}>⚠</span>
+                            {prioritiesError}
+                        </div>
 
-                    <div className={s.Recommendations}>
-                        <h5>Рекомендации:</h5>
-                        <ul>
-                            <li>Поле для предложений 1</li>
-                        </ul>
+                        <div className={s.Recommendations}>
+                            <h5>Рекомендации:</h5>
+                            <ul>
+                                {prioritiesErrorSuggestion.map((item, index) => (
+                                    <li key={index}>
+                                        {item.text}<span className={s.backgroundLighting}>"{item.button}"</span>.
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
-                </div>*/}
+                }
             </div>
 
 
@@ -612,12 +622,12 @@ export default function HomePage() {
                 ))}
                 <div className={s.cardsContainerFooter}>
                     <div className={s.nextPrevButtonsSection}>
-                        <button className={s.nextPrevButtons} onClick={handleOnPrevButtonClicked} disabled={currentPageNumber === 1}>
-                            ← Предыдущие 25 квартир
-                        </button>
-                        <button className={s.nextPrevButtons} onClick={handleOnNextButtonClicked} >
-                            Следующие 25 квартир →
-                        </button>
+                        <NextPrevButton handleOnButtonClicked={handleOnPrevButtonClicked}
+                                        disable={currentPageNumber === 1} isNext={false}
+                        />
+                        <NextPrevButton handleOnButtonClicked={handleOnNextButtonClicked}
+                                        disable={flatMap.length !== 25} isNext={true}
+                        />
                     </div>
                 </div>
             </div>
@@ -626,15 +636,3 @@ export default function HomePage() {
     )
 }
 /*disabled={currentStartIndex === 75 || (Object.keys(flatMap2).length - currentStartIndex - 25) <= 0 }*/
-
-
-/*{Object.entries(flatMap2 || {}).sort(([key1], [key2] )=>key2 - key1 )
-                    .slice(currentStartIndex, (((Object.keys(flatMap2).length - currentStartIndex - 25) > 0) ? (currentStartIndex+25) : (Object.keys(flatMap2).length - currentStartIndex))).map(([key, item]) => (
-                        <FlatCard key={key}  flatData={item} mark={key}
-                                  isFavorite={isFavorite(item.id)}
-                                  isInComparison={isInComparison(item.id)}
-                                  onFavoriteClick={() => handleFavoriteClick(item.id)}
-                                  onComparisonClick={(e) => handleComparisonClick(item.id, e)}
-                                  cardClick={() => navigate(`/FlatPage/${item.id}`, { state: { flat_id: item.id } })}
-                        />
-                    ))}*/
