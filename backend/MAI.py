@@ -5,7 +5,11 @@ import math
 
 def getSortedApartments(app, flat_preferences: dict, rent_preferences, type_sdelki: int):
     matrix_priorities = []
-    priorities = flat_preferences.get("priorities")
+    if type_sdelki == 0:
+        priorities = flat_preferences.get("priorities")
+    else:
+        priorities = rent_preferences.get("priorities")
+
     vector_priorities = []
     for priority in priorities.keys():
         try:
@@ -79,17 +83,17 @@ def getSortedApartments(app, flat_preferences: dict, rent_preferences, type_sdel
             
             matrix = np.array(matrix) / np.array(summa)
             vector = matrix.mean(axis = 1)
-            if priority == "numberOfBeds":
-                conn = app.connection_pool.getconn()
-                with conn.cursor() as cursor:
-                    cursor.execute("SELECT id, count_of_guests FROM apartment_data WHERE type_sdelki = 1")
-                    apartments = cursor.fetchall()
-                a = []
-                for i in range(len(apartments)):
-                    a.append([apartments[i][0], apartments[i][1], vector[i]])
-                a.sort(key=lambda x: x[2], reverse=True)
-                for elem in a:
-                    print(f"{elem[0]}\t{elem[1]}\t{elem[2]}")
+            # if priority == "numberOfBeds":
+            #     conn = app.connection_pool.getconn()
+            #     with conn.cursor() as cursor:
+            #         cursor.execute("SELECT id, count_of_guests FROM apartment_data WHERE type_sdelki = 1")
+            #         apartments = cursor.fetchall()
+            #     a = []
+            #     for i in range(len(apartments)):
+            #         a.append([apartments[i][0], apartments[i][1], vector[i]])
+            #     a.sort(key=lambda x: x[2], reverse=True)
+            #     for elem in a:
+            #         print(f"{elem[0]}\t{elem[1]}\t{elem[2]}")
             matrix_priorities.append(vector)
         except Exception as e:
             print(f"[MAI ERROR] Error: {e}")
@@ -99,7 +103,9 @@ def getSortedApartments(app, flat_preferences: dict, rent_preferences, type_sdel
         with conn.cursor() as cursor:
             cursor.execute(f"SELECT id FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             apartments = cursor.fetchall()
-        result_priorities = np.dot(np.array(matrix_priorities).T, np.array(vector_priorities))
+        
+        result_priorities = list(np.dot(np.array(matrix_priorities).T, np.array(vector_priorities)))
+        
         for i in range(len(result_priorities)):
             apartments[i] = [apartments[i][0], result_priorities[i]]
         apartments.sort(key=lambda x: x[1], reverse=True)

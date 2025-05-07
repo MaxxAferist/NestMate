@@ -638,7 +638,7 @@ def init_routes(app):  #: Application):
                     except Exception as e:
                         print(f"[ERROR] error get json: {e}")
                 else:
-                    ids = list(map(lambda x: x[0], ids))
+                    # ids = list(map(lambda x: x[0], ids))
                     apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
                 json_apartments["apartments"] = apartments_info
             return jsonify({'status': 'success', "apartments": json_apartments}), 200
@@ -671,11 +671,12 @@ def init_routes(app):  #: Application):
                 try:
                     ids_and_weights = MAI.getSortedApartments(app, flat_preferences, rent_preferences, type_sdelki)
                     ids = list(map(lambda x: x[0], ids_and_weights))
+
                     cursor.execute("""
         UPDATE users
         SET ids_last_MAI = %s
         WHERE id = %s""",
-            (ids_and_weights, user_id))
+            (ids, user_id))
                     conn.commit()
                 except Exception as e:
                     print(f"[ERROR]: {e}")
