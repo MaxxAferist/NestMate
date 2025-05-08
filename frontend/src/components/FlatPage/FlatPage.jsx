@@ -177,7 +177,7 @@ const FlatPage = () => {
                 <div className={s.section}>
                     <h2 className={s.sectionTitle}>Расположение</h2>
                     <p>
-                        {flatData.geo.address ? flatData.geo.address: '-'}
+                        {flatData.geo.address ? `${flatData.geo.address} ${flatData.geo.district} р-н`  : '-'}
                         {/*{flatData.region ? `${flatData.region},` : ''} {flatData.city}
                         {flatData.district && `, ${flatData.district}`}<br />
                         {flatData.street}, {flatData.house}
