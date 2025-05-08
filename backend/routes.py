@@ -646,7 +646,7 @@ def init_routes(app):  #: Application):
                     ids = ids[(page - 1) * 25:page * 25]
                     apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
                     for i, apartment in enumerate(apartments_info):
-                        apartment["weight"] = grades[i]
+                        apartment["weight"] = grades[(page - 1) * 25 + i]
                     json_apartments["is_MAIl"] = True
                 json_apartments["apartments"] = apartments_info
             return jsonify({'status': 'success', "apartments": json_apartments}), 200
@@ -788,7 +788,7 @@ def init_routes(app):  #: Application):
             furniture = apartment[39]
             technique = apartment[40]
 
-            amenities = additional_amenities + furniture + technique #
+            amenities = additional_amenities + furniture + technique
 
             if apartment[2] == 0:
                 json_apartment = {
