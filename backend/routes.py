@@ -601,7 +601,7 @@ def init_routes(app):  #: Application):
 
 
     @app.app.route('/api/mainIndex/<int:user_id>/<int:page>', methods=['GET'])
-    def getApartmentsForMainIndex(user_id, page):
+    def getApartmentsForMainIndexForUser(user_id, page):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
@@ -639,8 +639,30 @@ def init_routes(app):  #: Application):
                         print(f"[ERROR] error get json: {e}")
                 else:
                     # ids = list(map(lambda x: x[0], ids))
+                    ids = ids[(page - 1) * 25:[page] * 25]
                     apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
                 json_apartments["apartments"] = apartments_info
+            return jsonify({'status': 'success', "apartments": json_apartments}), 200
+        except Exception as e:
+            print(f"[ERROR]: {e}")
+            return jsonify({'status': 'error', "message": f"Error with getting apartments: {e}"}), 500
+        finally:
+            app.connection_pool.putconn(conn)
+
+
+    @app.app.route('/api/mainIndex/<int:page>', methods=['GET'])
+    def getApartmentsForMainIndex(page):
+        conn = app.connection_pool.getconn()
+        try:
+            json_apartments = {
+                "apartments": []
+            }
+            try:
+                ids = utils.idsFromPage(conn, 0, page, 25)
+                apartments_info = utils.getJsonInformationAboutApartments(conn, ids, [], [])
+            except Exception as e:
+                print(f"[ERROR] error get json: {e}")
+            json_apartments["apartments"] = apartments_info
             return jsonify({'status': 'success', "apartments": json_apartments}), 200
         except Exception as e:
             print(f"[ERROR]: {e}")
