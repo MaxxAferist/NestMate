@@ -593,8 +593,8 @@ def init_routes(app):  #: Application):
             app.connection_pool.putconn(conn)
 
 
-    @app.app.route('/api/mainIndex/<int:user_id>/<int:page>', methods=['GET'])
-    def getApartmentsForMainIndexForUser(user_id, page):
+    @app.app.route('/api/mainIndex/<int:user_id>/<int:page>/<int:type_sdelki>', methods=['GET'])
+    def getApartmentsForMainIndexForUser(user_id, page, type_sdelki):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
@@ -626,7 +626,7 @@ def init_routes(app):  #: Application):
                 }
                 if not ids:
                     try:
-                        ids = utils.idsFromPage(conn, 0, page, 25)
+                        ids = utils.idsFromPage(conn, type_sdelki, page, 25)
                         apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
                     except Exception as e:
                         print(f"[ERROR] error get json: {e}")
@@ -643,15 +643,15 @@ def init_routes(app):  #: Application):
             app.connection_pool.putconn(conn)
 
 
-    @app.app.route('/api/mainIndex/<int:page>', methods=['GET'])
-    def getApartmentsForMainIndex(page):
+    @app.app.route('/api/mainIndex/<int:page>/<int:type_sdelki>', methods=['GET'])
+    def getApartmentsForMainIndex(page, type_sdelki):
         conn = app.connection_pool.getconn()
         try:
             json_apartments = {
                 "apartments": []
             }
             try:
-                ids = utils.idsFromPage(conn, 0, page, 25)
+                ids = utils.idsFromPage(conn, type_sdelki, page, 25)
                 apartments_info = utils.getJsonInformationAboutApartments(conn, ids, [], [])
             except Exception as e:
                 print(f"[ERROR] error get json: {e}")
