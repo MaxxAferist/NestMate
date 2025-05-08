@@ -622,7 +622,8 @@ def init_routes(app):  #: Application):
                 json_apartments = {
                     "apartments": [],
                     "favorites_list": favorites,
-                    "comparison_list": comparison
+                    "comparison_list": comparison,
+                    "is_MAIl": False
                 }
                 if not ids:
                     try:
@@ -634,6 +635,7 @@ def init_routes(app):  #: Application):
                     # ids = list(map(lambda x: x[0], ids))
                     ids = ids[(page - 1) * 25:page * 25]
                     apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
+                    json_apartments["is_MAIl"] = True
                 json_apartments["apartments"] = apartments_info
             return jsonify({'status': 'success', "apartments": json_apartments}), 200
         except Exception as e:
@@ -648,7 +650,8 @@ def init_routes(app):  #: Application):
         conn = app.connection_pool.getconn()
         try:
             json_apartments = {
-                "apartments": []
+                "apartments": [],
+                "is_MAIl": False
             }
             try:
                 ids = utils.idsFromPage(conn, type_sdelki, page, 25)
