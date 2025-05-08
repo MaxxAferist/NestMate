@@ -722,7 +722,7 @@ export default function HomePage() {
                     }
                     {/*<FaArrowCircleRight  onClick={handleOnNextButtonClicked} disabled={flatMap.length !== 25}/>*/}
                     <div>
-                            <FaArrowCircleRight className={s.iconButton} onClick={handleOnNextButtonClicked} disable={flatMap.length !== 25}/>
+                            <FaArrowCircleRight className={s.iconButton} onClick={handleOnNextButtonClicked} style={flatMap.length !== 25 ? {color:'grey'} : null}/>
                     </div>
                 </div>
 
