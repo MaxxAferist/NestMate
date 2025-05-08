@@ -85,10 +85,10 @@ def getSortedApartments(app, flat_preferences: dict, rent_preferences, type_sdel
             
             matrix = np.array(matrix) / np.array(summa)
             vector = matrix.mean(axis = 1)
-            if priority == "budget":
+            if priority == "area":
                 conn = app.connection_pool.getconn()
                 with conn.cursor() as cursor:
-                    cursor.execute(f"SELECT id, price FROM apartment_data WHERE type_sdelki = {type_sdelki}")
+                    cursor.execute(f"SELECT id, area FROM apartment_data WHERE type_sdelki = {type_sdelki}")
                     apartments = cursor.fetchall()
                 a = []
                 for i in range(len(apartments)):
@@ -632,7 +632,7 @@ def getMatrixAndSummaByInfrastructure(app, infrastructure, type_sdelki): # Со�
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
-        if sum(map(int, infrastructure.values())) == 0:
+        if sum(map(lambda x: int(x) if x.isdigit() else 0, infrastructure.values())) == 0:
             summa = [N for _ in range(N)]
             return matrix, summa
         summa = [1 for _ in range(N)]
@@ -692,7 +692,7 @@ def getMatrixAndSummaByTransport(app, transport, type_sdelki): # Составл�
             apartments = cursor.fetchall()
         N = len(apartments)
         matrix = [[1 for _ in range(N)] for _ in range(N)]
-        if sum(map(int, (transport.values()))) == 0:
+        if sum(map(lambda x: int(x) if x.isdigit() else 0, transport.values())) == 0:
             summa = [N for _ in range(N)]
             return matrix, summa
         summa = [1 for _ in range(N)]
