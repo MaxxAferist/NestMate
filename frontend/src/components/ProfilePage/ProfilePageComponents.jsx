@@ -230,6 +230,14 @@ export const InfrastructureParameterRow = ({ name, value, defaultValue = 'рас
     );
 };
 
+export const SaveErrorField = ({children}) =>{
+    return (
+        <div className={s.saveErrorField}>
+            <span className={s.saveError}>{children}</span>
+        </div>
+    );
+}
+
 
 
 

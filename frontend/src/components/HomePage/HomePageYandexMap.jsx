@@ -44,7 +44,7 @@ const HomePageYandexMap = ({ flats, onClose }) => {
                             key={id}
                             geometry={[flatData.coords.lat, flatData.coords.lng]}
                             properties={{
-                                iconContent: `${id}`,
+                                iconContent: `${flatData?.weight || ''}`,
                                 iconCaption: `${Intl.NumberFormat('ru-RU').format(flatData.price)} ₽`,
                             }}
                             options={{
@@ -75,7 +75,7 @@ const HomePageYandexMap = ({ flats, onClose }) => {
                 <div className={s.flatCardContainer}>
                     <FlatCard
                         flatData={selectedFlat}
-                        mark={null}
+                        mark={selectedFlat?.weight || null}
                         isFavorite={isFavorite(selectedFlat.id)}
                         isInComparison={isInComparison(selectedFlat.id)}
                         onFavoriteClick={() => handleFavoriteClick(selectedFlat.id)}

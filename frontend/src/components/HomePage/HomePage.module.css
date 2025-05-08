@@ -209,6 +209,10 @@
     text-align: center;
     padding: 15px 0;
     border-radius: 8px 8px 0 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .cardsContainerHeader h2 {
@@ -217,6 +221,32 @@
     font-size: 25px;
     font-weight: 600;
     color: #2d3748;
+}
+
+.iconButton {
+    background-color: #f0f0f0;
+    /*background: none;*/
+    clip-path: circle();
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
+    color: #4299e1;
+    font-size: 50px;
+    transition: color 0.2s;
+    margin:  0 10px;
+}
+
+.iconButton svg {
+    background-color: #f0f0f0;
+}
+
+.iconButton:hover {
+    color: #0b3b8e;
+}
+
+.iconButton:disabled {
+    color: #808081;
+    background-color: #5f5f61;
 }
 
 .cardsContainer {

@@ -31,10 +31,11 @@ export const DetailsButton = ({ cardClick }) => {
     )
 }
 
-export const NextPrevButton = ({ handleOnButtonClicked, disable = null, isNext }) => {
+export const NextPrevButton = ({ handleOnButtonClicked, disable = null, isNext, isToFirst = false }) => {
     return (
         <button className={s.nextPrevButtons} onClick={handleOnButtonClicked} disabled={disable}>
-            {isNext ? 'Следующие 25 квартир →' : '← Предыдущие 25 квартир'}
+            {isToFirst ? 'На первую страницу' :
+                isNext ? 'Следующие 25 квартир →' : '← Предыдущие 25 квартир'}
         </button>
     )
 }
