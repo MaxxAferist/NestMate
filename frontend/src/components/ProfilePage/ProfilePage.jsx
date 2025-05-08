@@ -10,9 +10,11 @@ import {ProfileParameterRow,
     FlatParameterRow,
     InfrastructureParameterRow,
     InlineCheckboxField,
+    SaveErrorField
 } from './ProfilePageComponents.jsx';
 import {ComparisonMatrix} from '../ComparsionMatrix/ComparisonMatrix.jsx'
 import {EmptyText} from "../commonElements/fields.jsx";
+
 
 const ProfilePage = () => {
     const navigate = useNavigate();
@@ -27,7 +29,11 @@ const ProfilePage = () => {
 
 
     const [errors, setErrors] = useState({});
-
+    const [flatSaveError, setFlatSaveError] = useState(null);
+    const [flatMatrixSaveError, setFlatMatrixSaveError] = useState(null);
+    const [rentSaveError, setRentSaveError] = useState(null);
+    const [rentMatrixSaveError, setRentMatrixSaveError] = useState(null);
+    const [userDataError, setUserDataError] = useState(null);
 
     const validateNumberInput = (name, value, isInteger = true, minValue = 0) => {
         let error = '';
@@ -105,11 +111,12 @@ const ProfilePage = () => {
 
     const handlePersonalDataSubmit = async (e) => {
         e.preventDefault();
+        setUserDataError(null);
         try {
             await saveUserData(userData);
             setEditingPersonalData(false);
         } catch (err) {
-            console.error("Failed to update profile:", err);
+            setUserDataError(`Ошибка обновления профиля: ${err.message}`);
         }
     };
 
@@ -233,6 +240,7 @@ const ProfilePage = () => {
 
     const handleFlatDataSubmit = async (e) => {
         e.preventDefault();
+        setFlatSaveError(null);
 
         const isBudgetMinValid = validateNumberInput('budgetMin', flatPreferences.budgetMin, true, 0);
         const isBudgetMaxValid = validateNumberInput('budgetMax', flatPreferences.budgetMax, true, 0);
@@ -260,13 +268,12 @@ const ProfilePage = () => {
         ) {
             try {
                 await savePreferences();
-                console.log('Параметры квартиры успешно сохранены!');
                 setEditingFlatData(false);
             } catch (err) {
-                console.log('Ошибка сохранения параметров квартиры');
+                setFlatSaveError(`Ошибка сохранения параметров квартиры: ${err.message}`)
             }
         } else {
-            console.log('Исправьте ошибки в форме');
+            setFlatSaveError('Исправьте ошибки в форме');
         }
     }
 
@@ -314,26 +321,29 @@ const ProfilePage = () => {
         }));
     }
 
+
     const handleRentPreferencesSubmit = async (e) => {
         e.preventDefault();
+        setRentSaveError(null)
+
         const isNumberOfBedsValid = validateNumberInput('numberOfBeds', rentPreferences.numberOfBeds, true, 1);
+        const isRentPaymentValid = validateRange('rentPriceMin', 'rentPriceMax', rentPreferences.rentPayment.rentPriceMin, rentPreferences.rentPayment.rentPriceMax)
         if(
-            isNumberOfBedsValid
+            isNumberOfBedsValid && isRentPaymentValid
         ){
             try {
                 await savePreferences();
-                console.log('Параметры аренды успешно изменены!');
                 setEditingRentData(false);
             } catch (err) {
-                console.log('Ошибка при сохранении параметров');
+                setRentSaveError(`Ошибка при сохранении параметров: ${err.message}`)
             }
         } else {
-            console.log('Исправьте ошибки в форме');
+            setRentSaveError('Исправьте ошибки в форме');
         }
     }
 
     const flatParameters = [
-        'budget', 'area', 'roomCount', 'apartmentType', 'balconyType',
+        'budget', 'area', 'roomCount','district', 'apartmentType', 'balconyType',
         'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
         'renovationCondition', 'amenities',
         'infrastructure', 'transportAccessibility'
@@ -342,6 +352,7 @@ const ProfilePage = () => {
         budget: "Цена",
         area: "Площадь",
         roomCount: "Количество комнат",
+        district: 'Район',
         apartmentType: "Вторичка/новостройка",
         balconyType: "Балкон/лоджия",
         ceilingHeight: "Высота потолков",
@@ -355,7 +366,7 @@ const ProfilePage = () => {
     };
 
     const rentParameters = [
-        'rentPayment','rentalTerms','numberOfBeds','area', 'roomCount', 'balconyType',
+        'rentPayment','rentalTerms','numberOfBeds', 'district','area', 'roomCount', 'balconyType',
         'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
         'renovationCondition', 'amenities',
         'infrastructure', 'transportAccessibility'
@@ -364,6 +375,7 @@ const ProfilePage = () => {
         rentPayment: "Цена и срок аренды",
         rentalTerms: "Условия аренды и заселения",
         numberOfBeds: "Количество спальных мест",
+        district: 'Район',
         area: "Площадь",
         roomCount: "Количество комнат",
         balconyType: "Балкон/лоджия",
@@ -378,6 +390,7 @@ const ProfilePage = () => {
     };
 
     const handleSaveFlatPriorities = async (matrix, weights) => {
+        setFlatMatrixSaveError(null)
         try {
             const newPreferences = {
                 ...flatPreferences,
@@ -388,16 +401,15 @@ const ProfilePage = () => {
             setFlatPreferences(newPreferences);
             await savePreferences(newPreferences);
 
-            console.log('Приоритеты и матрица сравнений успешно сохранены!');
             setEditingFlatPriorities(false);
         } catch (err) {
-            console.error('Ошибка при сохранении приоритетов:', err);
+            setFlatMatrixSaveError(`Ошибка при сохранении парных сравнений: ${err.message}`);
         }
     };
 
     const handleSaveRentPriorities = async (matrix, weights) => {
+        setRentMatrixSaveError(null)
         try {
-
             const newPreferences = {
                 ...rentPreferences,
                 comparisonMatrix: matrix,
@@ -407,10 +419,9 @@ const ProfilePage = () => {
             setRentPreferences(newPreferences);
             await savePreferences(flatPreferences, newPreferences);
 
-            console.log('Приоритеты и матрица сравнений успешно сохранены!');
             setEditingRentPriorities(false);
         } catch (err) {
-            console.error('Ошибка при сохранении приоритетов:', err);
+            setRentMatrixSaveError(`Ошибка при сохранении приоритетов: ${err.message}`);
         }
     };
 
@@ -470,6 +481,9 @@ const ProfilePage = () => {
                             options={[{ value: '', label: 'Выберите пол' },{ value: 'male', label: 'Мужской' },
                             { value: 'female', label: 'Женский' },]}
                         />
+                        {userDataError &&
+                            <SaveErrorField>{userDataError}</SaveErrorField>
+                        }
                         <ButtonSave>Сохранить</ButtonSave>
                     </form>
                 ) : (
@@ -478,8 +492,6 @@ const ProfilePage = () => {
                             <ProfileParameterRow name="ID Профиля" value={userData.id} />
                             <ProfileParameterRow name="Имя" value={userData.firstName} />
                             <ProfileParameterRow name="Фамилия" value={userData.lastName} />
-                            {/*<ProfileParameterRow name="Отчество" value={userData.middleName} />
-                            <ProfileParameterRow name="Номер телефона" value={userData.phone} />*/}
                             <ProfileParameterRow name="Пол" value={userData.gender==="male" && 'Мужской' || userData.gender==="female" && 'Женский' || ''} />
                             <ProfileParameterRow name="Email" value={userData.email} />
                         </div>
@@ -517,6 +529,7 @@ const ProfilePage = () => {
                             label="Район:"
                             value={flatPreferences.district}
                             options={[
+                                { value: 'неважно', label: 'Неважно' },
                                 { value: 'Адмиралтейский', label: 'Адмиралтейский' },
                                 { value: 'Василеостровский', label: 'Василеостровский' },
                                 { value: 'Выборгский', label: 'Выборгский' },
@@ -784,24 +797,35 @@ const ProfilePage = () => {
                                              error={errors['transportAccessibility.metroDistance']}
                             />
                         </div>
+                        {flatSaveError &&
+                            <SaveErrorField>{flatSaveError}</SaveErrorField>
+                        }
                         <ButtonSave>Сохранить</ButtonSave>
                     </form>
                 }
                 {editingFlatPriorities &&
-                    <ComparisonMatrix
-                        parameters={flatParameters}
-                        parametersNames={flatParametersNames}
-                        currentPreferences={flatPreferences}
-                        onSave={handleSaveFlatPriorities}
-                        cancelChanging={handleCancelChangingFlatPriorities}
-                    />
+                    <>
+                        <ComparisonMatrix
+                            parameters={flatParameters}
+                            parametersNames={flatParametersNames}
+                            currentPreferences={flatPreferences}
+                            onSave={handleSaveFlatPriorities}
+                            cancelChanging={handleCancelChangingFlatPriorities}
+                        />
+                        {flatMatrixSaveError &&
+                            <SaveErrorField>{flatMatrixSaveError}</SaveErrorField>
+                        }
+                        </>
                 }
                 { (!editingFlatData && !editingFlatPriorities) &&
                     <div>
                         <div className={s.parametersContainer}>
                             <FlatParameterRow name="Регион" value={flatPreferences.region}/>
                             <FlatParameterRow name="Город" value={flatPreferences.city}/>
-                            <FlatParameterRow name="Район" value={flatPreferences.district}/>
+                            <FlatParameterRow name="Район" value={flatPreferences.district}
+                                              priority={flatPreferences.priorities.district}
+                                              rentPriority={rentPreferences.priorities.district}
+                            />
 
                             <FlatParameterRow name="Бюджет" isRange priority={flatPreferences.priorities.budget}>
                                 {flatPreferences.budgetMin ? `от ${flatPreferences.budgetMin} руб.` : ''}
@@ -986,6 +1010,9 @@ const ProfilePage = () => {
                             placeholder="Количество спальных мест (от)"
                             error={errors.numberOfBeds}
                         />
+                        {rentSaveError &&
+                            <SaveErrorField>{rentSaveError}</SaveErrorField>
+                        }
                         <button type="submit" className={s.buttonSave}>
                             Сохранить
                         </button>

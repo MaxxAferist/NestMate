@@ -252,8 +252,8 @@ export const ComparisonMatrix = ({ parameters, parametersNames, currentPreferenc
         const weights = calculateWeights(visibleMatrix);
         const CR = findConsistencyIndex(visibleMatrix, weights);
 
-        if (CR > 0.1) {
-            setSaveError(`Индекс согласованности CR = ${CR.toFixed(3)} превышает допустимый порог 0.1. 
+        if (CR > 0.15) {
+            setSaveError(`Индекс согласованности CR = ${CR.toFixed(3)} превышает допустимый порог 0.15. 
                     Упростите сравнения или сделайте их более согласованными.`);
             return;
         }

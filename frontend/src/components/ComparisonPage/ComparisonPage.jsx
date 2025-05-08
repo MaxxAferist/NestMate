@@ -2,7 +2,7 @@ import s from './ComparisonPage.module.css';
 import { useComparison } from '../contexts/ComparisonContext';
 import { FaCheck, FaHeart, FaTimes, FaTrash } from 'react-icons/fa';
 import {useFavorites} from '../contexts/FavoritesContext.jsx'
-import {useEffect, useContext, useState} from "react";
+import {useEffect, useContext, useState, useMemo} from "react";
 import {LoginContext} from "../contexts/LoginContext.jsx";
 import {EmptyText, ErrorText, LoadingText} from "../commonElements/fields.jsx";
 import {useNavigate} from "react-router-dom";
@@ -18,7 +18,7 @@ const PARAM_NAMES = {
     balconyType: 'Балкона/лоджия',
     renovationCondition: 'Состояние ремонта',
     floor: 'Этаж',
-    features: 'Удобства',
+    amenities: 'Удобства',
     buildingFloors: 'Этажей в доме',
     buildingMaterial: 'Материал дома',
     parks: 'Парки',
@@ -48,7 +48,7 @@ const PARAM_INTRODUCTION = {
 
 const PARAM_GROUPS = {
     comparisonFlatDetails: ['price', 'rooms', 'area', 'floor','ceilingHeight'],
-    restFlatDetails: ['type','balconyType', 'renovationCondition', 'features'],
+    restFlatDetails: ['type','balconyType', 'renovationCondition', 'amenities'],
     comparisonBuildingDetails: ['buildingYear'],
     restBuildingDetails: ['buildingFloors', 'buildingMaterial'],
     infrastructure: ['parks', 'hospitals', 'shoppingCenters', 'shops', 'schools', 'kindergartens'],
@@ -98,9 +98,12 @@ const ComparisonTable = () => {
 
         if (Array.isArray(value)) {
             return (
-                <div className={s.valueContainer}>
+                <div className={s.cellValue}>
                     {value.map((item, i) => (
-                        <span key={i}>{item},</span>
+                        item !== '' && (
+                            <span key={i}>{item},</span>
+                        )
+
                     ))}
                 </div>
             );
@@ -132,12 +135,7 @@ const ComparisonTable = () => {
         return value;
     };
 
-   /* comparisonFlatDetails: ['price', 'rooms', 'area', 'floor','ceilingHeight'],
-        restFlatDetails: ['type','balconyType', 'renovationCondition', 'features'],
-        comparisonBuildingDetails: ['buildingYear'],
-        restBuildingDetails: ['buildingFloors', 'buildingMaterial'],
-        infrastructure: ['parks', 'hospitals', 'shoppingCenters', 'shops', 'schools', 'kindergartens'],
-        transport: ['publicTransportStops', 'metroDistance']*/
+
 
     // получение лучшего значения
     const getBestValue = (param) => {
@@ -146,32 +144,31 @@ const ComparisonTable = () => {
             return null;
         }
 
-        const values = comparisonFlats.flatMap(flatData => {
-            if (param in flatData) return flatData[param];
-            if (flatData.infrastructure?.[param] !== undefined) return flatData.infrastructure[param];
+        const values = comparisonFlats.flatMap(flatData => { /*массив параметров*/
+            if (param in flatData) return flatData[param]; /*если параметр в flatData*/
+            if (flatData.infrastructure?.[param] !== undefined) return flatData.infrastructure[param]; /*если в infrastructure*/
             if (flatData.transportAccessibility?.[param] !== undefined) return flatData.transportAccessibility[param];
             return [];
-        }).filter(val => val !== undefined && val !== null);
+        }).filter(val => (val !== undefined && val !== null && val !== ''));
 
         if (values.length === 0) return null;
 
-        if (param === 'rooms') {
+        if (param === 'rooms') { /*отдельно для комнат т.к. часто встречается студия*/
             let bestValue = 0;
-
             values.forEach(value => {
-                const numValue = typeof value === 'string' && value.toLowerCase() !== 'студия'
+                const numberValue = typeof value === 'string' && value.toLowerCase() !== 'студия'
                     ? parseInt(value) : Number(value);
 
-                if (!isNaN(numValue) && numValue > bestValue) {
-                    bestValue = numValue;
+                if (!isNaN(numberValue) && numberValue > bestValue) {
+                    bestValue = numberValue;
                 }
             });
 
-            return `${bestValue}`;
+            return `${bestValue}`; /*нужно в строке*/
         }
 
         if (typeof values[0] === 'number') {
-            if(param === 'rooms' || param === 'area' || param === 'floor' || param === 'ceilingHeight' || param === 'buildingYear'){
+            if( param === 'area' || param === 'floor' || param === 'ceilingHeight' || param === 'buildingYear'){ /*по возрастанию*/
                 return Math.max(...values);
             }else{
                 return Math.min(...values);
@@ -181,6 +178,33 @@ const ComparisonTable = () => {
 
         return null;
     };
+
+    const bestValues = useMemo(() => {
+        const savedBestValues = {};
+        comparisonFlats.forEach(flatData => {
+            for (const param in flatData) {
+                if(param === 'infrastructure') {
+                    Object.keys(flatData.infrastructure).map((parameter) => {
+                        if (!savedBestValues[parameter]) {
+                            savedBestValues[parameter] = getBestValue(parameter);
+                        }
+                    })
+                }else if(param === 'transportAccessibility') {
+                    Object.keys(flatData.transportAccessibility).map((parameter) => {
+                        if (!savedBestValues[parameter]) {
+                            savedBestValues[parameter] = getBestValue(parameter);
+                        }
+                    })
+                }else{
+                    if (!savedBestValues[param]) {
+                        savedBestValues[param] = getBestValue(param);
+                    }
+                }
+            }
+        });
+
+        return savedBestValues;
+    }, [comparisonFlats]);
 
 
     const isBestValue = (value, bestValue) => {
@@ -229,18 +253,18 @@ const ComparisonTable = () => {
                 <table className={s.table}>
                     <thead>
                     <tr className={s.tableHeader}>
-                        <th className={s.parameterCell}>Параметр</th>
+                        <th className={s.parameterName}>Параметр</th>
                         {comparisonFlats.map(flatData => (
                             <th key={flatData.id} className={s.flatHeader}>
                                 <img
                                     src={flatData.picture}
                                     alt="Квартира"
-                                    className={s.flatImage}
+                                    className={s.image}
                                     onClick={() => navigate(`/FlatPage/${flatData.id}`, { state: { flat_id: flatData.id } })}
                                 />
-                                <div className={s.flatTitle}>{flatData.address}</div>
-                                <div className={s.flatDistrict}>{flatData.district} р-н</div>
-                                <div className={s.actions}>
+                                <div className={s.address}>{flatData.address}</div>
+                                <div className={s.district}>{flatData.district} р-н</div>
+                                <div className={s.buttonsSection}>
                                     <button className={s.actionButton} onClick={() => handleFavoriteClick(flatData.id)} >
                                         <FaHeart style={{ color: isFavorite(flatData.id) ? '#ff5d74' : '' }} />
                                     </button>
@@ -266,16 +290,15 @@ const ComparisonTable = () => {
                     {PARAM_GROUPS.comparisonFlatDetails.map(param => (
                         <tr key={param} className={s.dataRow}>
 
-                            <td className={s.parameterCell}>{PARAM_NAMES[param]}</td>
+                            <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
 
                             {comparisonFlats.map(flatData => {
                                 const value = flatData[param];
-                                const bestValue = getBestValue(param);
+                                const bestValue = bestValues[param];
                                 return (
-                                    <td key={`${flatData.id}-${param}`} className={s.valueCell}>
-                                        <div className={s.valueContainer}>
-                                            {formatValue(param, value)}
-                                            {isBestValue(value, bestValue) && <FaCheck className={s.bestValueIcon} />}
+                                    <td key={`${flatData.id}-${param}`} className={s.parameterCell}>
+                                        <div className={s.cellValue}>
+                                            {formatValue(param, value)} {isBestValue(value, bestValue) && <FaCheck className={s.bestIcon} />}
                                         </div>
                                     </td>
                                 );
@@ -284,12 +307,12 @@ const ComparisonTable = () => {
                     ))}
                     {PARAM_GROUPS.restFlatDetails.map(param => (
                         <tr key={param} className={s.dataRow}>
-                            <td className={s.parameterCell}>{PARAM_NAMES[param]}</td>
+                            <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
                             {comparisonFlats.map(flatData => {
                                 const value = flatData[param];
                                 return (
-                                    <td key={`${flatData.id}-${param}`} className={s.valueCell}>
-                                        <div className={s.valueContainer}>
+                                    <td key={`${flatData.id}-${param}`} className={s.parameterCell}>
+                                        <div className={s.cellValue}>
                                             {formatValue(param, value)}
                                         </div>
                                     </td>
@@ -307,15 +330,14 @@ const ComparisonTable = () => {
 
                     {PARAM_GROUPS.comparisonBuildingDetails.map(param => (
                         <tr key={param} className={s.dataRow}>
-                            <td className={s.parameterCell}>{PARAM_NAMES[param]}</td>
+                            <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
                             {comparisonFlats.map(flatData => {
                                 const value = flatData[param];
-                                const bestValue = getBestValue(param);
+                                const bestValue = bestValues[param];
                                 return (
-                                    <td key={`${flatData.id}-${param}`} className={s.valueCell}>
-                                        <div className={s.valueContainer}>
-                                            {formatValue(param, value)}
-                                            {isBestValue(value, bestValue) && <FaCheck className={s.bestValueIcon} />}
+                                    <td key={`${flatData.id}-${param}`} className={s.parameterCell}>
+                                        <div className={s.cellValue}>
+                                            {formatValue(param, value)} {isBestValue(value, bestValue) && <FaCheck className={s.bestIcon} />}
                                         </div>
                                     </td>
                                 );
@@ -325,13 +347,13 @@ const ComparisonTable = () => {
 
                     {PARAM_GROUPS.restBuildingDetails.map(param => (
                         <tr key={param} className={s.dataRow}>
-                            <td className={s.parameterCell}>{PARAM_NAMES[param]}</td>
+                            <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
 
                             {comparisonFlats.map(flatData => {
                                 const value = flatData[param];
                                 return(
-                                    <td key={`${flatData.id}-${param}`} className={s.valueCell}>
-                                        <div className={s.valueContainer}>
+                                    <td key={`${flatData.id}-${param}`} className={s.parameterCell}>
+                                        <div className={s.cellValue}>
                                             {formatValue(param, value)}
                                         </div>
                                     </td>
@@ -349,15 +371,14 @@ const ComparisonTable = () => {
 
                     {PARAM_GROUPS.infrastructure.map(param => (
                         <tr key={param} className={s.dataRow}>
-                            <td className={s.parameterCell}>{PARAM_NAMES[param]}</td>
+                            <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
                             {comparisonFlats.map(flatData => {
                                 const value = flatData.infrastructure?.[param];
-                                const bestValue = getBestValue(param);
+                                const bestValue = bestValues[param];
                                 return (
-                                    <td key={`${flatData.id}-${param}`} className={s.valueCell}>
-                                        <div className={s.valueContainer}>
-                                            {formatValue('infrastructure', value)}
-                                            {isBestValue(value, bestValue) && <FaCheck className={s.bestValueIcon} />}
+                                    <td key={`${flatData.id}-${param}`} className={s.parameterCell}>
+                                        <div className={s.cellValue}>
+                                            {formatValue('infrastructure', value)} {isBestValue(value, bestValue) && <FaCheck className={s.bestIcon} />}
                                         </div>
                                     </td>
                                 );
@@ -375,16 +396,15 @@ const ComparisonTable = () => {
                     {PARAM_GROUPS.transport.map(param => (
                         <tr key={param} className={s.dataRow}>
 
-                            <td className={s.parameterCell}>{PARAM_NAMES[param]}</td>
+                            <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
 
                             {comparisonFlats.map(flatData => {
                                 const value = flatData.transportAccessibility?.[param];
                                 const bestValue = getBestValue(param);
                                 return (
-                                    <td key={`${flatData.id}-${param}`} className={s.valueCell}>
-                                        <div className={s.valueContainer}>
-                                            {formatValue('transportAccessibility', value)}
-                                            {isBestValue(value, bestValue) && <FaCheck className={s.bestValueIcon} />}
+                                    <td key={`${flatData.id}-${param}`} className={s.parameterCell}>
+                                        <div className={s.cellValue}>
+                                            {formatValue('transportAccessibility', value)} {isBestValue(value, bestValue) && <FaCheck className={s.bestIcon} />}
                                         </div>
                                     </td>
                                 );

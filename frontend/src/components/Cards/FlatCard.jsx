@@ -38,10 +38,10 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
             </div>
 
 
-            <div className={s.contentContainer}
+            <div className={s.infoContainer}
                  style={mark === null ? {gridTemplateColumns: "1fr 1fr"} : {gridTemplateColumns: "1fr 1fr 1fr"}}
             >
-                <div className={s.contentBlock}>
+                <div className={s.infoBlock}>
                     <h3>О квартире</h3>
                     <div className={s.price}>
                         {Intl.NumberFormat('ru-RU').format(flatData.price)} ₽ {/*русский формат вывода*/}
@@ -51,7 +51,7 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
                     <span style={{borderBottom: "none"}}>Этаж: {flatData.floor} из {flatData.buildingFloors}</span>
                 </div>
 
-                <div className={s.contentBlock} >
+                <div className={s.infoBlock} >
                     <h3>Расположение</h3>
                     <span>{formatAddress()}</span>
                     {metroDistance &&
@@ -60,7 +60,7 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
 
                 </div>
                 {mark &&
-                    <div className={s.contentBlock}>
+                    <div className={s.infoBlock}>
                         <h3>Оценка МАИ</h3>
                         <div className={s.markBlock}>{mark} %</div>
                         <div className={s.markScale}>

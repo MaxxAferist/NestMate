@@ -26,7 +26,7 @@ export const LoginProvider = ({ children }) => {
             areaMax: '',
             region: 'Санкт-Петербург',
             city: 'Санкт-Петербург',
-            district: 'Адмиралтейский',
+            district: 'неважно',
             roomCount: [],
             apartmentType: 'неважно',
             balconyType: 'неважно',

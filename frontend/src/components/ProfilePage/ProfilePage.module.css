@@ -451,3 +451,23 @@
 }
 
 
+.saveErrorField {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.saveError{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 5px;
+    font-size: 20px;
+    background: #e4f1ff;
+    border: 1px solid #afc7e1;
+    color: #e53e3e;
+    border-radius: 10px;
+}
+
