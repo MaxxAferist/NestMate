@@ -159,13 +159,6 @@ def init_routes(app):  #: Application):
             # with open("flat_preferences.json", "w") as file:
             #     json.dump(user[8], file, ensure_ascii=False, indent=4)
 
-            if user[7]:
-                priorities = user[7].get("priorities")
-                res = 0
-                for key in priorities.keys():
-                    res += priorities.get(key)
-                print("summa =", res)
-
             response_data = {
                 "status": "success",
                 "user": {
@@ -639,7 +632,7 @@ def init_routes(app):  #: Application):
                         print(f"[ERROR] error get json: {e}")
                 else:
                     # ids = list(map(lambda x: x[0], ids))
-                    ids = ids[(page - 1) * 25:[page] * 25]
+                    ids = ids[(page - 1) * 25:page * 25]
                     apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
                 json_apartments["apartments"] = apartments_info
             return jsonify({'status': 'success', "apartments": json_apartments}), 200

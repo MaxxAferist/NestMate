@@ -85,17 +85,17 @@ def getSortedApartments(app, flat_preferences: dict, rent_preferences, type_sdel
             
             matrix = np.array(matrix) / np.array(summa)
             vector = matrix.mean(axis = 1)
-            # if priority == "numberOfBeds":
-            #     conn = app.connection_pool.getconn()
-            #     with conn.cursor() as cursor:
-            #         cursor.execute("SELECT id, count_of_guests FROM apartment_data WHERE type_sdelki = 1")
-            #         apartments = cursor.fetchall()
-            #     a = []
-            #     for i in range(len(apartments)):
-            #         a.append([apartments[i][0], apartments[i][1], vector[i]])
-            #     a.sort(key=lambda x: x[2], reverse=True)
-            #     for elem in a:
-            #         print(f"{elem[0]}\t{elem[1]}\t{elem[2]}")
+            if priority == "budget":
+                conn = app.connection_pool.getconn()
+                with conn.cursor() as cursor:
+                    cursor.execute(f"SELECT id, price FROM apartment_data WHERE type_sdelki = {type_sdelki}")
+                    apartments = cursor.fetchall()
+                a = []
+                for i in range(len(apartments)):
+                    a.append([apartments[i][0], apartments[i][1], vector[i]])
+                a.sort(key=lambda x: x[2], reverse=True)
+                for elem in a:
+                    print(f"{elem[0]}\t{elem[1]}\t{elem[2]}")
             matrix_priorities.append(vector)
         except Exception as e:
             print(f"[MAI ERROR] Error: {e}")
