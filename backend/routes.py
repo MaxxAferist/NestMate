@@ -56,14 +56,17 @@ def init_routes(app):  #: Application):
                     rent_preferences,
                     favorites,
                     comparison,
-                    ids_last_MAI
+                    ids_last_MAI_flat,
+                    ids_last_MAI_rent,
+                    grades_last_MAI_flat,
+                    grades_last_MAI_rent
                             )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id""",
             (data["firstName"], data["email"], hashed_password,
                                 data.get('lastName', ""), data.get('gender', ""),
                                 json.dumps(data.get('flatPreferences', {})),
-                                json.dumps(data.get('rentPreferences', {})), [], [], []))
+                                json.dumps(data.get('rentPreferences', {})), [], [], [], [], [], []))
                 user_id = cursor.fetchone()[0]
             conn.commit()
             return jsonify({"status": "success", "message": "User registered", "user_id": user_id}), 200
@@ -598,8 +601,14 @@ def init_routes(app):  #: Application):
         conn = app.connection_pool.getconn()
         try:
             with conn.cursor() as cursor:
+                if type_sdelki == 0:
+                    ids_name = "ids_last_MAI_flat"
+                    grades_name = "grades_last_MAI_flat"
+                elif type_sdelki == 1:
+                    ids_name = "ids_last_MAI_rent"
+                    grades_name = "grades_last_MAI_rent"
                 cursor.execute("""
-        SELECT ids_last_MAI, favorites, comparison FROM users
+        SELECT """+ ids_name +""", favorites, comparison, """+ grades_name +""" FROM users
         WHERE id = %s""",
             (user_id,))
                 apartments = cursor.fetchone()
@@ -619,6 +628,8 @@ def init_routes(app):  #: Application):
                 else:
                     comparison = list(map(int, comparison))
 
+                grades = apartments[3]
+
                 json_apartments = {
                     "apartments": [],
                     "favorites_list": favorites,
@@ -632,9 +643,10 @@ def init_routes(app):  #: Application):
                     except Exception as e:
                         print(f"[ERROR] error get json: {e}")
                 else:
-                    # ids = list(map(lambda x: x[0], ids))
                     ids = ids[(page - 1) * 25:page * 25]
                     apartments_info = utils.getJsonInformationAboutApartments(conn, ids, favorites, comparison)
+                    for i, apartment in enumerate(apartments_info):
+                        apartment["weight"] = grades[i]
                     json_apartments["is_MAIl"] = True
                 json_apartments["apartments"] = apartments_info
             return jsonify({'status': 'success', "apartments": json_apartments}), 200
@@ -689,12 +701,22 @@ def init_routes(app):  #: Application):
                 try:
                     ids_and_weights = MAI.getSortedApartments(app, flat_preferences, rent_preferences, type_sdelki)
                     ids = list(map(lambda x: x[0], ids_and_weights))
+                    max_weight = max(ids_and_weights, key=lambda x: x[1])[1]
+                    weights = list(map(lambda x: int(x[1] / max_weight * 100), ids_and_weights))
 
+
+                    if type_sdelki == 0:
+                        ids_name = "ids_last_MAI_flat"
+                        grades_name = "grades_last_MAI_flat"
+                    elif type_sdelki == 1:
+                        ids_name = "ids_last_MAI_rent"
+                        grades_name = "grades_last_MAI_rent"
                     cursor.execute("""
         UPDATE users
-        SET ids_last_MAI = %s
+        SET """ + ids_name + """ = %s,
+        """ + grades_name + """= %s
         WHERE id = %s""",
-            (ids, user_id))
+            (ids, weights, user_id))
                     conn.commit()
                 except Exception as e:
                     print(f"[ERROR]: {e}")

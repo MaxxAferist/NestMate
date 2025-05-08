@@ -80,22 +80,25 @@ def getSortedApartments(app, flat_preferences: dict, rent_preferences, type_sdel
                 number_of_beds = rent_preferences.get("numberOfBeds", "")
                 number_of_beds = int(number_of_beds) if number_of_beds.isdigit() else -1
                 matrix, summa = getMatrixAndSummaByNumberOfBeds(app, number_of_beds, type_sdelki)
+            elif priority == "district":
+                district = flat_preferences.get("district")
+                matrix, summa = getMatrixAndSummaByDistrict(app, district, type_sdelki)
             else:
                 print(f"[ERROR] unexpected = {priority}")
             
             matrix = np.array(matrix) / np.array(summa)
             vector = matrix.mean(axis = 1)
-            if priority == "area":
-                conn = app.connection_pool.getconn()
-                with conn.cursor() as cursor:
-                    cursor.execute(f"SELECT id, area FROM apartment_data WHERE type_sdelki = {type_sdelki}")
-                    apartments = cursor.fetchall()
-                a = []
-                for i in range(len(apartments)):
-                    a.append([apartments[i][0], apartments[i][1], vector[i]])
-                a.sort(key=lambda x: x[2], reverse=True)
-                for elem in a:
-                    print(f"{elem[0]}\t{elem[1]}\t{elem[2]}")
+            # if priority == "area":
+            #     conn = app.connection_pool.getconn()
+            #     with conn.cursor() as cursor:
+            #         cursor.execute(f"SELECT id, area FROM apartment_data WHERE type_sdelki = {type_sdelki}")
+            #         apartments = cursor.fetchall()
+            #     a = []
+            #     for i in range(len(apartments)):
+            #         a.append([apartments[i][0], apartments[i][1], vector[i]])
+            #     a.sort(key=lambda x: x[2], reverse=True)
+            #     for elem in a:
+            #         print(f"{elem[0]}\t{elem[1]}\t{elem[2]}")
             matrix_priorities.append(vector)
         except Exception as e:
             print(f"[MAI ERROR] Error: {e}")
@@ -847,6 +850,46 @@ def getWeightByCountOfGuest(count_i, count_j, number_of_beds):
         print(f"[ERROR] Calculating count of guests: {e}")
         return [1, 1]
     
+
+def getMatrixAndSummaByDistrict(app, district, type_sdelki): # Составление матрицы весов для критерия "Вторичка/"
+    conn = app.connection_pool.getconn()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(f"SELECT district FROM apartment_data WHERE type_sdelki = {type_sdelki}")
+            apartments = cursor.fetchall()
+        N = len(apartments)
+        matrix = [[1 for _ in range(N)] for _ in range(N)]
+        if district == "неважно":
+            summa = [N for _ in range(N)]
+            return matrix, summa
+        summa = [1 for _ in range(N)]
+
+        for i in range(N):
+            for j in range(i + 1, N):
+                apartment_type_i = apartments[i][0]
+                apartment_type_j = apartments[j][0]
+
+                if apartment_type_i == apartment_type_j:
+                    matrix[i][j] = 1
+                    matrix[j][i] = 1
+                elif apartment_type_i == district:
+                    matrix[i][j] = 9
+                    matrix[j][i] = 1 / 9
+                elif apartment_type_j == district:
+                    matrix[i][j] = 1 / 9
+                    matrix[j][i] = 9
+                else:
+                    matrix[i][j] = 1
+                    matrix[j][i] = 1
+
+                summa[j] += matrix[i][j]
+                summa[i] += matrix[j][i]
+        return matrix, summa
+    except Exception as e:
+        print(f"[ERROR] Calculating district: {e}")
+    finally:
+        app.connection_pool.putconn(conn)
+
 
 def to_saaty_weight(x, y):
     try:

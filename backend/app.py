@@ -64,7 +64,10 @@ class Application():
                     rent_preferences JSON,
                     favorites INTEGER[],
                     comparison INTEGER[],
-                    ids_last_MAI INTEGER[]
+                    ids_last_MAI_flat INTEGER[],
+                    ids_last_MAI_rent INTEGER[],
+                    grades_last_MAI_flat INTEGER[],
+                    grades_last_MAI_rent INTEGER[]
                 );""")
             conn.commit()
         finally:
