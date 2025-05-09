@@ -16,7 +16,7 @@ const FavoritesPage = () => {
     const [error, setError] = useState(null);
     const [filterType, setFilterType] = useState('all');
     const {user} = useContext(LoginContext);
-    const { isFavorite, handleFavoriteClick, clearFavorites } = useFavorites();
+    const { isFavorite, handleFavoriteClick, clearFavorites, setFavorites } = useFavorites();
     const navigate = useNavigate();
     const {isInComparison, handleComparisonClick} = useComparison();
 
@@ -37,11 +37,11 @@ const FavoritesPage = () => {
                         if(data.message === 'User do not have favorites apartments') {
                             setFlats([]);
                             setFilteredFlats([]);
-                            // установить избранные квартиры
+                            setFavorites([])
                         }else{
                             setFlats(data.favorites.apartments || []);
                             setFilteredFlats(data.favorites.apartments || []);
-                            // установить избранные квартиры
+                            setFilteredFlats(data.favorites.favorites_list || []);
                         }
                     } else {
                         setError(data.message || 'Ошибка загрузки избранных квартир');
@@ -88,6 +88,12 @@ const FavoritesPage = () => {
             setCurrentStartIndex(currentStartIndex - 25);
         }
     }
+    const handleOnToFirstButtonClicked = ()=>{
+        if(currentStartIndex !== 0){
+           setCurrentStartIndex(0)
+        }
+    }
+
 
     if(!user){
         return(
@@ -181,6 +187,9 @@ const FavoritesPage = () => {
                         <div className={s.nextPrevButtonsSection}>
                             <NextPrevButton handleOnButtonClicked={handleOnPrevButtonClicked}
                                             disable={currentStartIndex === 0} isNext={false}
+                            />
+                            <NextPrevButton handleOnButtonClicked={handleOnToFirstButtonClicked} isToFirst={true}
+                                            disable={currentStartIndex === 0}
                             />
                             <NextPrevButton handleOnButtonClicked={handleOnNextButtonClicked}
                                             disable={(filteredFlats.length - currentStartIndex - 25) <= 0} isNext={true}

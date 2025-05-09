@@ -84,17 +84,30 @@ const ProfilePage = () => {
         validateRange('rentPriceMin', 'rentPriceMax', rentPreferences.rentPayment.rentPriceMin, rentPreferences.rentPayment.rentPriceMax);
     }, [rentPreferences.rentPayment.rentPriceMin, rentPreferences.rentPayment.rentPriceMax]);
 
+    useEffect(() => {
+        validateRange('minFloor', 'floorsInBuildingMax', flatPreferences.minFloor, flatPreferences.floorsInBuildingMax);
+    },[flatPreferences.minFloor, flatPreferences.floorsInBuildingMax]);
+
     const validateRange = (minName, maxName, minValue, maxValue) => {
         if (minValue !== '' && maxValue !== '') {
             const min = parseFloat(minValue);
             const max = parseFloat(maxValue);
 
             if (Math.min(min, max) !== min) {
-                setErrors((prev) => ({
-                    ...prev,
-                    [minName]: 'Минимальное значение должно быть меньше или равно максимальному',
-                    [maxName]: 'Максимальное значение должно быть больше или равно минимальному',
-                }));
+                if(minName === 'minFloor' && maxName === 'floorsInBuildingMax'){
+                    setErrors((prev) => ({
+                        ...prev,
+                        [minName]: 'Минимальный этаж должен быть меньше, чем максимальное количество этажей в доме',
+                        [maxName]: 'Максимальное количество этажей в доме должно быть больше, чем минимальный этаж',
+                    }));
+                }else{
+                    setErrors((prev) => ({
+                        ...prev,
+                        [minName]: 'Минимальное значение должно быть меньше или равно максимальному',
+                        [maxName]: 'Максимальное значение должно быть больше или равно минимальному',
+                    }));
+                }
+
                 return false;
             } else {
                 setErrors((prev) => {
@@ -254,6 +267,7 @@ const ProfilePage = () => {
         const isBudgetRangeValid = validateRange('budgetMin', 'budgetMax', flatPreferences.budgetMin, flatPreferences.budgetMax);
         const isFloorRangeValid = validateRange('minFloor', 'maxFloor', flatPreferences.minFloor, flatPreferences.maxFloor);
         const isFloorsInBuildingRangeValid = validateRange('floorsInBuildingMin', 'floorsInBuildingMax', flatPreferences.floorsInBuildingMin, flatPreferences.floorsInBuildingMax);
+        const isFloorAndFloorsInBuildingValid =  validateRange('minFloor', 'floorsInBuildingMax', flatPreferences.minFloor, flatPreferences.floorsInBuildingMax);
 
         if (
             isBudgetMinValid &&
@@ -264,7 +278,8 @@ const ProfilePage = () => {
             isFloorsInBuildingMaxValid &&
             isBudgetRangeValid &&
             isFloorRangeValid &&
-            isFloorsInBuildingRangeValid
+            isFloorsInBuildingRangeValid &&
+            isFloorAndFloorsInBuildingValid
         ) {
             try {
                 await savePreferences();
@@ -1020,6 +1035,7 @@ const ProfilePage = () => {
                 }
 
                 {editingRentPriorities &&
+                    <>
                         <ComparisonMatrix
                             parameters={rentParameters}
                             parametersNames={rentParametersNames}
@@ -1027,6 +1043,11 @@ const ProfilePage = () => {
                             onSave={handleSaveRentPriorities}
                             cancelChanging={handleCancelChangingRentPriorities}
                         />
+                        {rentMatrixSaveError &&
+                            <SaveErrorField>{rentMatrixSaveError}</SaveErrorField>
+                        }
+                    </>
+
                 }
                 {(!editingRentData && !editingRentPriorities) &&
                     <div>

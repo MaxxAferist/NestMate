@@ -105,7 +105,6 @@ export const ComparisonProvider = ({ children }) => {
             }else{
                 setComparisonFlats([...comparisonFlats, flatId]);
             }
-            /*await loadComparison(user.id);*/
         } catch (err) {
             console.error("Ошибка при добавлении в сравнение:", err);
             throw err;
@@ -135,7 +134,6 @@ export const ComparisonProvider = ({ children }) => {
             }else{
                 setComparisonFlats(comparisonFlats.filter(f => f !== flatId));
             }
-            /*await loadComparison(user.id);*/
         } catch (err) {
             console.error("Ошибка при удалении из сравнения:", err);
             throw err;
@@ -160,9 +158,10 @@ export const ComparisonProvider = ({ children }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Ошибка при очистки сравнения');
+                throw new Error(`Ошибка при очистки сравнения: ${response.message}`);
+            }else{
+                setComparisonFlats([])
             }
-            await loadComparison(user.id);
         } catch (err) {
             console.error("Ошибка при очистки сравнения:", err);
             throw err;
@@ -178,6 +177,7 @@ export const ComparisonProvider = ({ children }) => {
     return (
         <ComparisonContext.Provider value={{
             comparisonFlats,
+            setComparisonFlats,
             addToComparison,
             removeFromComparison,
             clearComparison,

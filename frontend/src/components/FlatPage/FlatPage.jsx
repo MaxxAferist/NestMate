@@ -205,17 +205,18 @@ const FlatPage = () => {
                         <div className={s.parameterColumn}>
                             <ParameterItem label="Тип кухонной плиты">{flatData.kitchenStove ? flatData.kitchenStove  : 'не указан'}</ParameterItem>
                             <ParameterItem label="Состояние ремонта">{flatData.renovationCondition ? flatData.renovationCondition : 'нет данных'}</ParameterItem>
+                            {flatData.type === 'rent' &&
+                                <ParameterItem label="Кол-во спальных мест">{flatData.count_of_guests ? flatData.count_of_guests  : '-'}</ParameterItem>
+                            }
                         </div>
                     </div>
                 </div>
                 <div className={s.section}>
                     <h2 className={s.sectionTitle}>О доме</h2>
                     <div className={s.parametersGrid}>
-                        <div className={s.parameterColumn}>
                             <ParameterItem label="Этажей в доме">{flatData.buildingFloors ? flatData.buildingFloors : 'нет данных'}</ParameterItem>
                             <ParameterItem label="Материал">{flatData.buildingMaterial ? flatData.buildingMaterial : 'нет данных'}</ParameterItem>
-                            <ParameterItem label="Год постройки">{flatData.buildingYear ? flatData.buildingYear : 'нет данных'}</ParameterItem>
-                        </div>
+                            <ParameterItem label="Год постройки">{(flatData.buildingYear && flatData.buildingYear!== -1 && flatData.buildingYear!== 0)  ? flatData.buildingYear : 'нет данных'}</ParameterItem>
                     </div>
                 </div>
                 {flatData.amenities.length!==0 &&
@@ -270,7 +271,7 @@ const FlatPage = () => {
                 { flatData.transportAccessibility &&
                     <div>
                         <h2 className={s.sectionTitle}>Транспортная доступность</h2>
-                        <div className={s.parametersGrid} style={{gridTemplateColumns: "2fr 3fr"}}>
+
                             <div className={s.parameterColumn}>
                                 <ParameterItem label="Расстояние до метро">{flatData.transportAccessibility.metroDistance
                                     ? `Пешком ${flatData.transportAccessibility.metroDistance} минут`
@@ -283,7 +284,7 @@ const FlatPage = () => {
                                     : 'нет данных'}
                                 </ParameterItem>
                             </div>
-                        </div>
+
                     </div>
                 }
 
