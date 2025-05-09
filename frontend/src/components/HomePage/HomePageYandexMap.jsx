@@ -6,7 +6,7 @@ import {useFavorites} from '../contexts/FavoritesContext.jsx'
 import {useComparison} from "../contexts/ComparisonContext.jsx";
 import { useNavigate } from 'react-router-dom'
 
-const HomePageYandexMap = ({ flats, onClose }) => {
+const HomePageYandexMap = ({ flats, onClose, isUser }) => {
     const [selectedFlat, setSelectedFlat] = useState(null);
     const { isFavorite, handleFavoriteClick} = useFavorites();
     const {isInComparison, handleComparisonClick} = useComparison();
@@ -71,6 +71,7 @@ const HomePageYandexMap = ({ flats, onClose }) => {
                 </Map>
             </YMaps>
 
+            {/*карточка выбранной квартиры*/}
             {selectedFlat && (
                 <div className={s.flatCardContainer}>
                     <FlatCard
@@ -83,6 +84,7 @@ const HomePageYandexMap = ({ flats, onClose }) => {
                         showButtonsSection={true}
                         isFixed={false}
                         cardClick={() => navigate(`/FlatPage/${selectedFlat.id}`, { state: { flat_id: selectedFlat.id } })}
+                        isUser={isUser}
                     />
                     <button
                         onClick={() => setSelectedFlat(null)}

@@ -257,9 +257,6 @@ export const ComparisonMatrix = ({ parameters, parametersNames, currentPreferenc
                     Упростите сравнения или сделайте их более согласованными.`);
             return;
         }
-       /* const prioritiesArray = selectedColumns.map(parameter => ({
-            parameter, weight: weights[parameter]
-        }));*/
 
         onSave({
             matrix: visibleMatrix,

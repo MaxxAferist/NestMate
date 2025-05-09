@@ -1,6 +1,6 @@
 import s from './ProfilePage.module.css'
 
-
+/*отображение личных данных*/
 export const ProfileParameterRow = ({ name, value, className = '' }) => {
     return (
         <div className={`${s.parameterRow} ${className}`}> {/*className для дополнительных стилей*/}
@@ -10,6 +10,7 @@ export const ProfileParameterRow = ({ name, value, className = '' }) => {
     );
 };
 
+/*Ввод всех основных данных*/
 export const FormInputField = ({
                                    name,
                                    label,
@@ -19,14 +20,15 @@ export const FormInputField = ({
                                    options = null,
                                    className = '',
                                    inputClassName = s.input,
-                                   required = false,
+                                   required = false, /*необходимость заполнения*/
                                    placeholder = '',
                                    errorClassName = s.error,
                                    error = null,
-                                   step = null,
+                                   step = null, /*шаг ввода для чисел*/
                                    minuteLabel=''
 }) => {
     return (
+        /*для применения разных стилей*/
         <div className={`${s.formGroup} ${className}`}>
             <label>{label}</label>
             {options ? (
@@ -60,6 +62,7 @@ export const FormInputField = ({
         </div>
     );
 };
+
 export const ButtonSave = ({ children, type, className = '' }) => {
     return (
         <button className={`${s.buttonSave} ${className}`} type={type}>
@@ -68,6 +71,7 @@ export const ButtonSave = ({ children, type, className = '' }) => {
     )
 }
 
+/*ввод инлайн данных*/
 export const InlineFromField = ({
                                     name,
                                     label,
@@ -105,6 +109,7 @@ export const InlineFromField = ({
     )
 }
 
+/*ввод инлайн чекбоксов*/
 export const InlineCheckboxField = ({
                                         name,
                                         label,
@@ -127,6 +132,8 @@ export const InlineCheckboxField = ({
         </div>
     )
 }
+
+/*ввод значений с диапазонами*/
 export const RangeInput = ({
                         label,
                         minName,
@@ -169,6 +176,7 @@ export const RangeInput = ({
     );
 };
 
+/*отображение параметров квартиры*/
 export const FlatParameterRow = ({
                                      children,
                                      name,
@@ -179,7 +187,7 @@ export const FlatParameterRow = ({
                                      isRange = false,
                                      defaultValue = 'не указан',
 }) => {
-    const renderValue = () => {
+    const formatValue = () => {
         if (isArray) {
             return value.length > 0 ? value.join(', ') : defaultValue;
         }
@@ -200,7 +208,7 @@ export const FlatParameterRow = ({
     return (
         <div className={s.parameterRow}>
             <strong className={s.parameterName}>{name}:</strong>
-            <span className={s.parameterValue}>{renderValue()}</span>
+            <span className={s.parameterValue}>{formatValue()}</span>
             {(flatPriorityText || rentPriorityText) && (
                 <div className={s.priorityContainer}>
                     {flatPriorityText && (
@@ -219,6 +227,7 @@ export const FlatParameterRow = ({
     );
 };
 
+/*строки для инфраструктуры и транспортной доступности*/
 export const InfrastructureParameterRow = ({ name, value, defaultValue = 'расстояние не указано' }) => {
     return (
         <div className={s.parameterRow}>
@@ -230,6 +239,7 @@ export const InfrastructureParameterRow = ({ name, value, defaultValue = 'рас
     );
 };
 
+/*поля ошибок*/
 export const SaveErrorField = ({children}) =>{
     return (
         <div className={s.saveErrorField}>

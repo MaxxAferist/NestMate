@@ -45,7 +45,7 @@ const PARAM_INTRODUCTION = {
     transportAccessibility: 'Пешком ',
 };
 
-
+/*группы параметров*/
 const PARAM_GROUPS = {
     comparisonFlatDetails: ['price', 'rooms', 'area', 'floor','ceilingHeight'],
     restFlatDetails: ['type','balconyType', 'renovationCondition', 'amenities'],
@@ -56,7 +56,7 @@ const PARAM_GROUPS = {
 };
 
 const ComparisonTable = () => {
-    const [comparisonFlatsData, setComparisonFlatsData] = useState([]);
+    const [comparisonFlatsData, setComparisonFlatsData] = useState([]); /*полные данные квартир сравнения*/
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { removeFromComparison, clearComparison, setComparisonFlats } = useComparison();

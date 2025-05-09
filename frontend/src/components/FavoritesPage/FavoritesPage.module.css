@@ -5,7 +5,7 @@
     flex-direction: column;
     margin: 20px;
     padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
 .cardsContainerHeader {
@@ -87,7 +87,6 @@
 
 .radioButton {
     position: absolute;
-    opacity: 0;
     width: 0;
     height: 0;
 }
@@ -118,7 +117,6 @@
 
 .flatsContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 20px;
     width: 100%;
     padding: 20px;
@@ -145,20 +143,3 @@
 }
 
 
-
-@media (max-width: 768px) {
-    .filterPanel {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-start;
-    }
-
-    .filterOptions {
-        width: 100%;
-        justify-content: space-between;
-    }
-
-    .cardsContainer {
-        width: 100%;
-    }
-}

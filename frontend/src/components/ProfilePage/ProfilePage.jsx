@@ -21,15 +21,15 @@ const ProfilePage = () => {
     const {user,userData, setUserData, saveUserData,  logout, flatPreferences, setFlatPreferences,
         rentPreferences, setRentPreferences, savePreferences } = useContext(LoginContext);
 
-    const [editingRentData, setEditingRentData] = useState(false);
-    const [editingPersonalData, setEditingPersonalData] = useState(false);
-    const [editingFlatData, setEditingFlatData] = useState(false);
-    const [editingFlatPriorities, setEditingFlatPriorities] = useState(false);
-    const [editingRentPriorities, setEditingRentPriorities] = useState(false);
+    const [editingRentData, setEditingRentData] = useState(false); /*аренда*/
+    const [editingPersonalData, setEditingPersonalData] = useState(false); /*личные данные*/
+    const [editingFlatData, setEditingFlatData] = useState(false); /*данные покупки квартиры*/
+    const [editingFlatPriorities, setEditingFlatPriorities] = useState(false); /*веса параметров покупки*/
+    const [editingRentPriorities, setEditingRentPriorities] = useState(false); /*веса параметров аренды*/
 
 
-    const [errors, setErrors] = useState({});
-    const [flatSaveError, setFlatSaveError] = useState(null);
+    const [errors, setErrors] = useState({}); /*общие ошибки*/
+    const [flatSaveError, setFlatSaveError] = useState(null); /*ошибки сохранения параметров квартиры*/
     const [flatMatrixSaveError, setFlatMatrixSaveError] = useState(null);
     const [rentSaveError, setRentSaveError] = useState(null);
     const [rentMatrixSaveError, setRentMatrixSaveError] = useState(null);
@@ -40,11 +40,11 @@ const ProfilePage = () => {
 
         if (value !== '') {
             if (isNaN(value)) {
-                error = 'Введите число';
+                error = 'Введите число'; /*если введён текст*/
             } else if (isInteger && !Number.isInteger(Number(value))) {
-                error = 'Введите целое число';
+                error = 'Введите целое число'; /*если нужно целове*/
             } else if (value < minValue) {
-                error = `Значение должно быть ${minValue === 0 ? 'больше или равно 0' : 'больше или равно 1'}`;
+                error = `Значение должно быть ${minValue === 0 ? 'больше или равно 0' : 'больше или равно 1'}`; /*проверка минимального*/
             }
         }
 
@@ -54,7 +54,7 @@ const ProfilePage = () => {
                 [name]: error,
             }));
             return false;
-        } else {
+        } else { /*если нет ошибки*/
             setErrors((prev) => {
                 const newErrors = { ...prev };
                 delete newErrors[name];
@@ -64,6 +64,7 @@ const ProfilePage = () => {
         }
     };
 
+    /*Валидация полей с диапазоном*/
     useEffect(() => {
         validateRange('budgetMin', 'budgetMax', flatPreferences.budgetMin, flatPreferences.budgetMax);
     }, [flatPreferences.budgetMin, flatPreferences.budgetMax]);
@@ -94,7 +95,7 @@ const ProfilePage = () => {
             const max = parseFloat(maxValue);
 
             if (Math.min(min, max) !== min) {
-                if(minName === 'minFloor' && maxName === 'floorsInBuildingMax'){
+                if(minName === 'minFloor' && maxName === 'floorsInBuildingMax'){ /*отдльно для мин этажа и макс этажей в доме*/
                     setErrors((prev) => ({
                         ...prev,
                         [minName]: 'Минимальный этаж должен быть меньше, чем максимальное количество этажей в доме',
@@ -109,7 +110,7 @@ const ProfilePage = () => {
                 }
 
                 return false;
-            } else {
+            } else { /*если нет ошибок*/
                 setErrors((prev) => {
                     const newErrors = { ...prev };
                     delete newErrors[minName];
@@ -122,8 +123,8 @@ const ProfilePage = () => {
         return true;
     };
 
+    /*обновление личных данных*/
     const handlePersonalDataSubmit = async (e) => {
-        e.preventDefault();
         setUserDataError(null);
         try {
             await saveUserData(userData);
@@ -133,6 +134,7 @@ const ProfilePage = () => {
         }
     };
 
+    /*изменение личных*/
     const handleUserDataChange = (e) => {
         const { name, value } = e.target;
         setUserData({
@@ -142,13 +144,15 @@ const ProfilePage = () => {
     }
 
 
+    /*изменение данных квартиры*/
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
 
+        /*для чисел*/
         if (type === 'number') {
-            const numericValue = value === '' ? '' : parseFloat(value);
+            const numericValue = value === '' ? '' : parseFloat(value); /*если пустое значение*/
             if (name === 'minFloor' || name === 'maxFloor' || name === 'floorsInBuildingMin' || name === 'floorsInBuildingMax' || name ==="budgetMax" || name ==="maxRentPeriod") {
-                if (!validateNumberInput(name, numericValue, true, 1)) {
+                if (!validateNumberInput(name, numericValue, true, 1)) { /*минимальное значение - 1*/
                     return;
                 }
             }
@@ -166,6 +170,7 @@ const ProfilePage = () => {
     };
 
 
+    /*отдельно для удобств*/
     const handleAmenitiesChange = (e) => {
         const { value, checked } = e.target;
         setFlatPreferences((prev) => {
@@ -174,8 +179,8 @@ const ProfilePage = () => {
                 amenities.push(value);
             } else {
                 const index = amenities.indexOf(value);
-                if (index !== -1) {
-                    amenities.splice(index, 1);
+                if (index !== -1) { /*если есть элемент*/
+                    amenities.splice(index, 1); /*удаление по индексу (только 1 элемент)*/
                 }
             }
             return { ...prev, amenities };
@@ -183,7 +188,7 @@ const ProfilePage = () => {
     }
 
 
-
+    /*для материалов дома*/
     const handleHouseMaterialChange = (e) => {
         const { value, checked } = e.target;
         setFlatPreferences((prev) => {
@@ -204,24 +209,22 @@ const ProfilePage = () => {
         const { value, checked } = e.target;
         setFlatPreferences(prev => {
             let newRoomCount = [...prev.roomCount];
-
             if (checked) {
                 newRoomCount.push(value);
             } else {
                 newRoomCount = newRoomCount.filter(item => item !== value);
             }
-
             newRoomCount.sort((a, b) => Number(a) - Number(b)); // сортировка для отображения
-
             return { ...prev, roomCount: newRoomCount };
         });
     };
 
+    /*изменение полей инфраструктура*/
     const handleInfrastructureChange = (e) => {
         const { name, type, value } = e.target;
         if(type === 'number') {
-            const numericValue = value === '' ? '' : parseFloat(value);
-            if (!validateNumberInput(('infrastructure.'+name), numericValue, true, 0)) {
+            const numericValue = value === '' ? '' : parseFloat(value); /*для пустых*/
+            if (!validateNumberInput(('infrastructure.'+name), numericValue, true, 0)) { /*для корректной валидации*/
                 return;
             }
         }
@@ -234,6 +237,7 @@ const ProfilePage = () => {
         }));
     }
 
+    /*изменение полей транспортной доступности*/
     const handleTransportAccessibilityChange = (e) => {
         const { name, type, value } = e.target;
         if(type === 'number') {
@@ -255,6 +259,7 @@ const ProfilePage = () => {
         e.preventDefault();
         setFlatSaveError(null);
 
+        /*проверка валидации*/
         const isBudgetMinValid = validateNumberInput('budgetMin', flatPreferences.budgetMin, true, 0);
         const isBudgetMaxValid = validateNumberInput('budgetMax', flatPreferences.budgetMax, true, 0);
         const isMinFloorValid = validateNumberInput('minFloor', flatPreferences.minFloor, true, 1);
@@ -292,6 +297,7 @@ const ProfilePage = () => {
         }
     }
 
+    /*изменение для аренды*/
     const handleRentInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         if (type === 'number') {
@@ -306,9 +312,9 @@ const ProfilePage = () => {
         if (name === 'petsAllowed' || name === 'childrenAllowed' || name === 'immediateMoveIn' || name === "smokingAllowed") {
             setRentPreferences(prev => ({
                 ...prev,
-                rentalTerms: {
+                rentalTerms: { /*отдельно для rentalTerms*/
                     ...prev.rentalTerms,
-                    [name]: type === 'checkbox' ? checked : value
+                    [name]: type === 'checkbox' ? checked : value /*если чекбокс - то checked*/
                 }
             }));
         } else {
@@ -319,6 +325,7 @@ const ProfilePage = () => {
         }
     }
 
+    /*изменение оплаты*/
     const handleRentPaymentChange = (e) => {
         const { name, type, value } = e.target;
         if(type === 'number') {
@@ -329,7 +336,7 @@ const ProfilePage = () => {
         }
         setRentPreferences((prev) => ({
             ...prev,
-            rentPayment: {
+            rentPayment: { /*изменение именно rentPayment*/
                 ...prev.rentPayment,
                 [name]: value,
             },
@@ -337,8 +344,8 @@ const ProfilePage = () => {
     }
 
 
+    /*сохранение аренды*/
     const handleRentPreferencesSubmit = async (e) => {
-        e.preventDefault();
         setRentSaveError(null)
 
         const isNumberOfBedsValid = validateNumberInput('numberOfBeds', rentPreferences.numberOfBeds, true, 1);
@@ -357,12 +364,14 @@ const ProfilePage = () => {
         }
     }
 
+    /*параметры для матрицы*/
     const flatParameters = [
         'budget', 'area', 'roomCount','district', 'apartmentType', 'balconyType',
         'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
         'renovationCondition', 'amenities',
         'infrastructure', 'transportAccessibility'
     ];
+    /*словарь для матрицы*/
     const flatParametersNames = {
         budget: "Цена",
         area: "Площадь",
@@ -380,6 +389,7 @@ const ProfilePage = () => {
         transportAccessibility: "Транспортная доступность"
     };
 
+    /*аналогично*/
     const rentParameters = [
         'rentPayment','rentalTerms','numberOfBeds', 'district','area', 'roomCount', 'balconyType',
         'ceilingHeight', 'floor', 'floorsInBuilding', 'houseMaterial',
@@ -404,10 +414,11 @@ const ProfilePage = () => {
         transportAccessibility: "Транспортная доступность"
     };
 
+    /*сохранение весов покупки*/
     const handleSaveFlatPriorities = async (matrix, weights) => {
         setFlatMatrixSaveError(null)
         try {
-            const newPreferences = {
+            const newPreferences = { /*сохранение новой матрицы и вычисленных весов*/
                 ...flatPreferences,
                 comparisonMatrix: matrix,
                 priorities: weights
@@ -415,13 +426,13 @@ const ProfilePage = () => {
 
             setFlatPreferences(newPreferences);
             await savePreferences(newPreferences);
-
             setEditingFlatPriorities(false);
         } catch (err) {
             setFlatMatrixSaveError(`Ошибка при сохранении парных сравнений: ${err.message}`);
         }
     };
 
+    /*сохранение весов аренды*/
     const handleSaveRentPriorities = async (matrix, weights) => {
         setRentMatrixSaveError(null)
         try {
@@ -433,13 +444,13 @@ const ProfilePage = () => {
 
             setRentPreferences(newPreferences);
             await savePreferences(flatPreferences, newPreferences);
-
             setEditingRentPriorities(false);
         } catch (err) {
             setRentMatrixSaveError(`Ошибка при сохранении приоритетов: ${err.message}`);
         }
     };
 
+    /*отмены изменений*/
     const handleCancelChangingFlatPriorities = () => {
         setEditingFlatPriorities(false)
     }
@@ -447,15 +458,16 @@ const ProfilePage = () => {
         setEditingRentPriorities(false)
     }
 
+    /*выход*/
 
     const handleLogout = () => {
         logout();
         navigate('/');
     }
 
+    /*для правильного показа количества комнат*/
     const showRoomCount = (roomCount) => {
         if (!roomCount || roomCount.length === 0) return "не указано";
-
         const roomMap = {
             '0': 'студия',
             '1': '1 комната',
@@ -465,7 +477,6 @@ const ProfilePage = () => {
             '5': '5 комнат',
             '6': '6 и более комнат'
         };
-
         return roomCount.map(value => roomMap[value] || value).join(', ');
     };
 
@@ -977,13 +988,9 @@ const ProfilePage = () => {
 
                                 <RangeInput
                                     label={`Цена ${
-                                        rentPreferences.rentPayment.rentPeriod === 'неважно'
-                                            ? ''
-                                            : (
+                                        rentPreferences.rentPayment.rentPeriod === 'неважно' ? '' : (
                                                 rentPreferences.rentPayment.rentPeriod === 'посуточно'
-                                                    ? 'за 1 день'
-                                                    : 'за 1 месяц'
-                                            )
+                                                    ? 'за 1 день' : 'за 1 месяц')
                                     } руб.`}
                                     minName="rentPriceMin"
                                     maxName="rentPriceMax"
@@ -1062,12 +1069,8 @@ const ProfilePage = () => {
                                 <div className={s.parameterRow}>
                                     <span className={s.parameterName}>{`Цена ${
                                         rentPreferences.rentPayment.rentPeriod === 'неважно'
-                                            ? ''
-                                            : (
-                                                rentPreferences.rentPayment.rentPeriod === 'посуточно'
-                                                    ? 'за 1 день'
-                                                    : 'за 1 месяц'
-                                            )
+                                            ? '' : (rentPreferences.rentPayment.rentPeriod === 'посуточно'
+                                                    ? 'за 1 день' : 'за 1 месяц')
                                     } руб.`}
                                     </span>
                                     <span className={s.parameterValue}>{rentPreferences.rentPayment.rentPriceMin ? `от ${rentPreferences.rentPayment.rentPriceMin} руб.` : ''}

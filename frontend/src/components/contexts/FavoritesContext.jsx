@@ -16,7 +16,8 @@ export const FavoritesProvider = ({ children }) => {
         try {
             const response = await fetch(`/api/favorites_list/${userId}`);
             if (!response.ok) {
-                throw new Error(`Ошибка при получении избранных квартир ${response?.message}`);
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при получении избранных квартир ${errorMessage?.message}`);
             }
             const data = await response.json();
             setFavorites(data.favorites.favorites_list || []);
@@ -55,7 +56,8 @@ export const FavoritesProvider = ({ children }) => {
                 }),
             });
             if (!response.ok) {
-                throw new Error(`Ошибка при добавлении в избранное: ${response?.message}`);
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при добавлении в избранное: ${errorMessage?.message}`);
             }else{
                 setFavorites(prev => [...prev, flatId]);
             }
@@ -83,7 +85,8 @@ export const FavoritesProvider = ({ children }) => {
             });
 
             if (!response.ok) {
-                throw new Error(`Ошибка при удалении из избранного ${response?.message}`);
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при удалении из избранного ${errorMessage?.message}`);
             }else{
                 setFavorites(favorites.filter(f => f !== flatId));
             }
@@ -110,7 +113,8 @@ export const FavoritesProvider = ({ children }) => {
             });
 
             if (!response.ok) {
-                throw new Error(`Ошибка при очистки избранного: ${response?.message}`);
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при очистки избранного: ${errorMessage?.message}`);
             }else{
                 setFavorites([])
             }

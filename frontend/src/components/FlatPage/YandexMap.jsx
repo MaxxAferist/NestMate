@@ -18,6 +18,7 @@ export const YandexMap = ({ inputCoordinates = [55, 57],inputZoom = 16, mapStyle
     return (
         <div ref={mapRef}>
             <YMaps query={{ apikey: API_KEY }}>
+                {/*сама карта*/}
                 <Map
                     width={mapStyle?.width || '100%'}
                     height={mapStyle?.height || '400px'}
@@ -27,6 +28,7 @@ export const YandexMap = ({ inputCoordinates = [55, 57],inputZoom = 16, mapStyle
                         controls: [],
                     }}
                 >
+                    {/*метка*/}
                     <Placemark
                         geometry={inputCoordinates}
                         options={{
@@ -34,12 +36,14 @@ export const YandexMap = ({ inputCoordinates = [55, 57],inputZoom = 16, mapStyle
                             draggable: false,
                         }}
                     />
+                    {/*вид карты*/}
                     <TypeSelector options={{
                         position: { right: 10, top: 10 }
                     }} />
                     <ZoomControl options={{
                         position: { right: 10, top: 80 }
                     }} />
+                    {/*рулетка*/}
                     <RulerControl options={{
                         position: { right: 10, bottom: 30 }
                     }} />

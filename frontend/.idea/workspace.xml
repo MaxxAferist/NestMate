@@ -9,33 +9,29 @@
       <change beforePath="$PROJECT_DIR$/../backend/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/utils.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/@pbe_react-yandex-maps.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/@pbe_react-yandex-maps.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/chunk-ILK4XV7T.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/chunk-ILK4XV7T.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/chunk-MVRAC76T.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/chunk-MVRAC76T.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/html-react-parser.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/html-react-parser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom_client.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom_client.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom_client.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-dom_client.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-icons_fa.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-icons_fa.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-router-dom.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-router-dom.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react-router-dom.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react-router-dom.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-dev-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-dev-runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-dev-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-dev-runtime.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-runtime.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/node_modules/.vite/deps/react_jsx-runtime.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Cards/FlatCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Cards/FlatCard.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ComparisonPage/ComparisonPage.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ComparsionMatrix/ComparisonMatrix.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ComparsionMatrix/ComparisonMatrix.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ComparsionMatrix/ComparisonMatrix.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ComparsionMatrix/ComparisonMatrix.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FavoritesPage/FavoritesPage.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FlatPage/FlatPage.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FlatPage/YandexMap.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FlatPage/YandexMap.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePage.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePageYandexMap.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePageYandexMap.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/HomePage/HomePageYandexMap.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/HomePage/HomePageYandexMap.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/LoginWindow/LoginWindow.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LoginWindow/LoginWindow.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/LoginWindow/LoginWindow.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/LoginWindow/LoginWindow.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePage.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePageComponents.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ProfilePage/ProfilePageComponents.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SignInWindow/SignInWindow.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SignInWindow/SignInWindow.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SignInWindow/SignInWindow.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SignInWindow/SignInWindow.module.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/contexts/ComparisonContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/ComparisonContext.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/contexts/FavoritesContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/FavoritesContext.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/contexts/LoginContext.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/contexts/LoginContext.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,6 +219,8 @@
       <workItem from="1746628502980" duration="15598000" />
       <workItem from="1746703543209" duration="12911000" />
       <workItem from="1746786450456" duration="9359000" />
+      <workItem from="1746795989103" duration="57000" />
+      <workItem from="1746811365803" duration="12147000" />
     </task>
     <task id="LOCAL-00001" summary="Доделал страницу квартиры">
       <option name="closed" value="true" />

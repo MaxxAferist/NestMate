@@ -23,16 +23,15 @@ const FlatPage = () => {
     const {user} = useContext(LoginContext);
 
     const {handleFavoriteClick, isFavorite} = useFavorites();
-
     const { handleComparisonClick, isInComparison} = useComparison();
+
     useEffect(() => {
-        if(user && user.id && flat_id ) {
+        if(flat_id ) {
             setLoading(true);
             const fetchFlatData = async () => {
                 try {
                     const response = await fetch(`/api/apartment/${flat_id}`);
                     const data = await response.json();
-                    console.log('data',data.apartments);
                     if (data.status === 'success') {
                         setFlatData(data.apartments);
                     } else {
@@ -49,18 +48,16 @@ const FlatPage = () => {
     }, [user, flat_id]);
 
 
+    /*главное фото*/
     const nextPhoto = () => {
-        setCurrentPhotoIndex((prev) =>
-            prev === flatData.photos.length - 1 ? 0 : prev + 1
-        );
+        setCurrentPhotoIndex((prev) => prev === flatData.photos.length - 1 ? 0 : prev + 1);
     };
 
     const prevPhoto = () => {
-        setCurrentPhotoIndex((prev) =>
-            prev === 0 ? flatData.photos.length - 1 : prev - 1
-        );
+        setCurrentPhotoIndex((prev) => prev === 0 ? flatData.photos.length - 1 : prev - 1);
     };
 
+    /*все фото*/
     const nextMiniatures = () => {
         if (photoStartIndex + photosToShow < flatData.photos.length) {
             if(photoStartIndex+photosToShow + 5 < flatData.photos.length){
@@ -87,23 +84,14 @@ const FlatPage = () => {
         setCurrentPhotoIndex(index);
     };
 
+    /*для красивого отображения цены*/
     const formatPrice = (price) => {
-        return new Intl.NumberFormat('ru-RU', {
-            style: 'decimal',
-            maximumFractionDigits: 0
-        }).format(price);
+        return new Intl.NumberFormat('ru-RU', {style: 'decimal', maximumFractionDigits: 0}).format(price);
     };
 
+    /*для отображения комнат*/
     const formatRooms = (rooms) => {
-        if(typeof rooms === 'number'){
-            if(rooms === 0){
-                return ' студия, ';
-            }else{
-                return `${rooms}-комнатная квартира, `;
-            }
-        }else{
-            return ' студия, ';
-        }
+        return rooms === '0' || rooms.toLowerCase() === 'студия' ?  ' студия, ' : ` ${rooms}-комнатная квартира, `;
     }
 
     if(loading){
@@ -131,7 +119,7 @@ const FlatPage = () => {
 
                 <div className={s.photosSection}>
                     <div className={s.mainPhotoContainer}>
-                        <button className={s.photoNavButton} onClick={prevPhoto}>&lt;</button>
+                        <button className={s.photoNavButton} onClick={prevPhoto}>&lt;</button> {/*&lt - знак < */}
                         <img
                             src={flatData.photos[currentPhotoIndex]}
                             alt="Квартира"
@@ -141,8 +129,7 @@ const FlatPage = () => {
                     </div>
 
                     <div className={s.miniaturesContainer}>
-                        <button
-                            className={s.miniaturesNavButton}
+                        <button className={s.miniaturesNavButton}
                             onClick={prevMiniatures}
                             disabled={photoStartIndex === 0}
                         >
@@ -151,14 +138,14 @@ const FlatPage = () => {
 
                         <div className={s.miniatures}>
                             {flatData.photos.slice(photoStartIndex, photoStartIndex + photosToShow).map((photo, index) => {
-                                const actualIndex = photoStartIndex + index;
+                                const currentIndex = photoStartIndex + index;
                                 return (
                                     <img
-                                        key={actualIndex}
+                                        key={currentIndex}
                                         src={photo}
-                                        alt="Миниатюра"
-                                        className={`${s.miniature} ${actualIndex === currentPhotoIndex ? s.selectedMiniature : ''}`}
-                                        onClick={() => selectPhoto(actualIndex)}
+                                        alt="МиниФото"
+                                        className={`${s.miniature} ${currentIndex === currentPhotoIndex ? s.selectedMiniature : ''}`}
+                                        onClick={() => selectPhoto(currentIndex)}
                                     />
                                 );
                             })}
@@ -178,16 +165,12 @@ const FlatPage = () => {
                     <h2 className={s.sectionTitle}>Расположение</h2>
                     <p>
                         {flatData.geo.address ? `${flatData.geo.address} ${flatData.geo.district} р-н`  : '-'}
-                        {/*{flatData.region ? `${flatData.region},` : ''} {flatData.city}
-                        {flatData.district && `, ${flatData.district}`}<br />
-                        {flatData.street}, {flatData.house}
-                        {flatData.apartment && `, кв. ${flatData.apartment}`}*/}
                     </p>
                 </div>
 
                 <div className={s.section}>
                     <h2 className={s.sectionTitle}>Описание</h2>
-                    <div>{parse(flatData.description)}</div>
+                    <div>{parse(flatData.description)}</div> {/*для парсинга html */}
                 </div>
                 <div className={s.section}>
                     <h2 className={s.sectionTitle}>О квартире</h2>
@@ -298,6 +281,7 @@ const FlatPage = () => {
                 }
 
             </div>
+            {/*сайдбар*/}
             <div className={s.sidebar}>
                 <p className={s.sidebarTitle}>
                     {((flatData.rooms === 'Студия' ||flatData.rooms === 0 ) ? 'Студия' : `${flatData.rooms}-комнатная квартиры`)},
@@ -317,14 +301,19 @@ const FlatPage = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        🔗 Перейти к источнику
+                         Перейти к источнику
                     </a>
 
-                    <ComparisonButton onComparisonClick={(e) => handleComparisonClick(flatData.id, e)}
-                                      isInComparison={isInComparison(flatData.id)}
-                    />
+                    { user &&
+                        (
+                            <>
+                                <ComparisonButton onComparisonClick={(e) => handleComparisonClick(flatData.id, e)}
+                                                  isInComparison={isInComparison(flatData.id)}
+                                />
 
-                    <FavoriteButton onFavoriteClick={() => handleFavoriteClick(flatData.id)} isFavorite={isFavorite(flatData.id)} />
+                                <FavoriteButton onFavoriteClick={() => handleFavoriteClick(flatData.id)} isFavorite={isFavorite(flatData.id)} />
+                            </>
+                        )}
                 </div>
             </div>
         </div>

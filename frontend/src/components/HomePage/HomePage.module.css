@@ -5,7 +5,7 @@
     flex-direction: column;
     margin: 20px;
     padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
 /*панель фильтров*/
@@ -18,12 +18,11 @@
     background: linear-gradient(135deg, #dce6fb 0%, #e7daff 100%);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .searchPanel {
     display: flex;
-    align-items: stretch;
+    align-items: stretch; /*чтобы поля растягивались*/
     margin-bottom: 15px;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 12px;
@@ -51,17 +50,16 @@
 }
 
 .filterTitle {
-    font-size: 1rem;
+    font-size: 16px;
     color: #2c3e50;
     font-weight: 500;
-    white-space: nowrap;
 }
 
 .filterLabel {
     display: inline-flex;
     align-items: center;
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: 15px;
     border: 1px solid #bccbdd;
     background-color: #f0f6fd;
     color: #51739a;
@@ -69,7 +67,6 @@
     padding: 8px 16px;
     border-radius: 8px;
     transition: all 0.2s ease;
-    white-space: nowrap;
 }
 
 .filterLabel:hover {
@@ -86,7 +83,6 @@
 
 .radioButton {
     position: absolute;
-    opacity: 0;
     width: 0;
     height: 0;
 }
@@ -110,7 +106,6 @@
     transition: all 0.3s;
     box-shadow: 0 2px 8px rgba(74, 107, 223, 0.3);
     font-weight: 500;
-    white-space: nowrap;
 }
 
 .searchButton:hover {
@@ -118,7 +113,7 @@
     box-shadow: 0 4px 12px rgba(74, 107, 223, 0.4);
 }
 
-.secondaryControls {
+.secondaryButtons {
     display: flex;
     gap: 15px;
     margin-bottom: 15px;
@@ -127,7 +122,7 @@
 
 .secondaryButton {
     padding: 8px 16px;
-    font-size: 0.95rem;
+    font-size: 17px;
     background: linear-gradient(135deg, #6f42c1 0%, #5a32a3 100%);
     color: white;
     border: none;
@@ -152,6 +147,7 @@
 .radioLabel {
     padding-left: 0;
 }
+
  /*предупреждения и предложения*/
 .warning {
     color: #4a5568;
@@ -225,7 +221,6 @@
 
 .iconButton {
     background-color: #f0f0f0;
-    /*background: none;*/
     clip-path: circle();
     overflow: hidden;
     border: none;
@@ -282,8 +277,6 @@
     width: 100%;
 }
 
-
-
 .backgroundLighting {
     background-color: #bee3f8;
     padding: 2px 6px;
@@ -292,21 +285,4 @@
     color: #2c5282;
 }
 
-@media (max-width: 768px) {
-    .searchPanel {
-        flex-direction: column;
-    }
-
-    .filterSection {
-        width: 100%;
-        justify-content: center;
-        padding: 10px;
-    }
-
-    .searchButtonSection {
-        width: 100%;
-        justify-content: center;
-        padding: 10px;
-    }
-}
 

@@ -37,10 +37,10 @@ export default function HomePage() {
         try {
             const response = await fetch(`/api/mainIndex/${user.id}/${page}/${type}`);
             if (!response.ok) {
-                throw new Error('Ошибка загрузки квартир: ' + response.message);
+                const errorData = await response.json();
+                throw new Error('Ошибка загрузки квартир: ' + errorData.message);
             }
             const data = await response.json();
-            console.log('data', data);
             if (data.status === 'success') {
                 setFlatMap(data.apartments.apartments);
                 setComparisonFlats(data.apartments.comparison_list)
@@ -83,7 +83,8 @@ export default function HomePage() {
         try{
             const response = await fetch(`/api/mainIndex/${page}/${type}`);
             if (!response.ok) {
-                throw new Error("Ошибка при получении квартир: " + response.message);
+                const errorData = await response.json();
+                throw new Error("Ошибка при получении квартир: " + errorData.message);
             }
             const data = await response.json();
             if (data.status === 'success') {
@@ -196,11 +197,6 @@ export default function HomePage() {
         }
     }, [user]);
 
-
-   /* useEffect(() => {
-        fetchApartments(currentPageNumber);
-    }, [currentPageNumber]);*/
-
     const handleFilterChange = (type) => {
         setFilterType(type);
         localStorage.setItem('filterType', type);
@@ -215,17 +211,6 @@ export default function HomePage() {
         }
     };
 
-
-    /*const handleOnNextButtonClicked = ()=>{
-        if(currentStartIndex <= 75 && (flatMap2.length - currentStartIndex - 25 > 0)){
-            setCurrentStartIndex(currentStartIndex + 25);
-        }
-    }
-    const handleOnPrevButtonClicked = ()=>{
-        if(currentStartIndex >= 25){
-            setCurrentStartIndex(currentStartIndex - 25);
-        }
-    }*/
 
     const handleOnNextButtonClicked = ()=>{
         localStorage.setItem('pageNumber', `${currentPageNumber + 1}`);
@@ -316,14 +301,14 @@ export default function HomePage() {
                     </div>
                 </div>
 
-                <div className={s.secondaryControls}>
+                <div className={s.secondaryButtons}>
                     <button className={s.secondaryButton} onClick={() => navigate('/Profile')}>
                         Изменить параметры подбора в профиле
                     </button>
                     <button className={s.secondaryButton} onClick={() => setShowYMap(true)}>
                         Показать квартиры на карте
                     </button>
-                    {showYMap && <HomePageYandexMap flats={flatMap} onClose={() => setShowYMap(false)} />}
+                    {showYMap && <HomePageYandexMap flats={flatMap} onClose={() => setShowYMap(false)} isUser={user !== null} />}
                 </div>
 
                 {prioritiesError &&
@@ -379,6 +364,7 @@ export default function HomePage() {
                               onFavoriteClick={() => handleFavoriteClick(flatData.id)}
                               onComparisonClick={(e) => handleComparisonClick(flatData.id, e)}
                               cardClick={() => navigate(`/FlatPage/${flatData.id}`, { state: { flat_id: flatData.id } })}
+                              isUser={user !== null}
                     />
                 ))}
                 <div className={s.cardsContainerFooter}>
@@ -399,4 +385,3 @@ export default function HomePage() {
         </div>
     )
 }
-/*disabled={currentStartIndex === 75 || (Object.keys(flatMap2).length - currentStartIndex - 25) <= 0 }*/

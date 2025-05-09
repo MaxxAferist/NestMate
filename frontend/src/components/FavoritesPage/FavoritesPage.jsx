@@ -32,16 +32,15 @@ const FavoritesPage = () => {
                 try {
                     const response = await fetch(`/api/favorites/${user.id}`);
                     const data = await response.json();
-                    console.log(data);
                     if (data.status === 'success') {
-                        if(data.message === 'User do not have favorites apartments') {
+                        if(data.message === 'User do not have favorites apartments') { /*нет квартир*/
                             setFlats([]);
                             setFilteredFlats([]);
-                            setFavorites([])
+                            setFavorites([]) /*обновление списка айди*/
                         }else{
                             setFlats(data.favorites.apartments || []);
                             setFilteredFlats(data.favorites.apartments || []);
-                            setFilteredFlats(data.favorites.favorites_list || []);
+                            setFavorites(data.favorites.favorites_list || []);  /*обновление списка айд*/
                         }
                     } else {
                         setError(data.message || 'Ошибка загрузки избранных квартир');
@@ -52,7 +51,6 @@ const FavoritesPage = () => {
                     setLoading(false);
                 }
             };
-
             fetchFavorites();
         }
     }, []);
@@ -180,6 +178,7 @@ const FavoritesPage = () => {
                             isInComparison={isInComparison(flatData.id)}
                             onComparisonClick={(e) => handleComparisonClick(flatData.id, e)}
                             cardClick={() => navigate(`/FlatPage/${flatData.id}`, { state: { flat_id: flatData.id } })}
+                            isUser={user !== null}
                         />
 
                     ))}

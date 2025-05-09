@@ -61,12 +61,10 @@ export default function SignInWindow(){
     const handleChange = (e) => {
         const {name, value} = e.target;
         setUserData({ ...userData, [name]: value});
-        setErrors({ ...errors, [name]: '' }); // очищаем ошибку
+        setErrors({ ...errors, [name]: '' }); // сброс ошибки
     }
 
     const handleRegister = async(e) => {
-        e.preventDefault();
-
         setMessage('');
 
         if (!validateFields()) {
@@ -84,7 +82,6 @@ export default function SignInWindow(){
             if(data.message === 'User registered'){
                 setMessage('Профиль успешно создан!');
                 setIsRegistered(true);
-                /*login(userData)*/
             } else {
                 setMessage(data.message || 'Успешная регистрация');
             }
@@ -158,12 +155,7 @@ export default function SignInWindow(){
                             onClick={() => setShowPassword(!showPassword)}
                             disabled={isRegistered}
                         >
-                            {showPassword ?
-                                (
-                                    <FaEyeSlash />
-                                ) : (
-                                    <FaEye />
-                                )}
+                            {showPassword ? (<FaEyeSlash />) : (<FaEye />)}
                         </button>
                     </div>
                     {errors.password && <span className={s.errorText}>{errors.password}</span>}
@@ -185,12 +177,7 @@ export default function SignInWindow(){
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                             disabled={isRegistered}
                         >
-                            {showConfirmPassword ?
-                                (
-                                    <FaEyeSlash />
-                                ) : (
-                                    <FaEye />
-                                )}
+                            {showConfirmPassword ? (<FaEyeSlash />) : (<FaEye />)}
                         </button>
                     </div>
                     {errors.confirmPassword && <span className={s.errorText}>{errors.confirmPassword}</span>}

@@ -4,7 +4,7 @@
     margin: 0 auto;
     padding: 20px;
     gap: 30px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
 .mainContent {
@@ -14,9 +14,9 @@
 .sidebar {
     flex: 1;
     max-width: 350px;
-    position: sticky;
+    position: sticky; /*фиксирует сайдбар при перемотке страницы*/
     top: 20px;
-    height: fit-content;
+    height: fit-content; /*подстраивает высоту сайдбар*/
     padding: 20px;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
@@ -74,11 +74,11 @@
     justify-content: center;
 }
 
-.photoNavButton:first-child {
+.photoNavButton:first-child { /*для первой кнопки фиксированная позиция*/
     left: 10px;
 }
 
-.photoNavButton:last-child {
+.photoNavButton:last-child { /*для второй*/
     right: 10px;
 }
 
@@ -103,7 +103,7 @@
 }
 
 .miniaturesNavButton:disabled {
-    opacity: 0.5;
+    opacity: 0.5; /*прозрачность*/
     cursor: not-allowed;
 }
 
@@ -111,16 +111,16 @@
     display: flex;
     gap: 5px;
     overflow: hidden;
-    flex-grow: 1;
+    flex-grow: 1; /*для заполнения пространства*/
 }
 
 .miniature {
     width: 60px;
     height: 60px;
-    object-fit: cover;
+    object-fit: cover; /*обрезает края сохраняя пропорции*/
     border-radius: 4px;
     cursor: pointer;
-    border: 2px solid transparent;
+    border: 2px solid transparent; /*прозрачная*/
 }
 
 .selectedMiniature {
@@ -138,7 +138,7 @@
 }
 
 .featuresList {
-    list-style-type: none;
+    list-style-type: none; /*убирает маркеры списка*/
     padding: 0;
     margin: 0;
 }
@@ -174,7 +174,6 @@
 }
 
 .sourceButton {
-
     width: 94%;
     padding: 10px;
     color: white;
