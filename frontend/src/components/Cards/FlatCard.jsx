@@ -5,6 +5,7 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
                       onFavoriteClick, onComparisonClick,
                       showButtonsSection = true,
                       isFixed = true,
+                      isUser = false,
                   }) => {
 
     const getRoomsText = (rooms) => {
@@ -76,8 +77,13 @@ const FlatCard = ({ mark, flatData, cardClick, isFavorite,isInComparison,
 
             {showButtonsSection && (
                 <div className={s.buttonsSection} style={isFixed ? {minWidth: "200px"} : {minWidth: '100px', maxWidth: '200px'} }>
-                    <FavoriteButton onFavoriteClick={ onFavoriteClick } isFavorite={isFavorite} />
-                    <ComparisonButton onComparisonClick={onComparisonClick} isInComparison={isInComparison} />
+                    {isUser && (
+                        <>
+                            <FavoriteButton onFavoriteClick={ onFavoriteClick } isFavorite={isFavorite} />
+                            <ComparisonButton onComparisonClick={onComparisonClick} isInComparison={isInComparison} />
+                        </>
+
+                    )}
                     <DetailsButton cardClick={cardClick} />
                 </div>
             )}

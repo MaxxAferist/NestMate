@@ -7,7 +7,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
 .backgroundOverlay {
@@ -144,7 +144,7 @@
 }
 
 .inputError {
-    border-color: #e53e3e !important;
+    border-color: #e53e3e;
     background-color: #fff5f5;
 }
 

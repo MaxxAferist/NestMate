@@ -16,35 +16,33 @@ export const ComparisonProvider = ({ children }) => {
                 await addToComparison(flatId);
             }
         } catch(error) {
-            console.error("Ошибка при изменении сравнения:", error);
-
-            // Показываем сообщение только для ошибки лимита
+            /*для всплывающего окна подсказки*/
             if (error.isComparisonLimitError && event) {
-                const tooltip = document.createElement('div');
-                tooltip.className = 'comparison-error-tooltip';
-                tooltip.textContent = error.message;
+                const window = document.createElement('div'); /*объект div*/
+                /*document - страница*/
+                window.textContent = error.message; /*текст*/
 
 
 
                 // возле курсора
-                tooltip.style.position = 'fixed';
-                tooltip.style.left = `${event.clientX + 10}px`;
-                tooltip.style.top = `${event.clientY + 10}px`;
-                tooltip.style.backgroundColor = '#fffce6';
-                tooltip.style.padding = '8px 12px';
-                tooltip.style.borderRadius = '4px';
-                tooltip.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
-                tooltip.style.zIndex = '9999';
-                tooltip.style.color = '#bf5617';
-                tooltip.style.border = '1px solid #ffcdd2';
-                tooltip.style.maxWidth = '250px';
+                window.style.position = 'fixed';
+                window.style.left = `${event.clientX + 10}px`; // правее курсора
+                window.style.top = `${event.clientY + 10}px`; // ниже
+                window.style.backgroundColor = '#fffce6';
+                window.style.padding = '8px 12px';
+                window.style.borderRadius = '4px';
+                window.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+                window.style.zIndex = '9999'; // над всеми элементами
+                window.style.color = '#bf5617';
+                window.style.border = '1px solid #ffcdd2';
+                window.style.maxWidth = '250px';
 
-                document.body.appendChild(tooltip);
+                document.body.appendChild(window); /*добавляет объект*/
 
-                setTimeout(() => {
-                    tooltip.style.opacity = '0';
-                    tooltip.style.transition = 'opacity 0.3s ease';
-                    setTimeout(() => tooltip.remove(), 300);
+                setTimeout(() => { /*удаляет через 2 секунды */
+                    window.style.opacity = '0'; // плавное удаление
+                    window.style.transition = 'opacity 0.3s ease'; // анимация дляпрозрачности
+                    setTimeout(() => window.remove(), 300); // удаление
                 }, 2000);
             }
         }
@@ -59,12 +57,13 @@ export const ComparisonProvider = ({ children }) => {
         try {
             const response = await fetch(`/api/comparison_list/${userId}`);
             if (!response.ok) {
-                throw new Error('Ошибка при получении квартир в сравнении');
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при получении квартир в сравнении: ${errorMessage.message}`);
             }
             const data = await response.json();
             setComparisonFlats(data.comparison.comparison_list || []);
         } catch (err) {
-            console.error("Ошибка при получении избранных квартир:", err);
+            console.error(err);
         } finally {
             setLoading(false);
         }
@@ -101,13 +100,13 @@ export const ComparisonProvider = ({ children }) => {
                 }),
             });
             if (!response.ok) {
-                throw new Error('Ошибка при добавлении в сравнение');
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при добавлении в сравнение: ${errorMessage.message}`);
             }else{
                 setComparisonFlats([...comparisonFlats, flatId]);
             }
-            /*await loadComparison(user.id);*/
         } catch (err) {
-            console.error("Ошибка при добавлении в сравнение:", err);
+            console.error(err);
             throw err;
         } finally {
             setLoading(false);
@@ -131,13 +130,13 @@ export const ComparisonProvider = ({ children }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Ошибка при удалении из сравнения');
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при удалении из сравнения ${errorMessage.message}`);
             }else{
                 setComparisonFlats(comparisonFlats.filter(f => f !== flatId));
             }
-            /*await loadComparison(user.id);*/
         } catch (err) {
-            console.error("Ошибка при удалении из сравнения:", err);
+            console.error(err);
             throw err;
         } finally {
             setLoading(false);
@@ -160,11 +159,13 @@ export const ComparisonProvider = ({ children }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Ошибка при очистки сравнения');
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при очистки сравнения: ${errorMessage.message}`);
+            }else{
+                setComparisonFlats([])
             }
-            await loadComparison(user.id);
         } catch (err) {
-            console.error("Ошибка при очистки сравнения:", err);
+            console.error(err);
             throw err;
         } finally {
             setLoading(false);
@@ -178,6 +179,7 @@ export const ComparisonProvider = ({ children }) => {
     return (
         <ComparisonContext.Provider value={{
             comparisonFlats,
+            setComparisonFlats,
             addToComparison,
             removeFromComparison,
             clearComparison,

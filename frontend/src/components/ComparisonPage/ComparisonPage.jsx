@@ -45,7 +45,7 @@ const PARAM_INTRODUCTION = {
     transportAccessibility: 'Пешком ',
 };
 
-
+/*группы параметров*/
 const PARAM_GROUPS = {
     comparisonFlatDetails: ['price', 'rooms', 'area', 'floor','ceilingHeight'],
     restFlatDetails: ['type','balconyType', 'renovationCondition', 'amenities'],
@@ -56,10 +56,10 @@ const PARAM_GROUPS = {
 };
 
 const ComparisonTable = () => {
-    const [comparisonFlats, setComparisonFlats] = useState([]);
+    const [comparisonFlatsData, setComparisonFlatsData] = useState([]); /*полные данные квартир сравнения*/
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { removeFromComparison, clearComparison } = useComparison();
+    const { removeFromComparison, clearComparison, setComparisonFlats } = useComparison();
     const {user} = useContext(LoginContext);
     const { isFavorite, handleFavoriteClick } = useFavorites();
     const navigate = useNavigate();
@@ -73,11 +73,11 @@ const ComparisonTable = () => {
                     const data = await response.json();
                     if (data.status === 'success') {
                         if(data.message === 'User do not have comparison apartments') {
-                            setComparisonFlats([]);
-                            // установить список сравнения
+                            setComparisonFlatsData([]);
+                            setComparisonFlats([])
                         }
-                        setComparisonFlats(data.comparison.apartments || []);
-                        // установить список сравнения
+                        setComparisonFlatsData(data.comparison.apartments || []);
+                        setComparisonFlats(data.comparison.comparison_list || [])
                     } else {
                         setError(data.message || 'Ошибка загрузки квартир для сравнения');
                     }
@@ -90,7 +90,8 @@ const ComparisonTable = () => {
 
             fetchComparison();
         }
-    }, [removeFromComparison, clearComparison]);
+    }, []);
+
 
     // форматирование значения
     const formatValue = (param, value) => {
@@ -135,8 +136,6 @@ const ComparisonTable = () => {
         return value;
     };
 
-
-
     // получение лучшего значения
     const getBestValue = (param) => {
         if (PARAM_GROUPS.restFlatDetails.includes(param) &&
@@ -144,7 +143,7 @@ const ComparisonTable = () => {
             return null;
         }
 
-        const values = comparisonFlats.flatMap(flatData => { /*массив параметров*/
+        const values = comparisonFlatsData.flatMap(flatData => { /*массив параметров*/
             if (param in flatData) return flatData[param]; /*если параметр в flatData*/
             if (flatData.infrastructure?.[param] !== undefined) return flatData.infrastructure[param]; /*если в infrastructure*/
             if (flatData.transportAccessibility?.[param] !== undefined) return flatData.transportAccessibility[param];
@@ -181,7 +180,7 @@ const ComparisonTable = () => {
 
     const bestValues = useMemo(() => {
         const savedBestValues = {};
-        comparisonFlats.forEach(flatData => {
+        comparisonFlatsData.forEach(flatData => {
             for (const param in flatData) {
                 if(param === 'infrastructure') {
                     Object.keys(flatData.infrastructure).map((parameter) => {
@@ -204,16 +203,24 @@ const ComparisonTable = () => {
         });
 
         return savedBestValues;
-    }, [comparisonFlats]);
-
+    }, [comparisonFlatsData]);
 
     const isBestValue = (value, bestValue) => {
         return bestValue !== null && value === bestValue;
     };
 
     const handleClearAllClick = () => {
-        clearComparison();
-        setComparisonFlats([])
+        if (comparisonFlatsData.length !== 0) {
+            clearComparison();
+            setComparisonFlatsData([])
+        }
+    }
+
+    const handleRemoveDataFromComparison = (flatDataId) => {
+        if(comparisonFlatsData.length !== 0) {
+            setComparisonFlatsData(comparisonFlatsData.filter(f => f.id !== flatDataId));
+            removeFromComparison(flatDataId)
+        }
     }
 
 
@@ -229,7 +236,7 @@ const ComparisonTable = () => {
         return (<LoadingText/>);
     }
 
-    if (comparisonFlats.length === 0) {
+    if (comparisonFlatsData.length === 0) {
         return (
             <EmptyText>
                 Нет квартир для сравнения.
@@ -254,7 +261,7 @@ const ComparisonTable = () => {
                     <thead>
                     <tr className={s.tableHeader}>
                         <th className={s.parameterName}>Параметр</th>
-                        {comparisonFlats.map(flatData => (
+                        {comparisonFlatsData.map(flatData => (
                             <th key={flatData.id} className={s.flatHeader}>
                                 <img
                                     src={flatData.picture}
@@ -270,7 +277,7 @@ const ComparisonTable = () => {
                                     </button>
                                     <button
                                         className={s.actionButton}
-                                        onClick={() => removeFromComparison(flatData.id)}
+                                        onClick={() => handleRemoveDataFromComparison(flatData.id)}
                                     >
                                         <FaTimes />
                                     </button>
@@ -282,7 +289,7 @@ const ComparisonTable = () => {
                     <tbody>
 
                     <tr className={s.sectionRow}>
-                        <td colSpan={comparisonFlats.length + 1} className={s.sectionHeader}>
+                        <td colSpan={comparisonFlatsData.length + 1} className={s.sectionHeader}>
                             О квартире
                         </td>
                     </tr>
@@ -292,7 +299,7 @@ const ComparisonTable = () => {
 
                             <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
 
-                            {comparisonFlats.map(flatData => {
+                            {comparisonFlatsData.map(flatData => {
                                 const value = flatData[param];
                                 const bestValue = bestValues[param];
                                 return (
@@ -308,7 +315,7 @@ const ComparisonTable = () => {
                     {PARAM_GROUPS.restFlatDetails.map(param => (
                         <tr key={param} className={s.dataRow}>
                             <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
-                            {comparisonFlats.map(flatData => {
+                            {comparisonFlatsData.map(flatData => {
                                 const value = flatData[param];
                                 return (
                                     <td key={`${flatData.id}-${param}`} className={s.parameterCell}>
@@ -323,7 +330,7 @@ const ComparisonTable = () => {
 
 
                     <tr className={s.sectionRow}>
-                        <td colSpan={comparisonFlats.length + 1} className={s.sectionHeader}>
+                        <td colSpan={comparisonFlatsData.length + 1} className={s.sectionHeader}>
                             Детали дома
                         </td>
                     </tr>
@@ -331,7 +338,7 @@ const ComparisonTable = () => {
                     {PARAM_GROUPS.comparisonBuildingDetails.map(param => (
                         <tr key={param} className={s.dataRow}>
                             <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
-                            {comparisonFlats.map(flatData => {
+                            {comparisonFlatsData.map(flatData => {
                                 const value = flatData[param];
                                 const bestValue = bestValues[param];
                                 return (
@@ -349,7 +356,7 @@ const ComparisonTable = () => {
                         <tr key={param} className={s.dataRow}>
                             <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
 
-                            {comparisonFlats.map(flatData => {
+                            {comparisonFlatsData.map(flatData => {
                                 const value = flatData[param];
                                 return(
                                     <td key={`${flatData.id}-${param}`} className={s.parameterCell}>
@@ -364,7 +371,7 @@ const ComparisonTable = () => {
 
 
                     <tr className={s.sectionRow}>
-                        <td colSpan={comparisonFlats.length + 1} className={s.sectionHeader}>
+                        <td colSpan={comparisonFlatsData.length + 1} className={s.sectionHeader}>
                             Инфраструктура района
                         </td>
                     </tr>
@@ -372,7 +379,7 @@ const ComparisonTable = () => {
                     {PARAM_GROUPS.infrastructure.map(param => (
                         <tr key={param} className={s.dataRow}>
                             <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
-                            {comparisonFlats.map(flatData => {
+                            {comparisonFlatsData.map(flatData => {
                                 const value = flatData.infrastructure?.[param];
                                 const bestValue = bestValues[param];
                                 return (
@@ -388,7 +395,7 @@ const ComparisonTable = () => {
 
 
                     <tr className={s.sectionRow}>
-                        <td colSpan={comparisonFlats.length + 1} className={s.sectionHeader}>
+                        <td colSpan={comparisonFlatsData.length + 1} className={s.sectionHeader}>
                             Транспортная доступность
                         </td>
                     </tr>
@@ -398,7 +405,7 @@ const ComparisonTable = () => {
 
                             <td className={s.parameterName}>{PARAM_NAMES[param]}</td>
 
-                            {comparisonFlats.map(flatData => {
+                            {comparisonFlatsData.map(flatData => {
                                 const value = flatData.transportAccessibility?.[param];
                                 const bestValue = getBestValue(param);
                                 return (

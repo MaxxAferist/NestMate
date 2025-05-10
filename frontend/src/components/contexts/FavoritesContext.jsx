@@ -7,24 +7,23 @@ export const FavoritesProvider = ({ children }) => {
     const { user} = useContext(LoginContext);
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [favoritesError, setFavoritesError] = useState(null);
 
 
     const loadFavorites = useCallback(async (userId) => {
         if (!userId || loading) return;
 
         setLoading(true);
-        setFavoritesError(null);
         try {
             const response = await fetch(`/api/favorites_list/${userId}`);
             if (!response.ok) {
-                throw new Error('Ошибка при получении избранных квартир');
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при получении избранных квартир ${errorMessage?.message}`);
             }
             const data = await response.json();
             setFavorites(data.favorites.favorites_list || []);
         } catch (err) {
-            setFavoritesError(err.message);
-            console.error("Ошибка при получении избранных квартир:", err);
+            console.error(err);
+            throw err;
         } finally {
             setLoading(false);
         }
@@ -45,7 +44,6 @@ export const FavoritesProvider = ({ children }) => {
         if (!user?.id || loading) return;
 
         setLoading(true);
-        setFavoritesError(null);
         try {
             const response = await fetch('/api/favorites/add', {
                 method: 'POST',
@@ -58,12 +56,13 @@ export const FavoritesProvider = ({ children }) => {
                 }),
             });
             if (!response.ok) {
-                throw new Error('Ошибка при добавлении в избранное');
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при добавлении в избранное: ${errorMessage?.message}`);
+            }else{
+                setFavorites(prev => [...prev, flatId]);
             }
-            await loadFavorites(user.id);
         } catch (err) {
-            setFavoritesError(err.message);
-            console.error("Ошибка при добавлении в избранное:", err);
+            console.error(err);
             throw err;
         } finally {
             setLoading(false);
@@ -73,7 +72,6 @@ export const FavoritesProvider = ({ children }) => {
     const removeFavorite = async (flatId) => {
         if (!user?.id) return;
         setLoading(true);
-        setFavoritesError(null);
         try {
             const response = await fetch('/api/favorites/remove', {
                 method: 'DELETE',
@@ -87,12 +85,13 @@ export const FavoritesProvider = ({ children }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Ошибка при удалении из избранного');
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при удалении из избранного ${errorMessage?.message}`);
+            }else{
+                setFavorites(favorites.filter(f => f !== flatId));
             }
-            await loadFavorites(user.id);
         } catch (err) {
-            setFavoritesError(err.message);
-            console.error("Ошибка при удалении из избранного:", err);
+            console.error(err);
             throw err;
         } finally {
             setLoading(false);
@@ -114,12 +113,13 @@ export const FavoritesProvider = ({ children }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Ошибка при очистки избранного');
+                const errorMessage = await response.json();
+                throw new Error(`Ошибка при очистки избранного: ${errorMessage?.message}`);
+            }else{
+                setFavorites([])
             }
-            await loadFavorites(user.id);
         } catch (err) {
-            setFavoritesError(err.message);
-            console.error("Ошибка при очистки избранного:", err);
+            console.error(err);
             throw err;
         } finally {
             setLoading(false);
@@ -145,8 +145,8 @@ export const FavoritesProvider = ({ children }) => {
     return(
         <FavoritesContext.Provider value={{
             favorites,
+            setFavorites,
             loading,
-            favoritesError,
             addFavorite,
             removeFavorite,
             isFavorite,

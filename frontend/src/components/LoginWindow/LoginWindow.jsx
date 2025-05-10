@@ -51,8 +51,6 @@ export default function LoginWindow(){
   }
 
   const handleLogin = async(e) => {
-    e.preventDefault();
-
     setMessage('');
 
     if (!validateFields()) {
@@ -126,12 +124,7 @@ export default function LoginWindow(){
                   className={s.showPasswordChange}
                   onClick={() => setShowPassword(!showPassword)}
               >
-                {showPassword ?
-                    (
-                        <FaEyeSlash />
-                    ) : (
-                        <FaEye />
-                    )}
+                {showPassword ? (<FaEyeSlash />) : (<FaEye />)}
               </button>
             </div>
 

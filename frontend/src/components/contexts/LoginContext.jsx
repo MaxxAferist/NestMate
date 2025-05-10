@@ -84,7 +84,6 @@ export const LoginProvider = ({ children }) => {
     const [rentPreferences, setRentPreferences] = useState(getDefaultRentPreferences);
 
     const [isLoading, setIsLoading] = useState(false);  // состояние загрузки
-    /*const [error, setError] = useState(null); // ошибки*/
 
     //useCallback - возвращает один и тот же экземпляр функции между рендерами, пока не изменятся указанные зависимости.
     const loadAllUserData = useCallback(async (userId) => { // загрузка данных пользователя
@@ -123,7 +122,7 @@ export const LoginProvider = ({ children }) => {
             }
         } catch (err) {
             console.error("Ошибка загрузки данных пользователя:", err.message);
-            throw new Error(err.message);
+            throw err;
         } finally {
             setIsLoading(false);
         }
@@ -167,7 +166,7 @@ export const LoginProvider = ({ children }) => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Ошибка обновления данных пользователя');
+                throw new Error(`Ошибка обновления данных пользователя: ${errorData.message}`);
             }
             await loadAllUserData(user.id); // загрузка актуальных данных
         } catch (err) {
@@ -267,7 +266,7 @@ export const LoginProvider = ({ children }) => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.message || 'Ошибка при сохранении параметров');
+                throw new Error(`Ошибка при сохранении параметров: ${errorData.message}`);
             }
             await loadAllUserData(user.id);
         } catch (err) {

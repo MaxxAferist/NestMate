@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
 .windowForm {
@@ -25,7 +25,6 @@
     width: 500px;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
-    /*object-fit: cover;*/
 }
 
 .loginForm {
@@ -53,7 +52,6 @@
 .closeButton:hover {
     color: #2d3748;
 }
-
 
 .title {
     font-size: 24px;
@@ -85,7 +83,7 @@
 
 .input:focus {
     border-color: #4299e1;
-    outline: none;
+    outline: none; /*чтобы правильно отображалась рамка (убирает внешнюю рамкуу)*/
     box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
     background-color: #fff;
 }
@@ -149,7 +147,7 @@
 }
 
 .inputError {
-    border-color: red !important;
+    border-color: red;
 }
 
 .errorText {

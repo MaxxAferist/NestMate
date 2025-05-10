@@ -16,7 +16,7 @@ const FavoritesPage = () => {
     const [error, setError] = useState(null);
     const [filterType, setFilterType] = useState('all');
     const {user} = useContext(LoginContext);
-    const { isFavorite, handleFavoriteClick, clearFavorites } = useFavorites();
+    const { isFavorite, handleFavoriteClick, clearFavorites, setFavorites } = useFavorites();
     const navigate = useNavigate();
     const {isInComparison, handleComparisonClick} = useComparison();
 
@@ -32,16 +32,15 @@ const FavoritesPage = () => {
                 try {
                     const response = await fetch(`/api/favorites/${user.id}`);
                     const data = await response.json();
-                    console.log(data);
                     if (data.status === 'success') {
-                        if(data.message === 'User do not have favorites apartments') {
+                        if(data.message === 'User do not have favorites apartments') { /*нет квартир*/
                             setFlats([]);
                             setFilteredFlats([]);
-                            // установить избранные квартиры
+                            setFavorites([]) /*обновление списка айди*/
                         }else{
                             setFlats(data.favorites.apartments || []);
                             setFilteredFlats(data.favorites.apartments || []);
-                            // установить избранные квартиры
+                            setFavorites(data.favorites.favorites_list || []);  /*обновление списка айд*/
                         }
                     } else {
                         setError(data.message || 'Ошибка загрузки избранных квартир');
@@ -52,7 +51,6 @@ const FavoritesPage = () => {
                     setLoading(false);
                 }
             };
-
             fetchFavorites();
         }
     }, []);
@@ -88,6 +86,12 @@ const FavoritesPage = () => {
             setCurrentStartIndex(currentStartIndex - 25);
         }
     }
+    const handleOnToFirstButtonClicked = ()=>{
+        if(currentStartIndex !== 0){
+           setCurrentStartIndex(0)
+        }
+    }
+
 
     if(!user){
         return(
@@ -174,6 +178,7 @@ const FavoritesPage = () => {
                             isInComparison={isInComparison(flatData.id)}
                             onComparisonClick={(e) => handleComparisonClick(flatData.id, e)}
                             cardClick={() => navigate(`/FlatPage/${flatData.id}`, { state: { flat_id: flatData.id } })}
+                            isUser={user !== null}
                         />
 
                     ))}
@@ -181,6 +186,9 @@ const FavoritesPage = () => {
                         <div className={s.nextPrevButtonsSection}>
                             <NextPrevButton handleOnButtonClicked={handleOnPrevButtonClicked}
                                             disable={currentStartIndex === 0} isNext={false}
+                            />
+                            <NextPrevButton handleOnButtonClicked={handleOnToFirstButtonClicked} isToFirst={true}
+                                            disable={currentStartIndex === 0}
                             />
                             <NextPrevButton handleOnButtonClicked={handleOnNextButtonClicked}
                                             disable={(filteredFlats.length - currentStartIndex - 25) <= 0} isNext={true}

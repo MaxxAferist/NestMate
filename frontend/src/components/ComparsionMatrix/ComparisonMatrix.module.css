@@ -3,7 +3,7 @@
     padding: 20px;
     border: 1px solid #e2e8f0;
     border-radius: 8px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
 }
 
 .matrixContainer h3 {
@@ -50,7 +50,7 @@
     padding: 0 0 0 20px;
     list-style: none;
     color: #2b374e;
-    line-height: 1.6;
+    line-height: 1.5; /*межстрочный интервал (множитель высоты строки) */
 }
 
 .instructionItem {
@@ -63,7 +63,7 @@
     position: absolute;
     left: -20px;
     color: #2e8fe6;
-    font-weight: bold;
+    font-weight: 800;
 }
 
 .example {
@@ -273,7 +273,6 @@
 .errorList {
     margin: 0;
     padding: 0;
-    list-style: none;
 }
 
 .errorItem {
