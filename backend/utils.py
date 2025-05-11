@@ -35,7 +35,7 @@ def getJsonInformationAboutApartments(connection, ids, favorites, comparison):
         apartments_information = []
         for _id in ids:
             cursor.execute("""
-            SELECT id,pictures, count_rooms, area, floor, count_floors, price, address, minuts_for_subway, type_sdelki, count_floors FROM apartment_data
+            SELECT id,pictures, count_rooms, area, floor, count_floors, price, address, minuts_for_subway, type_sdelki, count_floors, coord_lat, coord_lng FROM apartment_data
             WHERE id = %s""",
                 (_id,))
             apartment = cursor.fetchone()
@@ -57,6 +57,8 @@ def getJsonInformationAboutApartments(connection, ids, favorites, comparison):
             address = apartment[7]
             minuts_for_subway = apartment[8]
             count_floors = apartment[10]
+            coord_lat = apartment[11]
+            coort_lng = apartment[12]
             is_favorite = True if apartment[0] in favorites else False
             is_comparison = True if apartment[0] in comparison else False
             apartments_information.append({
@@ -71,7 +73,11 @@ def getJsonInformationAboutApartments(connection, ids, favorites, comparison):
                 "buildingFloors" : count_floors, # добавил
                 "metroDistance": minuts_for_subway, #  название сменил
                 "is_favorite": is_favorite,
-                "is_comparison": is_comparison
+                "is_comparison": is_comparison,
+                "coords": {
+                    "lat": coord_lat,
+                    "lng": coort_lng
+                }
             })
     return apartments_information
 
