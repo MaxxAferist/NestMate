@@ -1,6 +1,4 @@
 from flask import jsonify, request, render_template
-from datetime import datetime
-from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 import json
 import os
@@ -29,7 +27,6 @@ def init_routes(app):  #: Application):
     @app.app.route('/api/signIn', methods=['POST'])
     def signIn():
         data = request.json  # Получаем данные из запроса
-        print(type(data))
         if not data or not data.get('firstName') or not data.get('email') or not data.get('password'):
             return jsonify({"status": "error", "message": "Missing data"}), 400
         conn = app.connection_pool.getconn()

@@ -33,45 +33,46 @@ def getDescription(desc: str):
 def getJsonInformationAboutApartments(connection, ids, favorites, comparison):
     with connection.cursor() as cursor:
         apartments_information = []
-        cursor.execute("""
-        SELECT id,pictures, count_rooms, area, floor, count_floors, price, address, minuts_for_subway, type_sdelki, count_floors FROM apartment_data
-        WHERE id = ANY(%s)""",
-            (ids,))
-        apartments = cursor.fetchall()
+        for _id in ids:
+            cursor.execute("""
+            SELECT id,pictures, count_rooms, area, floor, count_floors, price, address, minuts_for_subway, type_sdelki, count_floors FROM apartment_data
+            WHERE id = %s""",
+                (_id,))
+            apartment = cursor.fetchone()
 
-    for apartment in apartments:
-        main_picture_url = apartment[1][0].split(", ")[0]
-        if apartment[2].isdigit():
-            count_room = f"{apartment[2]}-комнатная"
-        else:
-            count_room = "Студия"
-        if apartment[9] == 0: # добавил
-            type_sdelki = 'sell'
-        else:
-            type_sdelki = 'rent'
-        id_apartment = apartment[0]
-        area = apartment[3] # изменил с f"{apartment[3]} м²"
-        floor = apartment[4]
-        count_floors = apartment[5]
-        price = apartment[6]
-        address = apartment[7]
-        minuts_for_subway = apartment[8]
-        count_floors = apartment[10]
-        is_favorite = True if apartment[0] in favorites else False
-        is_comparison = True if apartment[0] in comparison else False
-        apartments_information.append({
-            "id": id_apartment, # добавил
-            "picture": main_picture_url,
-            "type": type_sdelki, # добавил
-            "price": price,
-            "rooms": count_room, # изменено с room_count
-            "area": area,
-            "floor": floor,
-            "address": address,
-            "buildingFloors" : count_floors, # добавил
-            "metroDistance": minuts_for_subway, #  название сменил
-            "is_favorite": is_favorite
-        })
+            main_picture_url = apartment[1][0].split(", ")[0]
+            if apartment[2].isdigit():
+                count_room = f"{apartment[2]}-комнатная"
+            else:
+                count_room = "Студия"
+            if apartment[9] == 0: # добавил
+                type_sdelki = 'sell'
+            else:
+                type_sdelki = 'rent'
+            id_apartment = apartment[0]
+            area = apartment[3] # изменил с f"{apartment[3]} м²"
+            floor = apartment[4]
+            count_floors = apartment[5]
+            price = apartment[6]
+            address = apartment[7]
+            minuts_for_subway = apartment[8]
+            count_floors = apartment[10]
+            is_favorite = True if apartment[0] in favorites else False
+            is_comparison = True if apartment[0] in comparison else False
+            apartments_information.append({
+                "id": id_apartment, # добавил
+                "picture": main_picture_url,
+                "type": type_sdelki, # добавил
+                "price": price,
+                "rooms": count_room, # изменено с room_count
+                "area": area,
+                "floor": floor,
+                "address": address,
+                "buildingFloors" : count_floors, # добавил
+                "metroDistance": minuts_for_subway, #  название сменил
+                "is_favorite": is_favorite,
+                "is_comparison": is_comparison
+            })
     return apartments_information
 
 

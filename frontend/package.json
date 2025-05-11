@@ -4,12 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "proxy": "http://127.0.0.1:5000",
   "dependencies": {
     "@pbe/react-yandex-maps": "^1.2.5",
     "html-react-parser": "^5.2.3",

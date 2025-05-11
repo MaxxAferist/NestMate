@@ -81,17 +81,17 @@ def getSortedApartments(app, flat_preferences: dict, rent_preferences, type_sdel
                 number_of_beds = int(number_of_beds) if number_of_beds.isdigit() else -1
                 matrix, summa = getMatrixAndSummaByNumberOfBeds(app, number_of_beds, type_sdelki)
             elif priority == "district":
-                district = flat_preferences.get("district")
+                district = flat_preferences.get("district").lower()
                 matrix, summa = getMatrixAndSummaByDistrict(app, district, type_sdelki)
             else:
                 print(f"[ERROR] unexpected = {priority}")
             
             matrix = np.array(matrix) / np.array(summa)
             vector = matrix.mean(axis = 1)
-            # if priority == "area":
+            # if priority == "district":
             #     conn = app.connection_pool.getconn()
             #     with conn.cursor() as cursor:
-            #         cursor.execute(f"SELECT id, area FROM apartment_data WHERE type_sdelki = {type_sdelki}")
+            #         cursor.execute(f"SELECT id, district FROM apartment_data WHERE type_sdelki = {type_sdelki}")
             #         apartments = cursor.fetchall()
             #     a = []
             #     for i in range(len(apartments)):
@@ -866,16 +866,16 @@ def getMatrixAndSummaByDistrict(app, district, type_sdelki): # Составле�
 
         for i in range(N):
             for j in range(i + 1, N):
-                apartment_type_i = apartments[i][0]
-                apartment_type_j = apartments[j][0]
+                district_i = apartments[i][0]
+                district_j = apartments[j][0]
 
-                if apartment_type_i == apartment_type_j:
+                if district_i == district_j:
                     matrix[i][j] = 1
                     matrix[j][i] = 1
-                elif apartment_type_i == district:
+                elif district_i == district:
                     matrix[i][j] = 9
                     matrix[j][i] = 1 / 9
-                elif apartment_type_j == district:
+                elif district_j == district:
                     matrix[i][j] = 1 / 9
                     matrix[j][i] = 9
                 else:

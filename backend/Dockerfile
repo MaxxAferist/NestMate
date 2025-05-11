@@ -1,6 +1,14 @@
-FROM python:3-alpine3.12
+FROM python:3.12-alpine3.21
 WORKDIR /app
 COPY . /app
-RUN pip install -r requirements.txt
+RUN apk update && \
+    apk add --no-cache \
+    postgresql-dev \
+    gcc \
+    python3-dev \
+    musl-dev && \
+    rm -rf /var/cache/apk/*
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 EXPOSE 5000
-CMD python ./app.py
+ENTRYPOINT [ "python", "./app.py" ]

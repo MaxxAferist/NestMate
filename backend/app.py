@@ -16,11 +16,11 @@ class Application():
         self.__setup_signals()
 
         # Config Database
-        self.app.config["bd_host"] = config.host
-        self.app.config["bd_user"] = config.user
-        self.app.config["bd_password"] = config.password
-        self.app.config["bd_port"] = config.port
-        self.app.config["db_name"] = config.db_name
+        # self.app.config["bd_host"] = config.host
+        # self.app.config["bd_user"] = config.user
+        # self.app.config["bd_password"] = config.password
+        # self.app.config["bd_port"] = config.port
+        # self.app.config["db_name"] = config.db_name
         # ------------
         self.connection_pool = None
         self.connect_to_db()
@@ -38,10 +38,11 @@ class Application():
 
     def connect_to_db(self):
         try:
+            print(config.database_url)
             self.connection_pool = ThreadedConnectionPool(
                 minconn=2,
                 maxconn=10,
-                dsn=f"postgresql://{config.user}:{config.password}@{config.host}:{config.port}/{config.db_name}"
+                dsn=config.database_url
             )
             print("[INFO] Database connected")
         except Exception as e:
@@ -127,7 +128,7 @@ class Application():
 
     def start(self):
         try:
-            self.app.run(debug=True)
+            self.app.run(host=config.flask_run_host, port=config.flask_run_port, debug=True)
         except KeyboardInterrupt:
             self.handle_shutdown()
 
