@@ -8,6 +8,8 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
+      host: '0.0.0.0',  // Обязательно для Render
+      port: process.env.PORT || 5173,  // Render использует $PORT
       allowedHosts: [
         'nestmate.onrender.com', // Ваш хост на Render.com
         'localhost',             // Локальная разработка
@@ -26,6 +28,10 @@ export default defineConfig(({ mode }) => {
           },
         }
       }
+    },
+    preview: {
+      host: '0.0.0.0',  // Для команды `preview`
+      port: process.env.PORT || 4173,
     }
   }
 })
