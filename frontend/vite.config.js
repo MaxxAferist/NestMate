@@ -8,6 +8,11 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
+      allowedHosts: [
+        'nestmate.onrender.com', // Ваш хост на Render.com
+        'localhost',             // Локальная разработка
+        '127.0.0.1'              // Локальная разработка
+      ],
       proxy: {
         '/api': {
           target: `http://${env.VITE_BACKEND_HOST}:${env.VITE_BACKEND_PORT}`,
