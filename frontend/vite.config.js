@@ -15,8 +15,15 @@ export default defineConfig(({ mode }) => {
       ],
       proxy: {
         '/api': {
-          target: `http://${env.VITE_BACKEND_HOST}:${env.VITE_BACKEND_PORT}`,
-          changeOrigin: true
+          // target: `http://${env.VITE_BACKEND_HOST}:${env.VITE_BACKEND_PORT}`,
+          target: `http://${env.VITE_BACKEND_HOST}`,
+          _changeOrigin: true,
+          get changeOrigin() {
+            return this._changeOrigin
+          },
+          set changeOrigin(value) {
+            this._changeOrigin = value
+          },
         }
       }
     }
